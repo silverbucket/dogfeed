@@ -13,22 +13,25 @@
   </head>
 
   <body>
+    <div id="remotestorage-connect" ng-controller="remoteStorageCtrl"></div>
+
     <nav>
       <div class="navbar" ng-controller="titlebarCtrl">
         <div class="navbar-inner">
           <a class="brand" href="#"><img src="res/img/dogfeed-logo.svg" width="115" alt="Dogfeed" /></a>
           <ul class="nav nav-tabs">
             <li>
-              <a href="" ng-click="addFeed()"><span class="icon-plus" alt="Add Feed"></span> Add Feed</a>
+              <a href="" ng-click="addFeed()"><i class="icon-plus" alt="Add Feed"></i> Add Feed</a>
             </li>
           </ul>
         </div>
       </div>
     </nav>
 
-    <article>
-      <ng-view></ng-view>
-    </article>
+    <div class="message-container">
+      <div message></div>
+    </div>
+    <ng-view></ng-view>
 
     <!-- add feed modal window -->
     <div id="modalAddFeed" class="modal hide fade" ng-controller="addFeedCtrl">
@@ -39,12 +42,12 @@
       <div class="modal-body">
         <form name="addFeed" class="form-horizontal" novalidate>
           <input type="text" class="required input-xxlarge" name="url" placeholder="Enter URL..." ng-model="url" autofocus="autofocus" required />
-        </form>
       </div>
       <div class="modal-footer">
-        <button ng-click="add(url)" ng-disabled="addFeed.$invalid || adding">
-          <span class="icon-plus" alt="Add Feed"></span> Add Feed
-        </button>
+          <button ng-click="add(url)" ng-disabled="addFeed.$invalid || adding">
+            <span class="icon-plus" alt="Add Feed"></span> Add Feed
+          </button>
+        </form>
       </div>
     </div>
 
@@ -64,7 +67,11 @@
     <script src="vendor/jquery-1.10.1.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.min.js?v=2.3.2"></script>
     <script src="vendor/remotestorage.min.js?v=0.7.2"></script>
+    <script src="vendor/remotestorage-sockethub.js?v=0.0.1"></script>
+    <script src="vendor/remotestorage-rss.js?v=0.0.1"></script>
+    <script src="vendor/remotestorage-news.js?v=0.0.1"></script>
     <script src="vendor/sockethub-client/sockethub-client.js"></script>
+    <script src="res/js/ngRemoteStorage.js?v=0.0.1"></script>
     <script src="res/js/dogfeed.js"></script>
   </body>
 </html>

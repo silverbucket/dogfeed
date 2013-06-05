@@ -6,3 +6,19 @@
 .form-button {
   margin-top: 10px;
 }
+
+.message-container {
+  height: 40px;
+  margin: -10px 0 0 0;
+}
+
+.alert {
+  margin: 0 5% 0 5%;
+  padding: 8px 0 8px 10px;
+}
+.alert p {
+  margin: 0 0 0 1%;
+}
+.alert strong {
+ margin-right: 5px;
+}
