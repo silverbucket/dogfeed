@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>dogfeed - remoteStorage callback endpoint</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  </head>
+  <body>
+    <div id="remotestorage-connect"></div>
+    <script type="text/javascript" src="vendor/remotestorage.min.js?v=0.7.2"></script>
+    <script type="text/javascript" src="vendor/remotestorage-sockethub.js?v=0.0.1"></script>
+    <script type="text/javascript" src="vendor/remotestorage-news.js?v=0.0.1"></script>
+    <script type="text/javascript" src="vendor/remotestorage-rss.js?v=0.0.1"></script>
+    <script>
+(function initRemoteStorage() {
+  remoteStorage.claimAccess({sockethub:'rw',rss:'rw',news:'rw'}).then(function () {
+    remoteStorage.displayWidget('remotestorage-connect', {
+      redirectUri: window.location.origin + '/rscallback.html'
+    });
+  });
+})();
+setTimeout(function rsConnect() {
+  if (remoteStorage.getBearerToken() === 'null') {
+    console.log('waiting for rs to connect');
+    rsConnect();
+  } else {
+    //console.log('rs connected, reloading to ' + baseUrl + "/");
+    window.location = "/";
+  }
+}, 1000);
+    </script>
+  </body>
+</html>
