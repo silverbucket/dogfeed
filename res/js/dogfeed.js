@@ -100,12 +100,13 @@ function ($scope, RS, $rootScope) {
       last_fetched: new Date().getTime()
     };
 
-    RS.call('rss', 'add', [obj]).then(function () {
-      console.log('rss feed url saved!');
+    RS.call('rss', 'add', [obj]).then(function (m) {
+      console.log('rss feed url saved!: ', m);
       $rootScope.$broadcast('closeModalAddFeed');
       $scope.adding = false;
       $rootScope.$broadcast('message', {type: 'success', message: 'RSS feed added: '+url});
     }, function (err) {
+      console.log('rss feed url save failed!: ', err);
       $rootScope.$broadcast('message', {type: 'error', message: err.message});
     });
   };

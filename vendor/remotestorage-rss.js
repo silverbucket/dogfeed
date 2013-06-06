@@ -5,8 +5,6 @@
     return {
       exports: {
         init: function () {
-          privateClient.release('');
-          publicClient.release('');
           privateClient.declareType(moduleName, {
             description: 'RSS Feed URLs and related settings',
             key: 'url',
