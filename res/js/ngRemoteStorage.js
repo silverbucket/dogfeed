@@ -40,10 +40,11 @@ function ($rootScope, $q) {
 }]);
 
 
-ngRemoteStorage.controller('remoteStorageCtrl', ['$scope', '$route', '$routeParams', '$location', 'RS',
-function ($scope, $route, $routeParams, $location, RS) {
+ngRemoteStorage.controller('remoteStorageCtrl',
+[function () {
 
-  remoteStorage.util.silenceAllLoggers();
+  //remoteStorage.util.silenceAllLoggers();
+  remoteStorage.util.unsilenceAllLoggers();
 
   remoteStorage.claimAccess({sockethub:'rw',rss:'rw',news:'rw'}).then(function () {
     remoteStorage.displayWidget('remotestorage-connect', {
