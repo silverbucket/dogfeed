@@ -19,8 +19,6 @@ function ($routeProvider) {
 }]).
 
 
-
-
 /**
  * emitters
  */
@@ -44,8 +42,6 @@ function ($rootScope) {
     $("#modalAddFeed").modal('hide');
   });
 }]).
-
-
 
 
 /**
@@ -81,52 +77,6 @@ function ($scope, $rootScope) {
 }]).
 
 
-/**
- * controller: addFeedCtrl
- */
-controller('addFeedCtrl',
-['$scope', 'RSS', '$rootScope',
-function ($scope, RSS, $rootScope) {
-  $scope.url = '';
-  $scope.adding = false;
-
-  $scope.add = function (url) {
-    $scope.adding = true;
-
-    var obj = {
-      url: url,
-      name: url,
-      cache_articles: 20,
-      last_fetched: new Date().getTime()
-    };
-
-    RSS.feeds.add(obj).then(function (m) {
-      console.log('rss feed url saved!: ', m);
-      $rootScope.$broadcast('closeModalAddFeed');
-      $scope.adding = false;
-      $rootScope.$broadcast('message', {type: 'success', message: 'RSS feed added: '+url});
-    }, function (err) {
-      console.log('rss feed url save failed!: ', err);
-      $rootScope.$broadcast('message', {type: 'error', message: err.message});
-    });
-
-  };
-
-}]).
-
-
-/**
- * controller: feedCtrl
- */
-controller('feedCtrl',
-['$scope',
-function ($scope) {
-
-  $scope.feeds = [];
-
-}]).
-
-
 
 
 ///////////////////////////////////////////////////////////////////////////
@@ -134,7 +84,6 @@ function ($scope) {
 // DIRECTIVES
 //
 ///////////////////////////////////////////////////////////////////////////
-
 
 
 /**
@@ -146,13 +95,12 @@ function ($rootScope, $timeout) {
   return {
     restrict: 'A',
     template: '<div class="alert alert-{{ m.type }}" ng-show="haveMessage">'+
-              '  <strong>{{ m.title }}</strong> ' +
-              '  <span> {{ m.message }}</span>' +
+              '  <strong ng-model="m.title"></strong> ' +
+              '  <span ng-model="m.message"></span>' +
               '</div>',
     link: function (scope) {
       scope.haveMessage = false;
       scope.m = {type: '', title: '', message: ''};
-
 
       var presets = {
         'remotestorage-connect': {
@@ -196,12 +144,6 @@ function ($rootScope, $timeout) {
           e = 'no error specified';
         }
 
-        /*if ((typeof e.type === 'undefined') ||
-            (typeof presets[e.message] === 'undefined')) {
-          scope.m = presets['unknown'];
-          scope.m.message = String(e.message || e);
-        } else {*/
-
         if (typeof presets[e.message] !== 'undefined') {
           scope.m = presets[e.message];
         } else if (typeof e.message === 'string') {
@@ -221,118 +163,8 @@ function ($rootScope, $timeout) {
           scope.m = {type: '', title: '', message: ''};
         }, 4000);
 
-
-        /*if (e.type === 'sockethub-config') {
-          console.log('no config found, launch modal');
-          $rootScope.$broadcast('showModalSettingsSockethub', {locked: true});
-        }*/
       });
     }
   };
-}]).
-
-/**
- * directive: articles
- */
-directive('articles', [
-function () {
-  return {
-    restrict: 'A',
-    scope: {
-      feeds: '='
-    },
-    template: '<div class="well" ng-repeat="f in feeds">' +
-              '  <h2>{{ f.object.title }}</h2>' +
-              '  <p>feed: <i>{{ f.actor.address }}</i></p>' +
-              '  <p>article link: <i><a target="_blank" href="{{ f.object.link }}">{{ f.object.link }}</a><i></p>' +
-              '  <div data-brief data-ng-bind-html-unsafe="f.object.brief_html"></div>' +
-              '</div>',
-    link: function (scope) {
-      console.log('ARTICLES: ', scope.feeds);
-      for (var i = 0, num = scope.feeds.length; i < num; i = i + 1) {
-        if (!scope.feeds[i].object.html) {
-          scope.feeds[i].object.html = scope.feeds[i].object.text;
-        }
-        if (!scope.feeds[i].object.brief_html) {
-          scope.feeds[i].object.brief_html = scope.feeds[i].object.brief_text;
-        }
-      }
-    }
-  };
-}]).
-
-
-/**
- * directive: feedList
- */
-directive('feedList', [
-function () {
-  return {
-    restrict: 'A',
-    scope: {
-      feeds: '='
-    },
-    template: '<h4 ng-transclude></h4>' +
-              ' <span>{{ message }}<span>' +
-              '<ul class="nav nav-list">' +
-              '  <li ng-repeat="f in uniqueFeeds" data-toggle="tooltip" title="{{ f.address }}">' +
-              '    <a href="#/{{f.platform}}/feed/{{ f.address | urlEncode }}">{{ f.name }}</a>' +
-              '  </li>' +
-              '</ul>',
-    link: function (scope, element, attrs) {
-      scope.uniqueFeeds = [];
-      scope.message = '';
-
-      for (var i = 0, num = scope.feeds.length; i < num; i = i + 1) {
-        var match = false;
-        for (var j = 0, jnum = scope.uniqueFeeds.length; j < jnum; j = j + 1) {
-          if (scope.uniqueFeeds[j].address === scope.feeds[i].actor.address) {
-            match = true;
-            break;
-          }
-        }
-        if (!match) {
-          scope.uniqueFeeds.push({ address: scope.feeds[i].actor.address,
-                                   name: scope.feeds[i].actor.name,
-                                   description: scope.feeds[i].actor.description,
-                                   platform: scope.feeds[i].platform });
-        }
-      }
-      console.log('**** feeds: ', scope.feeds);
-      console.log('**** uniqueFeeds: ', scope.uniqueFeeds);
-
-      if (scope.uniqueFeeds.length === 0) {
-        scope.message = "no feeds yet, add some!";
-      }
-    },
-    transclude: true
-  };
 }]);
 
-
-
-/*
-              <div ng-controller="feedListCtrl">
-                <h4>Feeds</h4>
-                <ul class="nav nav-list">
-                  <li data-ng-repeat="c in model.contacts | filter:c.name | orderBy:c.state" ng-class="feedSwitch('{{ c.address }}')">
-                    <a href="#/feed/{{c.address}}">
-                      <span class="state {{ c.state }}"></span>
-                      <span class="username" data-toggle="tooltip" title="{{ c.address }}">{{ c.name }}</span>
-                    </a>
-                  </li>
-                </ul>
-              </div>
-*/
-/*
-              <div class="span9 messages" ng-controller="articlesCtrl">
-                <p>{{ model.currentName }} - {{ model.currentAddress }}</p>
-                <div class="articles">
-                  <div class="article well" ng-repeat="a in model.articles">
-                    <div class="name"><small>{{ a.actor.name }}</small></div>
-                    <div class="address"><small>{{ a.actor.address }}</small></div>
-                    <div class="text"><p></p><p class="text-info">{{ a.object.brief_text }}<p></div>
-                  </div>
-                </div>
-              </div>
-*/
