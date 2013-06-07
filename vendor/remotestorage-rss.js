@@ -46,8 +46,16 @@
             obj.id = privateClient.uuid();
           }
           return privateClient.storeObject(moduleName, obj.id, obj);
-        }
+        },
 
+        // wrap these function to ensure they are called correctly.
+        // unhelpful errors happen if not.
+        getAll: function () {
+          return privateClient.getAll('');
+        },
+        getListing: function () {
+          return privateClient.getListing('');
+        }
       }
     };
   });
