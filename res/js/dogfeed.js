@@ -1,4 +1,4 @@
-angular.module('dogfeed', ['ngRemoteStorage']).
+angular.module('dogfeed', ['ngRemoteStorage', 'ngRSS']).
 
 
 /**
@@ -85,8 +85,8 @@ function ($scope, $rootScope) {
  * controller: addFeedCtrl
  */
 controller('addFeedCtrl',
-['$scope', 'RS', '$rootScope',
-function ($scope, RS, $rootScope) {
+['$scope', 'RSS', '$rootScope',
+function ($scope, RSS, $rootScope) {
   $scope.url = '';
   $scope.adding = false;
 
@@ -100,7 +100,7 @@ function ($scope, RS, $rootScope) {
       last_fetched: new Date().getTime()
     };
 
-    RS.call('rss', 'add', [obj]).then(function (m) {
+    RSS.feeds.add(obj).then(function (m) {
       console.log('rss feed url saved!: ', m);
       $rootScope.$broadcast('closeModalAddFeed');
       $scope.adding = false;
@@ -109,6 +109,7 @@ function ($scope, RS, $rootScope) {
       console.log('rss feed url save failed!: ', err);
       $rootScope.$broadcast('message', {type: 'error', message: err.message});
     });
+
   };
 
 }]).
