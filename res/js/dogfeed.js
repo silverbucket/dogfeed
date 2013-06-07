@@ -95,8 +95,8 @@ function ($rootScope, $timeout) {
   return {
     restrict: 'A',
     template: '<div class="alert alert-{{ m.type }}" ng-show="haveMessage">'+
-              '  <strong ng-model="m.title"></strong> ' +
-              '  <span ng-model="m.message"></span>' +
+              '  <strong>{{m.title}}</strong> ' +
+              '  <span>{{m.message}}</span>' +
               '</div>',
     link: function (scope) {
       scope.haveMessage = false;
