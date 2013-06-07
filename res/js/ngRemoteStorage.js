@@ -1,4 +1,4 @@
-var ngRemoteStorage = angular.module('ngRemoteStorage', []).
+angular.module('ngRemoteStorage', []).
 factory('RS', ['$rootScope', '$q',
 function ($rootScope, $q) {
 
@@ -12,7 +12,7 @@ function ($rootScope, $q) {
     },
     call: function (module, func, params) {
       var defer = $q.defer();
-      console.log('RS.call('+module+', '+func+', params):', params);
+      console.log('RS.call(' + module + ', ' + func + ', params):', params);
 
       if ((typeof params === 'object') &&
           (typeof params[0] === 'undefined')) {
@@ -37,10 +37,10 @@ function ($rootScope, $q) {
       return defer.promise;
     }
   };
-}]);
+}]).
 
 
-ngRemoteStorage.controller('remoteStorageCtrl',
+controller('remoteStorageCtrl',
 [function () {
 
   //remoteStorage.util.silenceAllLoggers();
