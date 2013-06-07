@@ -46,7 +46,7 @@ controller('remoteStorageCtrl',
   //remoteStorage.util.silenceAllLoggers();
   remoteStorage.util.unsilenceAllLoggers();
 
-  remoteStorage.claimAccess({sockethub:'rw',rss:'rw',news:'rw'}).then(function () {
+  remoteStorage.claimAccess({sockethub:'rw',rss:'rw'}).then(function () {
     remoteStorage.displayWidget('remotestorage-connect', {
       redirectUri: window.location.protocol + '//' + window.location.host + '/rscallback.html'
     });
