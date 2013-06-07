@@ -87,8 +87,8 @@ function ($rootScope, $q, SH, CH, RS) {
   func.addFeed = function addFeed(obj) {
     var defer = $q.defer();
     RS.call('rss', 'add', [obj]).then(function (m) {
-      console.log('feed added: ', m);
-      data.info[m] = obj;
+      console.log('feed added: ', obj);
+      data.info[obj.id] = obj;
       defer.resolve(m);
     }, function (err) {
       defer.reject(err);
@@ -152,11 +152,11 @@ function ($scope, RSS, $rootScope) {
       last_fetched: new Date().getTime()
     };
 
-    RSS.feeds.add(obj).then(function (m) {
+    RSS.func.addFeed(obj).then(function (m) {
       console.log('rss feed url saved!: ', m);
       $rootScope.$broadcast('closeModalAddFeed');
       $scope.adding = false;
-      $rootScope.$broadcast('message', {type: 'success', message: 'RSS feed added: '+url});
+      $rootScope.$broadcast('message', {type: 'success', message: 'RSS feed added: '+obj.url});
     }, function (err) {
       console.log('rss feed url save failed!: ', err);
       $rootScope.$broadcast('message', {type: 'error', message: err.message});
