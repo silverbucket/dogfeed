@@ -1,15 +1,17 @@
 angular.module('ngRemoteStorage', []).
-factory('RS', ['$rootScope', '$q',
-function ($rootScope, $q) {
+factory('RS', ['$rootScope', '$q', '$timeout',
+function ($rootScope, $q, $timeout) {
+
+  function isConnected() {
+    if (remoteStorage.getBearerToken() === null) {
+      return false;
+    } else {
+      return true;
+    }
+  }
 
   return {
-    isConnected: function () {
-      if (remoteStorage.getBearerToken() === null) {
-        return false;
-      } else {
-        return true;
-      }
-    },
+    isConnected: isConnected,
     call: function (module, func, params) {
       var defer = $q.defer();
       console.log('RS.call(' + module + ', ' + func + ', params):', params);
@@ -18,21 +20,30 @@ function ($rootScope, $q) {
           (typeof params[0] === 'undefined')) {
         defer.reject('RS.call params must be an array');
       } else {
-        try {
-          remoteStorage[module][func].apply(null, params).
-            then(function (res) {
-              $rootScope.$apply(function () {
-                defer.resolve(res);
-              });
-            }, function (err) {
-              $rootScope.$apply(function () {
-                defer.reject(err);
-              });
-            });
-        } catch (e) {
-          console.log('error : ',e);
-          defer.reject(e);
-        }
+
+        (function callRS() {
+          if (isConnected()) {
+            console.log('RS connected, sending call');
+            try {
+              remoteStorage[module][func].apply(null, params).
+                then(function (res) {
+                  $rootScope.$apply(function () {
+                    defer.resolve(res);
+                  });
+                }, function (err) {
+                  $rootScope.$apply(function () {
+                    defer.reject(err);
+                  });
+                });
+            } catch (e) {
+              console.log('error : ',e);
+              defer.reject(e);
+            }
+          } else {
+            console.log('RS not connected yet, delaying call 1s');
+            $timeout(callRS, 1000);
+          }
+        })();
       }
       return defer.promise;
     }
