@@ -25,6 +25,17 @@ value('configHelper', {
   }
 }).
 
+value('util', {
+  isEmptyObject: function isEmptyObject(obj) {
+    for(var prop in obj) {
+      if (Object.prototype.hasOwnProperty.call(obj, prop)) {
+        return false;
+      }
+    }
+    return true;
+  }
+}).
+
 
 
 
@@ -101,10 +112,13 @@ function ($rootScope, $q, SH, CH, RS) {
    * FEED FETCHING
    ****************/
   // issue orders to fetch feeds from sockethub
-  func.fetchFeed = function fetch(msg) {
+  func.fetchFeed = function fetch(url) {
     var defer = $q.defer();
+    var msg = {};
+    msg.target[0].address = url;
     msg.platform = 'rss';
     msg.verb = 'fetch';
+    msg.actor.address = "rss";
     console.log("FETCH: ", msg);
     SH.submit(msg, 5000).then(defer.resolve, defer.reject);
     return defer.promise;
@@ -171,15 +185,25 @@ function ($scope, RSS, $rootScope) {
  * controller: feedCtrl
  */
 controller('feedCtrl',
-['$scope', 'RSS',
-function ($scope, RSS) {
+['$scope', 'RSS', 'util',
+function ($scope, RSS, util) {
 
   $scope.model = {};
   $scope.model.feeds = RSS.data;
+  $scope.model.message = '';
 
-  console.log('-- feeds.info: ', $scope.model.feeds.info);
-  console.log('-- feeds.articles: ', $scope.model.feeds.articles);
+  // display friendly message when no feeds are loaded
+  if (util.isEmptyObject($scope.model.feeds.info)) {
+    $scope.model.message = "no feeds yet, add some!";
+    $scope.$watch('$scope.model.feeds.info', function (newVal, oldVal) {
+      console.log('feed info n: ', newVal);
+      console.log('feed info o: ', oldVal);
+      if (!util.isEmptyObject($scope.model.feeds.info)) {
+        $scope.model.message = '';
+      }
 
+    });
+  }
 }]).
 
 
@@ -241,79 +265,6 @@ function () {
               '    <a href="#/feed/{{ f.url | urlEncode }}">{{ f.name }}</a>' +
               '  </li>' +
               '</ul>',
-    transclude: true,
-    link: function (scope, element, attrs) {
-      scope.uniqueFeeds = [];
-      scope.message = '';
-      console.log('**** info: ', scope.feeds.info);
-      console.log('**** articles: ', scope.feeds.articles);
-
-      /*var match = false, j = 0, i = 0;
-      for (i = 0, num = scope.feeds.articles.length; i < num; i = i + 1) {
-        match = false;
-        for (j = 0, jnum = scope.uniqueFeeds.length; j < jnum; j = j + 1) {
-          if (scope.uniqueFeeds[j].address === scope.feeds.articles[i].actor.address) {
-            match = true;
-            break;
-          }
-        }
-        if (!match) {
-          scope.uniqueFeeds.push({ address: scope.feeds.articles[i].actor.address,
-                                   name: scope.feeds.articles[i].actor.name,
-                                   description: scope.feeds.articles[i].actor.description,
-                                   platform: scope.feeds.articles[i].platform });
-        }
-      }
-
-      for (var key in scope.feeds.info) {
-        match = false;
-        for (j = 0, jnum = scope.uniqueFeeds.length; j < jnum; j = j + 1) {
-          if (scope.uniqueFeeds[j].address === scope.feeds.info[key].url) {
-            match = true;
-            break;
-          }
-        }
-        if (!match) {
-          scope.uniqueFeeds.push({ address: scope.feeds.info[key].url,
-                                   name: scope.feeds.info[key].name,
-                                   description: '',
-                                   platform: 'rss' });
-        }
-      }
-
-      console.log('**** uniqueFeeds: ', scope.uniqueFeeds);
-
-      if (scope.uniqueFeeds.length === 0) {
-        scope.message = "no feeds yet, add some!";
-      }*/
-    }
+    transclude: true
   };
 }]);
-
-
-
-/*
-              <div ng-controller="feedListCtrl">
-                <h4>Feeds</h4>
-                <ul class="nav nav-list">
-                  <li data-ng-repeat="c in model.contacts | filter:c.name | orderBy:c.state" ng-class="feedSwitch('{{ c.address }}')">
-                    <a href="#/feed/{{c.address}}">
-                      <span class="state {{ c.state }}"></span>
-                      <span class="username" data-toggle="tooltip" title="{{ c.address }}">{{ c.name }}</span>
-                    </a>
-                  </li>
-                </ul>
-              </div>
-*/
-/*
-              <div class="span9 messages" ng-controller="articlesCtrl">
-                <p>{{ model.currentName }} - {{ model.currentAddress }}</p>
-                <div class="articles">
-                  <div class="article well" ng-repeat="a in model.articles">
-                    <div class="name"><small>{{ a.actor.name }}</small></div>
-                    <div class="address"><small>{{ a.actor.address }}</small></div>
-                    <div class="text"><p></p><p class="text-info">{{ a.object.brief_text }}<p></div>
-                  </div>
-                </div>
-              </div>
-*/
