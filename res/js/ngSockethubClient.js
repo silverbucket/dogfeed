@@ -1,4 +1,63 @@
 angular.module('ngSockethubClient', []).
+
+
+/**
+ * settings service
+ */
+value('settings', {
+  sockethub: function () {
+    // figure out sockethub connect settings
+    var settings = {
+      host: 'localhost',
+      port: '10550',
+      path: '/sockethub',
+      tls: false,
+      secret: '1234567890'
+    };
+
+    return settings;
+  },
+  save: function (scope, factory) {
+    scope.config = factory.config.data;
+    scope.model = {};
+    scope.model.submitMsg = '';
+    scope.save = function () {
+      scope.saving = true;
+      factory.config.set().then(function () {
+        scope.model.submitMsg = 'config saved!';
+        scope.saving = false;
+      }, function (err) {
+        scope.model.submitMsg = err;
+      });
+    };
+  }
+}).
+
+
+/**
+ * connect to sockethub on startup
+ */
+run(['settings', 'SH',
+function (settings, SH) {
+  var s = settings.sockethub();
+  // connect to sockethub and register
+  SH.setConfig(s.host, s.port,
+               s.path, s.tls,
+               s.secret).then(function () {
+    return SH.connect();
+  }).then(function () {
+    return SH.register();
+  }).then(function () {
+    console.log('connected to sockethub');
+  }, function (err) {
+    console.log('error connection to sockethub: ', err);
+  });
+}]).
+
+
+/**
+ * factory: SH
+ */
 factory('SH', ['$rootScope', '$q',
 function ($rootScope, $q) {
 
