@@ -1,3 +1,0 @@
-[submodule "vendor/sockethub-client"]
-	path = vendor/sockethub-client
-	url = git://github.com/sockethub/sockethub-client.git
