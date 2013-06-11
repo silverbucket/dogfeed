@@ -26,3 +26,21 @@
 .modal {
   margin-top: 30px;
 }
+
+.nav-list {
+  padding-left: 0px;
+}
+
+.status {
+  width: 18px;
+  height: 14px;
+  line-height: 14px;
+  display:inline-block;
+}
+.loading-small {
+  background-image: url("/res/img/loading_14.gif");
+  display: inline-block;
+  height: 14px;
+  line-height: 14px;
+  background-repeat: no-repeat;
+}
