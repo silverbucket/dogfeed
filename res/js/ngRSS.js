@@ -49,8 +49,8 @@ value('util', {
 /**
  * Factory: RSS
  */
-factory('RSS', ['$rootScope', '$q', 'SH', 'configHelper', 'RS',
-function ($rootScope, $q, SH, CH, RS) {
+factory('RSS', ['$q', 'SH', 'configHelper', 'RS', 'RSutil',
+function ($q, SH, CH, RS, RSutil) {
 
   var config = {};
   var data = {
@@ -79,15 +79,16 @@ function ($rootScope, $q, SH, CH, RS) {
     return defer.promise;
   };
 
+
   /****
    * FEED MANAGEMENT
    ******************/
   // grab whatever feeds exists in remoteStorage right away
   (function getFeedUrls() {
     RS.call('rss', 'getAll', ['']).then(function (urls) {
-      console.log('getFeedUrls - got: ', urls);
       for (var key in urls) {
-        data.info[key] = urls[key];
+        data.info[key] = urls[key]; // asign existing feed info to data struct
+        func.fetchFeed(urls[key].url); // fetch articles from sockethub
       }
     }, function (err) {
       console.log('error: unable to get feed list from remoteStorage: ', err);
@@ -99,7 +100,7 @@ function ($rootScope, $q, SH, CH, RS) {
     var defer = $q.defer();
     RS.call('rss', 'add', [obj]).then(function (m) {
       console.log('feed added: ', obj);
-      data.info[obj.id] = obj;
+      data.info[RSutil.encode(obj.id)] = obj;
       defer.resolve(m);
     }, function (err) {
       defer.reject(err);
@@ -114,7 +115,10 @@ function ($rootScope, $q, SH, CH, RS) {
   // issue orders to fetch feeds from sockethub
   func.fetchFeed = function fetch(url) {
     var defer = $q.defer();
-    var msg = {};
+    var msg = {
+      actor: {},
+      target: [{}]
+    };
     msg.target[0].address = url;
     msg.platform = 'rss';
     msg.verb = 'fetch';
@@ -127,8 +131,16 @@ function ($rootScope, $q, SH, CH, RS) {
   // detect when new articles are received from Sockethub
   SH.on('rss', 'message', function (m) {
     console.log("RSS received message");
+    var key = RSutil.encode(m.actor.address);
+    if (!data.info[key]) {
+      console.log("*** RSS: key doesn't match an feed entry "+key);
+    } else if (data.info[key].name !== m.actor.name) {
+      data.info[key]['name'] = m.actor.name;
+      func.addFeed(data.info[key]);
+    }
     data.articles.push(m);
   });
+
 
   return {
     config: config,
@@ -194,16 +206,18 @@ function ($scope, RSS, util) {
 
   // display friendly message when no feeds are loaded
   if (util.isEmptyObject($scope.model.feeds.info)) {
-    $scope.model.message = "no feeds yet, add some!";
-    $scope.$watch('$scope.model.feeds.info', function (newVal, oldVal) {
-      console.log('feed info n: ', newVal);
-      console.log('feed info o: ', oldVal);
-      if (!util.isEmptyObject($scope.model.feeds.info)) {
-        $scope.model.message = '';
-      }
-
-    });
+    $scope.model.message = "loading feed list...";
   }
+
+  $scope.$watch('$scope.model.feeds.info', function (newVal, oldVal) {
+    console.log('feed info n: ', newVal);
+    console.log('feed info o: ', oldVal);
+    if (!util.isEmptyObject($scope.model.feeds.info)) {
+      $scope.model.message = '';
+    } else {
+      $scope.model.message = "no feeds yet, add some!";
+    }
+  });
 }]).
 
 
@@ -225,25 +239,15 @@ function () {
   return {
     restrict: 'E',
     scope: {
-      feeds: '='
+      'feeds': '='
     },
-    template: '<div class="well" ng-repeat="f in articles">' +
+    template: '<div class="well" ng-repeat="f in feeds.articles | orderBy:f.object.date">' +
               '  <h2>{{ f.object.title }}</h2>' +
-              '  <p>feed: <i>{{ f.actor.address }}</i></p>' +
+              '  <p>feed: <i>{{ f.actor.name }}</i></p>' +
+              '  <p>date: <i>{{ f.object.date }}</i></p>' +
               '  <p>article link: <i><a target="_blank" href="{{ f.object.link }}">{{ f.object.link }}</a><i></p>' +
               '  <div data-brief data-ng-bind-html-unsafe="f.object.brief_html"></div>' +
-              '</div>',
-    link: function (scope) {
-      console.log('ARTICLES: ', scope.feeds.articles);
-      for (var i = 0, num = scope.feeds.articles.length; i < num; i = i + 1) {
-        if (!scope.feeds.articles[i].object.html) {
-          scope.feeds.articles[i].object.html = scope.feeds.articles[i].object.text;
-        }
-        if (!scope.feeds.articles[i].object.brief_html) {
-          scope.feeds.articles[i].object.brief_html = scope.feeds.articles[i].object.brief_text;
-        }
-      }
-    }
+              '</div>'
   };
 }]).
 
