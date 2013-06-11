@@ -121,6 +121,7 @@ function ($rootScope, $q) {
 
   function register() {
     var defer = $q.defer();
+    if (!isConnected()) { defer.reject('not connected to sockethub'); return defer.promise; }
     sc.register({
       secret: config.secret
     }).then(function () {
@@ -192,6 +193,7 @@ function ($rootScope, $q) {
 
   function sendSet(platform, type, index, object) {
     var defer = $q.defer();
+    if (!isConnected()) { defer.reject('not connected to sockethub'); return defer.promise; }
     var data = {};
     data[type] = {};
     data[type][index] = object;
@@ -210,6 +212,7 @@ function ($rootScope, $q) {
 
   function sendSubmit(obj, timeout) {
     var defer = $q.defer();
+    if (!isConnected()) { defer.reject('not connected to sockethub'); return defer.promise; }
 
     sc.submit(obj, timeout).then(function () {
       $rootScope.$apply(function () {
