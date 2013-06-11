@@ -49,8 +49,8 @@ value('util', {
 /**
  * Factory: RSS
  */
-factory('RSS', ['$q', 'SH', 'configHelper', 'RS', 'RSutil',
-function ($q, SH, CH, RS, RSutil) {
+factory('RSS', ['$q', 'SH', 'configHelper', 'RS',
+function ($q, SH, CH, RS) {
 
   var config = {};
   var data = {
@@ -100,7 +100,7 @@ function ($q, SH, CH, RS, RSutil) {
     var defer = $q.defer();
     RS.call('rss', 'add', [obj]).then(function (m) {
       console.log('feed added: ', obj);
-      data.info[RSutil.encode(obj.id)] = obj;
+      data.info[escape(obj.id)] = obj;
       defer.resolve(m);
     }, function (err) {
       defer.reject(err);
@@ -131,7 +131,7 @@ function ($q, SH, CH, RS, RSutil) {
   // detect when new articles are received from Sockethub
   SH.on('rss', 'message', function (m) {
     console.log("RSS received message");
-    var key = RSutil.encode(m.actor.address);
+    var key = escape(m.actor.address);
     if (!data.info[key]) {
       console.log("*** RSS: key doesn't match an feed entry "+key);
     } else if (data.info[key].name !== m.actor.name) {
