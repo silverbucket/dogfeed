@@ -41,21 +41,15 @@
 
         add: function (obj) {
           if (typeof obj.url === 'string') {
-            obj.id = encodeURIComponent(obj.url);
+            obj.id = encodeURIComponent(escape(obj.url));
           } else {
             obj.id = privateClient.uuid();
           }
           return privateClient.storeObject(moduleName, obj.id, obj);
         },
 
-        // wrap these function to ensure they are called correctly.
-        // unhelpful errors happen if not.
-        getAll: function () {
-          return privateClient.getAll('');
-        },
-        getListing: function () {
-          return privateClient.getListing('');
-        }
+        getAll: privateClient.getAll,
+        getListing: privateClient.getListing
       }
     };
   });

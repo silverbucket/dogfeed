@@ -49,8 +49,8 @@ value('util', {
 /**
  * Factory: RSS
  */
-factory('RSS', ['$q', 'SH', 'configHelper', 'RS',
-function ($q, SH, CH, RS) {
+factory('RSS', ['$q', 'SH', 'configHelper', 'RS', 'RSutil',
+function ($q, SH, CH, RS, RSutil) {
 
   var config = {};
   var data = {
@@ -131,12 +131,14 @@ function ($q, SH, CH, RS) {
   // detect when new articles are received from Sockethub
   SH.on('rss', 'message', function (m) {
     console.log("RSS received message");
-    var key = escape(m.actor.address);
+    var key = RSutil.encode(m.actor.address);
     if (!data.info[key]) {
-      console.log("*** RSS: key doesn't match an feed entry "+key);
+      console.log("*** RSS: key doesn't match an feed entry " + key);
     } else if (data.info[key].name !== m.actor.name) {
       data.info[key]['name'] = m.actor.name;
       func.addFeed(data.info[key]);
+    } else {
+      console.log("*** Names already match: " + m.actor.name);
     }
     data.articles.push(m);
   });
@@ -244,7 +246,7 @@ function () {
     template: '<div class="well" ng-repeat="f in feeds.articles | orderBy:f.object.date">' +
               '  <h2>{{ f.object.title }}</h2>' +
               '  <p>feed: <i>{{ f.actor.name }}</i></p>' +
-              '  <p>date: <i>{{ f.object.date }}</i></p>' +
+              '  <p>date: <i>{{ f.object.date | date }}</i></p>' +
               '  <p>article link: <i><a target="_blank" href="{{ f.object.link }}">{{ f.object.link }}</a><i></p>' +
               '  <div data-brief data-ng-bind-html-unsafe="f.object.brief_html"></div>' +
               '</div>'
@@ -266,9 +268,12 @@ function () {
               '<span>{{ message }}<span>' +
               '<ul class="nav nav-list">' +
               '  <li ng-repeat="f in feeds.info" data-toggle="tooltip" title="{{ f.name }}">' +
-              '    <a href="#/feed/{{ f.url | urlEncode }}">{{ f.name }}</a>' +
+              '    <a href="#/feed/{{ f.url | urlEncode }}"><i class="status loading-small"></i>  {{ f.name }}</a>' +
               '  </li>' +
               '</ul>',
-    transclude: true
+    transclude: true,
+    link: function (scope) {
+
+    }
   };
 }]);

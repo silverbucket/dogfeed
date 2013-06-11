@@ -1,5 +1,11 @@
 angular.module('ngRemoteStorage', []).
 
+value('RSutil', {
+  encode: function encode(string) {
+    return encodeURIComponent(escape(string));
+  }
+}).
+
 factory('RS', ['$rootScope', '$q', '$timeout',
 function ($rootScope, $q, $timeout) {
 
@@ -55,8 +61,8 @@ function ($rootScope, $q, $timeout) {
 controller('remoteStorageCtrl',
 [function () {
 
-  //remoteStorage.util.silenceAllLoggers();
-  remoteStorage.util.unsilenceAllLoggers();
+  remoteStorage.util.silenceAllLoggers();
+  //remoteStorage.util.unsilenceAllLoggers();
 
   remoteStorage.claimAccess({sockethub:'rw',rss:'rw'}).then(function () {
     remoteStorage.displayWidget('remotestorage-connect', {
