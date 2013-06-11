@@ -147,7 +147,7 @@ function ($rootScope, $q) {
     }).then(function (connection) {
       sc = connection;
       sc.on('message', function (data) {
-        console.log('SH received message: ', data);
+        console.log('SH received message');
         if ((data.platform) &&
             (callbacks['message'][data.platform])) {
           console.log('SH passing message to platform: '+data.platform);
@@ -172,7 +172,7 @@ function ($rootScope, $q) {
       });
       sc.on('close', function (data) {
         console.log('SH received close: ', data);
-        if ((data.platform) &&
+        if ((data) && (data.platform) &&
             (callbacks[close][data.platform])) {
           console.log('SH passing close to platform: '+data.platform);
           $rootScope.$apply(callbacks['close'][data.platform](data));
