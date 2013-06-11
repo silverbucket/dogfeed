@@ -1,7 +1,4 @@
-angular.module('dogfeed', ['ngRemoteStorage', 'ngRSS']).
-
-
-
+angular.module('dogfeed', ['ngRSS']).
 
 
 /**
