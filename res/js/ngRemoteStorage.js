@@ -1,4 +1,11 @@
 angular.module('ngRemoteStorage', []).
+
+value('RSutil', {
+  encode: function encode(string) {
+    return encodeURIComponent(string).replace('~', '%7E');
+  }
+}).
+
 factory('RS', ['$rootScope', '$q', '$timeout',
 function ($rootScope, $q, $timeout) {
 
