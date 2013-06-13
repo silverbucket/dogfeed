@@ -161,7 +161,10 @@ function ($q, SH, CH, RS, RSutil, $rootScope) {
       //console.log("*** Names already match: " + m.actor.name);
       data.info[key]['loaded'] = true;
     }
-    data.articles.push(m);
+
+    if (m.status) {
+      data.articles.push(m);
+    }
   });
 
 
