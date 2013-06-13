@@ -49,8 +49,8 @@ value('util', {
 /**
  * Factory: RSS
  */
-factory('RSS', ['$q', 'SH', 'configHelper', 'RS', 'RSutil',
-function ($q, SH, CH, RS, RSutil) {
+factory('RSS', ['$q', 'SH', 'configHelper', 'RS', 'RSutil', '$rootScope',
+function ($q, SH, CH, RS, RSutil, $rootScope) {
 
   var config = {};
   var data = {
@@ -101,6 +101,7 @@ function ($q, SH, CH, RS, RSutil) {
     RS.call('rss', 'add', [obj]).then(function (m) {
       console.log('feed added: ', obj);
       data.info[escape(obj.id)] = obj;
+      func.fetchFeed(obj.url);
       defer.resolve(m);
     }, function (err) {
       defer.reject(err);
@@ -132,13 +133,33 @@ function ($q, SH, CH, RS, RSutil) {
   SH.on('rss', 'message', function (m) {
     console.log("RSS received message");
     var key = RSutil.encode(m.actor.address);
+    if (!m.status) {
+      $rootScope.$broadcast('message', {
+        type: 'error',
+        message: m.target[0].address + ' ' + m.object.message
+      });
+    }
+
     if (!data.info[key]) {
-      console.log("*** RSS: key doesn't match an feed entry " + key);
+      console.log("*** RSS: key doesn't match a feed entry [ " + key +" ]: ", m);
+      if (!m.status) {
+        // actor not found and error detected, probably bad feed
+        var t_key = RSutil.encode(m.target[0].address);
+        console.log('CHECKING: [tkey:'+t_key+'] data.info:',data.info);
+        if (data.info[t_key]) {
+          console.log('PROBLEM FEED SETTINGS:', data.info[t_key]);
+          data.info[t_key]['loaded'] = true;
+          data.info[t_key]['error'] = true;
+          data.info[t_key]['errorMsg'] = m.object.message;
+        }
+      }
     } else if (data.info[key].name !== m.actor.name) {
       data.info[key]['name'] = m.actor.name;
       func.addFeed(data.info[key]);
+      data.info[key]['loaded'] = true;
     } else {
-      console.log("*** Names already match: " + m.actor.name);
+      //console.log("*** Names already match: " + m.actor.name);
+      data.info[key]['loaded'] = true;
     }
     data.articles.push(m);
   });
@@ -199,12 +220,13 @@ function ($scope, RSS, $rootScope) {
  * controller: feedCtrl
  */
 controller('feedCtrl',
-['$scope', 'RSS', 'util',
-function ($scope, RSS, util) {
+['$scope', 'RSS', 'util', '$rootScope',
+function ($scope, RSS, util, $rootScope) {
 
   $scope.model = {};
   $scope.model.feeds = RSS.data;
   $scope.model.message = '';
+  $scope.model.loading = true;
 
   // display friendly message when no feeds are loaded
   if (util.isEmptyObject($scope.model.feeds.info)) {
@@ -212,13 +234,20 @@ function ($scope, RSS, util) {
   }
 
   $scope.$watch('$scope.model.feeds.info', function (newVal, oldVal) {
-    console.log('feed info n: ', newVal);
-    console.log('feed info o: ', oldVal);
     if (!util.isEmptyObject($scope.model.feeds.info)) {
       $scope.model.message = '';
     } else {
       $scope.model.message = "no feeds yet, add some!";
     }
+  });
+
+  $rootScope.$on('SockethubConnectFailed', function (event, e) {
+    $rootScope.$broadcast('message', {
+      message: e.message,
+      type: 'error',
+      timeout: false
+    });
+    $scope.model.loading = true;
   });
 }]).
 
@@ -268,12 +297,13 @@ function () {
               '<span>{{ message }}<span>' +
               '<ul class="nav nav-list">' +
               '  <li ng-repeat="f in feeds.info" data-toggle="tooltip" title="{{ f.name }}">' +
-              '    <a href="#/feed/{{ f.url | urlEncode }}"><i class="status loading-small"></i>  {{ f.name }}</a>' +
+              '    <a href="#/feed/{{ f.url | urlEncode }}" ng-class="{\'error\': f.error}">' +
+              '      <i class="status" ' +
+              '         ng-class="{\'loading-small\': !f.loaded}">' +
+              '      </i>  {{ f.name }}' +
+              '    </a>' +
               '  </li>' +
               '</ul>',
-    transclude: true,
-    link: function (scope) {
-
-    }
+    transclude: true
   };
 }]);
