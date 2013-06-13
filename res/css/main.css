@@ -16,9 +16,11 @@
   margin: 0 5% 0 5%;
   padding: 8px 0 8px 10px;
 }
+
 .alert p {
   margin: 0 0 0 1%;
 }
+
 .alert strong {
  margin-right: 5px;
 }
@@ -37,10 +39,19 @@
   line-height: 14px;
   display:inline-block;
 }
+
 .loading-small {
   background-image: url("/res/img/loading_14.gif");
   display: inline-block;
   height: 14px;
   line-height: 14px;
   background-repeat: no-repeat;
+}
+
+.contacts {
+  margin-bottom: 30px;
+}
+
+.error {
+  background-color: #ffd3d3;
 }
