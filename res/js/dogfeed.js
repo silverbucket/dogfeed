@@ -135,9 +135,11 @@ function ($rootScope, $timeout) {
         }
       };
 
+
       $rootScope.$on('message', function (event, e) {
         console.log('message event: ', e);
 
+        var timeout = (typeof e.timeout === 'boolean') ? e.timeout : true;
         scope.haveMessage = false;
 
         if (typeof e === 'undefined') {
@@ -158,11 +160,12 @@ function ($rootScope, $timeout) {
         console.log('done processing: ', scope.m);
 
         scope.haveMessage = true;
-        $timeout(function () {
-          scope.haveMessage = false;
-          scope.m = {type: '', title: '', message: ''};
-        }, 4000);
-
+        if (timeout) {
+          $timeout(function () {
+            scope.haveMessage = false;
+            scope.m = {type: '', title: '', message: ''};
+          }, 4000);
+        }
       });
     }
   };
