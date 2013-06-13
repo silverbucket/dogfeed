@@ -37,8 +37,8 @@ value('settings', {
 /**
  * connect to sockethub on startup
  */
-run(['settings', 'SH',
-function (settings, SH) {
+run(['settings', 'SH', '$rootScope',
+function (settings, SH, $rootScope) {
   var s = settings.sockethub();
   // connect to sockethub and register
   SH.setConfig(s.host, s.port,
@@ -51,6 +51,7 @@ function (settings, SH) {
     console.log('connected to sockethub');
   }, function (err) {
     console.log('error connection to sockethub: ', err);
+    $rootScope.$broadcast('SockethubConnectFailed', {message: err});
   });
 }]).
 
@@ -148,7 +149,7 @@ function ($rootScope, $q) {
     }).then(function (connection) {
       sc = connection;
       sc.on('message', function (data) {
-        console.log('SH received message');
+        //console.log('SH received message');
         if ((data.platform) &&
             (callbacks['message'][data.platform])) {
           console.log('SH passing message to platform: '+data.platform);
@@ -184,7 +185,6 @@ function ($rootScope, $q) {
       });
     }, function (err) { // sockethub connection failed
       $rootScope.$apply(function () {
-        //console.log('ngSockethubClient.connect: received error on connect: ', err);
         defer.reject(err);
       });
     });
