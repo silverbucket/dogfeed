@@ -50,7 +50,6 @@ function ($rootScope) {
 filter('urlEncode', [
 function() {
   return function (text, length, end) {
-    console.log("FILTER: ", text, length, end);
     return encodeURIComponent(text);
   };
 }]).
