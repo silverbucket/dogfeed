@@ -59,8 +59,8 @@ function (settings, SH, $rootScope) {
 /**
  * factory: SH
  */
-factory('SH', ['$rootScope', '$q',
-function ($rootScope, $q) {
+factory('SH', ['$rootScope', '$q', '$timeout',
+function ($rootScope, $q, $timeout) {
 
   var sc;
   var callbacks = {
@@ -120,22 +120,27 @@ function ($rootScope, $q) {
     }
   }
 
-  function register() {
+
+  function callOnReady(p) {
     var defer = $q.defer();
-    if (!isConnected()) { defer.reject('not connected to sockethub'); return defer.promise; }
-    sc.register({
-      secret: config.secret
-    }).then(function () {
-      //console.log('ngSockethubClient.register: registration success ['+sc.isConnected()+']');
-      $rootScope.$apply(defer.resolve);
-    }, function (err) { // sockethub registration fail
-      console.log('ngSockethubClient.register: registration failed: ', err);
-      $rootScope.$apply(function () {
-        defer.reject(err.message);
-      });
-    });
+    (function __call() {
+      if (p.testFunc()) {
+        console.log('SH: calling: '+p.callFunc);
+        sc[p.callFunc].apply(sc, p.callParams)
+          .then(function (e) {
+            $rootScope.$apply(defer.resolve(e));
+          }, function (e) {
+            $rootScope.$apply(defer.reject(e));
+          });
+      } else {
+        console.log('SH: delaying call 1s');
+        $timeout(__call, 1000);
+      }
+    })();
     return defer.promise;
   }
+
+
 
   function connect() {
     var defer = $q.defer();
@@ -148,6 +153,7 @@ function ($rootScope, $q) {
       confirmationTimeout: 3000   // timeout in miliseconds to wait for confirm
     }).then(function (connection) {
       sc = connection;
+      console.log('CONNECTED [connected: '+sc.isConnected()+'] [registered: '+sc.isRegistered()+']');
       sc.on('message', function (data) {
         //console.log('SH received message');
         if ((data.platform) &&
@@ -191,47 +197,54 @@ function ($rootScope, $q) {
     return defer.promise;
   }
 
+
+  function register() {
+    var defer = $q.defer();
+    console.log('SH.register() called');
+    callOnReady({
+      testFunc: isConnected,
+      callFunc: 'register',
+      callParams: [{
+        secret: config.secret
+      }]
+    }).then(defer.resolve, defer.reject);
+    return defer.promise;
+  }
+
+
   function sendSet(platform, type, index, object) {
     var defer = $q.defer();
-    if (!isConnected()) { defer.reject('not connected to sockethub'); return defer.promise; }
     var data = {};
     data[type] = {};
     data[type][index] = object;
-    sc.set(platform, data).then(function () {
-      $rootScope.$apply(function () {
-        defer.resolve();
-      });
-    }, function () {
-      $rootScope.$apply(function () {
-        defer.reject();
-      });
-    });
+
+    callOnReady({
+      testFunc: isRegistered,
+      callFunc: 'set',
+      callParams: [platform, data]
+    }).then(defer.resolve, defer.reject);
 
     return defer.promise;
   }
+
 
   function sendSubmit(obj, timeout) {
     var defer = $q.defer();
-    if (!isConnected()) { defer.reject('not connected to sockethub'); return defer.promise; }
 
-    sc.submit(obj, timeout).then(function () {
-      $rootScope.$apply(function () {
-        defer.resolve();
-      });
-
-    }, function (resp) {
-      console.log('ngSockethubClient submit rejection response: ', resp);
-      $rootScope.$apply(function () {
-        defer.reject(resp.message);
-      });
-    });
+    callOnReady({
+      testFunc: isRegistered,
+      callFunc: 'submit',
+      callParams: [obj, timeout]
+    }).then(defer.resolve, defer.reject);
 
     return defer.promise;
   }
+
 
   var on = function on(platform, type, func) {
     callbacks[type][platform] = func;
   };
+
 
   return {
     config: config,
