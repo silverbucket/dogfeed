@@ -9,13 +9,15 @@ value('RSutil', {
 factory('RS', ['$rootScope', '$q', '$timeout',
 function ($rootScope, $q, $timeout) {
 
+  var ready = false;
+
   function isConnected() {
-    if (remoteStorage.getBearerToken() === null) {
-      return false;
-    } else {
-      return true;
-    }
+    return ready;
   }
+
+  remoteStorage.on('ready', function () {
+    ready = true;
+  });
 
   return {
     isConnected: isConnected,
