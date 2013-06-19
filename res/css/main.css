@@ -30,7 +30,16 @@
 }
 
 .nav-list {
-  padding-left: 0px;
+  padding-left: 0;
+}
+
+.nav-list li {
+  display: inline-block;
+  margin: 0 50px 0 0;
+}
+
+.nav-list li a {
+  padding: 3px;
 }
 
 .status {
@@ -38,6 +47,11 @@
   height: 14px;
   line-height: 14px;
   display:inline-block;
+}
+
+.feed-entry {
+  min-width: 190px;
+  display: block;
 }
 
 .loading-small {
@@ -49,9 +63,11 @@
 }
 
 .contacts {
-  margin-bottom: 30px;
+  margin: 0 0 30px 0;
+  display: block;
 }
 
 .error {
   background-color: #ffd3d3;
 }
+

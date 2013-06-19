@@ -300,7 +300,7 @@ function () {
               '<span>{{ message }}<span>' +
               '<ul class="nav nav-list">' +
               '  <li ng-repeat="f in feeds.info" data-toggle="tooltip" title="{{ f.name }}">' +
-              '    <a href="#/feed/{{ f.url | urlEncode }}" ng-class="{\'error\': f.error}">' +
+              '    <a href="#/feed/{{ f.url | urlEncode }}" class="feed-entry" ng-class="{\'error\': f.error}">' +
               '      <i class="status" ' +
               '         ng-class="{\'loading-small\': !f.loaded}">' +
               '      </i>  {{ f.name }}' +
