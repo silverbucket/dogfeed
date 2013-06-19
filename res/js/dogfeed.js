@@ -10,9 +10,6 @@ function ($routeProvider) {
     when('/', {
       templateUrl: "feeds.html"
     }).
-    when('/:address', {
-      templateUrl: "feeds.html"
-    }).
     otherwise({
       redirectTo: "/"
     });
