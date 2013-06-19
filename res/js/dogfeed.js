@@ -10,7 +10,7 @@ function ($routeProvider) {
     when('/', {
       templateUrl: "feeds.html"
     }).
-    when('/feed/:address', {
+    when('/:address', {
       templateUrl: "feeds.html"
     }).
     otherwise({
@@ -50,7 +50,7 @@ function ($rootScope) {
 filter('urlEncode', [
 function() {
   return function (text, length, end) {
-    return encodeURIComponent(text);
+    return encodeURIComponent(escape(text));
   };
 }]).
 
