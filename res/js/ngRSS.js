@@ -318,7 +318,7 @@ function () {
               '    <a href="#/?feed={{ f.url }}" class="feed-entry" ng-class="{\'error\': f.error}">' +
               '      <i class="status" ' +
               '         ng-class="{\'loading-small\': !f.loaded}">' +
-              '      </i>  {{ f.name }}' +
+              '      </i><span>{{ f.name }}</span>' +
               '    </a>' +
               '  </li>' +
               '</ul>',

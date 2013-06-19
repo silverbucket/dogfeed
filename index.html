@@ -39,16 +39,16 @@
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
         <h4>Add RSS Feed</h4>
       </div>
-      <div class="modal-body">
         <form name="addFeed" class="form-horizontal" novalidate>
-          <input type="text" class="required input-xxlarge" name="url" placeholder="Enter URL..." ng-model="url" autofocus="autofocus" required />
-      </div>
-      <div class="modal-footer">
+          <div class="modal-body">
+            <input type="text" class="required input-xxlarge" name="url" placeholder="Enter URL..." ng-model="url" autofocus="autofocus" required />
+          </div>
+          <div class="modal-footer">
           <button ng-click="add(url)" ng-disabled="addFeed.$invalid || adding">
             <span class="icon-plus" alt="Add Feed"></span> Add Feed
           </button>
-        </form>
-      </div>
+        </div>
+      </form>
     </div>
 
     <!-- feeds -->
@@ -56,8 +56,8 @@
       <section id="talk" class="page">
         <div class="container-fluid">
           <div class="row-fluid" ng-controller="feedCtrl">
-            <feed-list class="span3 contacts" feeds="model.feeds">Feeds</feed-list>
-            <articles class="span9 articles" feeds="model.feeds">{{model.currentFeed.name}}</articles>
+            <feed-list class="span2 contacts" feeds="model.feeds">Feeds</feed-list>
+            <articles class="span10 articles" feeds="model.feeds">{{model.currentFeed.name}}</articles>
           </div>
         </div>
       </section>
