@@ -216,8 +216,6 @@ function ($scope, RSS, $rootScope) {
     });
   };
 
-
-
 }]).
 
 
@@ -225,8 +223,8 @@ function ($scope, RSS, $rootScope) {
  * controller: feedCtrl
  */
 controller('feedCtrl',
-['$scope', 'RSS', 'util', '$rootScope', '$routeParams',
-function ($scope, RSS, util, $rootScope, $routeParams) {
+['$scope', 'RSS', 'util', '$rootScope',
+function ($scope, RSS, util, $rootScope) {
 
   $scope.model = {};
   $scope.model.feeds = RSS.data;
@@ -236,12 +234,20 @@ function ($scope, RSS, util, $rootScope, $routeParams) {
     name: '',
     url: ''
   };
+
+/*
   if ($routeParams['feed']) {
     $scope.model.currentFeed = RSS.data.info[$routeParams['feed']];
   }
   console.log('routeParams: ', $routeParams);
+
   console.log('RSS.data: ', RSS.data);
   console.log('currentFeed: ', $scope.model.currentFeed);
+*/
+
+  $scope.switchFeed = function (url) {
+    $scope.model.currentFeed = RSS.data.info[url];
+  };
 
   // display friendly message when no feeds are loaded
   if (util.isEmptyObject($scope.model.feeds.info)) {
@@ -278,6 +284,36 @@ function ($scope, RSS, util, $rootScope, $routeParams) {
 
 
 /**
+ * directive: feedList
+ */
+directive('feedList', [
+function () {
+  return {
+    restrict: 'E',
+    scope: {
+      'feeds': '='
+    },
+    template: '<h4 ng-transclude></h4>' +
+              '<span>{{ message }}<span>' +
+              '<ul class="nav nav-list" ng-controller="feedCtrl">' +
+              '  <li ng-repeat="f in feeds.info"' +
+              '      data-toggle="tooltip" ' +
+              '      title="{{ f.url }}"' +
+              '      ng-click="switchFeed(f.url)"' +
+              '      ng-class="{active: model.currentFeed.url == f.url, error: f.error}">' +
+              '    <a href="" ng-class="{error: f.error}">' +
+              '      <i class="status" ' +
+              '         ng-class="{\'loading-small\': !f.loaded}">' +
+              '      </i><span>{{ f.name }}</span>' +
+              '    </a>' +
+              '  </li>' +
+              '</ul>',
+    transclude: true
+  };
+}]).
+
+
+/**
  * sdirective: articles
  */
 directive('articles', [
@@ -295,33 +331,6 @@ function () {
               '  <p>article link: <i><a target="_blank" href="{{ f.object.link }}">{{ f.object.link }}</a><i></p>' +
               '  <div data-brief data-ng-bind-html-unsafe="f.object.brief_html"></div>' +
               '</div>',
-    transclude: true
-  };
-}]).
-
-
-/**
- * directive: feedList
- */
-directive('feedList', [
-function () {
-  return {
-    restrict: 'E',
-    scope: {
-      'feeds': '='
-    },
-    template: '<h4 ng-transclude></h4>' +
-              '<span>{{ message }}<span>' +
-              '<ul class="nav nav-list">' +
-              '  <li ng-repeat="f in feeds.info" data-toggle="tooltip" ' +
-              '      title="{{ f.name }}" ng-class="{\'active\': (f.url==model.currentFeed)}">' +
-              '    <a href="#/?feed={{ f.url }}" class="feed-entry" ng-class="{\'error\': f.error}">' +
-              '      <i class="status" ' +
-              '         ng-class="{\'loading-small\': !f.loaded}">' +
-              '      </i><span>{{ f.name }}</span>' +
-              '    </a>' +
-              '  </li>' +
-              '</ul>',
     transclude: true
   };
 }]);
