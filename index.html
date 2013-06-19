@@ -57,7 +57,7 @@
         <div class="container-fluid">
           <div class="row-fluid" ng-controller="feedCtrl">
             <feed-list class="span3 contacts" feeds="model.feeds">Feeds</feed-list>
-            <articles class="span9 articles" feeds="model.feeds"></articles>
+            <articles class="span9 articles" feeds="model.feeds">{{model.currentFeed.name}}</articles>
           </div>
         </div>
       </section>
