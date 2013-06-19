@@ -87,8 +87,9 @@ function ($q, SH, CH, RS, RSutil, $rootScope) {
   (function getFeedUrls() {
     RS.call('rss', 'getAll', ['']).then(function (urls) {
       for (var key in urls) {
-        data.info[key] = urls[key]; // asign existing feed info to data struct
-        func.fetchFeed(urls[key].url); // fetch articles from sockethub
+        var url = urls[key].url;
+        data.info[url] = urls[key]; // asign existing feed info to data struct
+        func.fetchFeed(url); // fetch articles from sockethub
       }
     }, function (err) {
       console.log('error: unable to get feed list from remoteStorage: ', err);
@@ -100,7 +101,7 @@ function ($q, SH, CH, RS, RSutil, $rootScope) {
     var defer = $q.defer();
     RS.call('rss', 'add', [obj]).then(function (m) {
       console.log('feed added: ', obj);
-      data.info[escape(obj.id)] = obj;
+      data.info[obj.url] = obj;
       func.fetchFeed(obj.url);
       defer.resolve(m);
     }, function (err) {
@@ -131,8 +132,8 @@ function ($q, SH, CH, RS, RSutil, $rootScope) {
 
   // detect when new articles are received from Sockethub
   SH.on('rss', 'message', function (m) {
-    console.log("RSS received message");
-    var key = RSutil.encode(m.actor.address);
+    //console.log("RSS received message");
+    var key = m.actor.address;
     if (!m.status) {
       $rootScope.$broadcast('message', {
         type: 'error',
@@ -144,8 +145,8 @@ function ($q, SH, CH, RS, RSutil, $rootScope) {
       console.log("*** RSS: key doesn't match a feed entry [ " + key +" ]: ", m);
       if (!m.status) {
         // actor not found and error detected, probably bad feed
-        var t_key = RSutil.encode(m.target[0].address);
-        console.log('CHECKING: [tkey:'+t_key+'] data.info:',data.info);
+        var t_key = m.target[0].address;
+        //console.log('CHECKING: [tkey:' + t_key + '] data.info: ', data.info);
         if (data.info[t_key]) {
           console.log('PROBLEM FEED SETTINGS:', data.info[t_key]);
           data.info[t_key]['loaded'] = true;
@@ -213,8 +214,9 @@ function ($scope, RSS, $rootScope) {
       console.log('rss feed url save failed!: ', err);
       $rootScope.$broadcast('message', {type: 'error', message: err.message});
     });
-
   };
+
+
 
 }]).
 
@@ -223,13 +225,23 @@ function ($scope, RSS, $rootScope) {
  * controller: feedCtrl
  */
 controller('feedCtrl',
-['$scope', 'RSS', 'util', '$rootScope',
-function ($scope, RSS, util, $rootScope) {
+['$scope', 'RSS', 'util', '$rootScope', '$routeParams',
+function ($scope, RSS, util, $rootScope, $routeParams) {
 
   $scope.model = {};
   $scope.model.feeds = RSS.data;
   $scope.model.message = '';
   $scope.model.loading = true;
+  $scope.model.currentFeed = {
+    name: '',
+    url: ''
+  };
+  if ($routeParams['feed']) {
+    $scope.model.currentFeed = RSS.data.info[$routeParams['feed']];
+  }
+  console.log('routeParams: ', $routeParams);
+  console.log('RSS.data: ', RSS.data);
+  console.log('currentFeed: ', $scope.model.currentFeed);
 
   // display friendly message when no feeds are loaded
   if (util.isEmptyObject($scope.model.feeds.info)) {
@@ -275,13 +287,15 @@ function () {
     scope: {
       'feeds': '='
     },
-    template: '<div class="well" ng-repeat="f in feeds.articles | orderBy:f.object.date">' +
+    template: '<h4 ng-transclude></h4>' +
+              '<div class="well" ng-repeat="f in feeds.articles | orderBy:f.object.date">' +
               '  <h2>{{ f.object.title }}</h2>' +
               '  <p>feed: <i>{{ f.actor.name }}</i></p>' +
               '  <p>date: <i>{{ f.object.date | date }}</i></p>' +
               '  <p>article link: <i><a target="_blank" href="{{ f.object.link }}">{{ f.object.link }}</a><i></p>' +
               '  <div data-brief data-ng-bind-html-unsafe="f.object.brief_html"></div>' +
-              '</div>'
+              '</div>',
+    transclude: true
   };
 }]).
 
@@ -299,8 +313,9 @@ function () {
     template: '<h4 ng-transclude></h4>' +
               '<span>{{ message }}<span>' +
               '<ul class="nav nav-list">' +
-              '  <li ng-repeat="f in feeds.info" data-toggle="tooltip" title="{{ f.name }}">' +
-              '    <a href="#/feed/{{ f.url | urlEncode }}" class="feed-entry" ng-class="{\'error\': f.error}">' +
+              '  <li ng-repeat="f in feeds.info" data-toggle="tooltip" ' +
+              '      title="{{ f.name }}" ng-class="{\'active\': (f.url==model.currentFeed)}">' +
+              '    <a href="#/?feed={{ f.url }}" class="feed-entry" ng-class="{\'error\': f.error}">' +
               '      <i class="status" ' +
               '         ng-class="{\'loading-small\': !f.loaded}">' +
               '      </i>  {{ f.name }}' +
