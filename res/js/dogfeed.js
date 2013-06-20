@@ -1,8 +1,27 @@
-angular.module('dogfeed', ['ngRSS']).
+angular.module('dogfeed', ['ngRSS', 'ngSockethubClient']).
 
 
 /**
- * config: routes
+ * settings
+ */
+value('settings', {
+  sockethub: function () {
+    // figure out sockethub connect settings
+    var settings = {
+      host: 'localhost',
+      port: '10550',
+      path: '/sockethub',
+      tls: false,
+      secret: '1234567890'
+    };
+
+    return settings;
+  }
+}).
+
+
+/**
+ * routes
  */
 config(['$routeProvider',
 function ($routeProvider) {
@@ -13,6 +32,27 @@ function ($routeProvider) {
     otherwise({
       redirectTo: "/"
     });
+}]).
+
+
+
+/**
+ * sockethub connect
+ */
+run(['settings', 'SH', '$rootScope',
+function (settings, SH, $rootScope) {
+  var s = settings.sockethub();
+  // connect to sockethub and register
+  SH.setConfig(s).then(function () {
+    return SH.connect();
+  }).then(function () {
+    return SH.register();
+  }).then(function () {
+    console.log('connected to sockethub');
+  }, function (err) {
+    console.log('error connection to sockethub: ', err);
+    $rootScope.$broadcast('SockethubConnectFailed', {message: err});
+  });
 }]).
 
 
