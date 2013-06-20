@@ -37,8 +37,6 @@ value('util', {
 }).
 
 
-
-
 ///////////////////////////////////////////////////////////////////////////
 //
 // FACTORY
@@ -164,6 +162,7 @@ function ($q, SH, CH, RS, RSutil, $rootScope) {
     }
 
     if (m.status) {
+      console.log('adding: ',m);
       data.articles.push(m);
     }
   });
@@ -230,23 +229,13 @@ function ($scope, RSS, util, $rootScope) {
   $scope.model.feeds = RSS.data;
   $scope.model.message = '';
   $scope.model.loading = true;
-  $scope.model.currentFeed = {
+  $scope.model.feeds['current'] = {
     name: '',
     url: ''
   };
 
-/*
-  if ($routeParams['feed']) {
-    $scope.model.currentFeed = RSS.data.info[$routeParams['feed']];
-  }
-  console.log('routeParams: ', $routeParams);
-
-  console.log('RSS.data: ', RSS.data);
-  console.log('currentFeed: ', $scope.model.currentFeed);
-*/
-
   $scope.switchFeed = function (url) {
-    $scope.model.currentFeed = RSS.data.info[url];
+    $scope.model.feeds['current'] = RSS.data.info[url];
   };
 
   // display friendly message when no feeds are loaded
@@ -300,10 +289,10 @@ function () {
               '      data-toggle="tooltip" ' +
               '      title="{{ f.url }}"' +
               '      ng-click="switchFeed(f.url)"' +
-              '      ng-class="{active: model.currentFeed.url == f.url, error: f.error}">' +
+              '      ng-class="{active: model.feeds.current.url == f.url, error: f.error, loading: !f.loaded}">' +
               '    <a href="" ng-class="{error: f.error}">' +
               '      <i class="status" ' +
-              '         ng-class="{\'loading-small\': !f.loaded}">' +
+              '         ng-class="{\'loading-icon-small\': !f.loaded}">' +
               '      </i><span>{{ f.name }}</span>' +
               '    </a>' +
               '  </li>' +
@@ -314,7 +303,7 @@ function () {
 
 
 /**
- * sdirective: articles
+ * directive: articles
  */
 directive('articles', [
 function () {
@@ -323,14 +312,13 @@ function () {
     scope: {
       'feeds': '='
     },
-    template: '<h4 ng-transclude></h4>' +
-              '<div class="well" ng-repeat="f in feeds.articles | orderBy:f.object.date">' +
-              '  <h2>{{ f.object.title }}</h2>' +
-              '  <p>feed: <i>{{ f.actor.name }}</i></p>' +
-              '  <p>date: <i>{{ f.object.date | date }}</i></p>' +
-              '  <p>article link: <i><a target="_blank" href="{{ f.object.link }}">{{ f.object.link }}</a><i></p>' +
-              '  <div data-brief data-ng-bind-html-unsafe="f.object.brief_html"></div>' +
-              '</div>',
-    transclude: true
+    template: '<h4>{{ feeds.current.name }}</h4>' +
+              '<div class="well" ng-repeat="a in feeds.articles | orderBy:a.object.date">' +
+              '  <h2>{{ a.object.title }}</h2>' +
+              '  <p>feed: <i>{{ a.actor.name }}</i></p>' +
+              '  <p>date: <i>{{ a.object.date | date }}</i></p>' +
+              '  <p>article link: <i><a target="_blank" href="{{ a.object.link }}">{{ a.object.link }}</a><i></p>' +
+              '  <div data-brief data-ng-bind-html-unsafe="a.object.brief_html"></div>' +
+              '</div>'
   };
 }]);
