@@ -51,6 +51,14 @@
   overflow: hidden;
 }
 
+.contacts a {
+  text-decoration: none;
+}
+
+.all-feeds {
+  margin: 0 0 10px 20px;
+}
+
 .nav-list {
   padding: 0;
   display: inline-block;
@@ -82,7 +90,7 @@
   display: inline-block;
 }*/
 
-.loading-icon-small {
+.icon-loading-small {
   background-image: url("/res/img/loading_14.gif");
   display: inline-block;
   height: 14px;
