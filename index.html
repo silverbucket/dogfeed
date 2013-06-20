@@ -39,16 +39,17 @@
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
         <h4>Add RSS Feed</h4>
       </div>
-        <form name="addFeed" class="form-horizontal" novalidate>
-          <div class="modal-body">
-            <input type="text" class="required input-xxlarge" name="url" placeholder="Enter URL..." ng-model="url" autofocus="autofocus" required />
-          </div>
-          <div class="modal-footer">
+        <div class="modal-body">
+      <form name="addFeed" class="form-horizontal" novalidate>
+          <input type="text" class="required input-xxlarge" name="url" placeholder="Enter URL..." ng-model="url" autofocus="autofocus" required />
+        </div>
+        <div class="modal-footer">
           <button ng-click="add(url)" ng-disabled="addFeed.$invalid || adding">
             <span class="icon-plus" alt="Add Feed"></span> Add Feed
           </button>
-        </div>
       </form>
+
+        </div>
     </div>
 
     <!-- feeds -->
@@ -57,7 +58,7 @@
         <div class="container-fluid">
           <div class="row-fluid" ng-controller="feedCtrl">
             <feed-list class="span2 contacts" feeds="model.feeds">Feeds</feed-list>
-            <articles class="span10 articles" feeds="model.feeds">{{model.currentFeed.name}}</articles>
+            <articles class="span10 articles" feeds="model.feeds"></articles>
           </div>
         </div>
       </section>
@@ -70,9 +71,9 @@
     <script src="vendor/remotestorage/remotestorage-sockethub.js?v=0.0.1"></script>
     <script src="vendor/remotestorage/remotestorage-rss.js?v=0.0.1"></script>
     <script src="vendor/sockethub-client/sockethub-client.js"></script>
+    <script src="vendor/sockethub-client/angular/ngSockethubClient.js?v=0.0.1"></script>
     <script src="res/js/ngRemoteStorage.js?v=0.0.1"></script>
     <script src="res/js/ngRSS.js?v=0.0.1"></script>
-    <script src="res/js/ngSockethubClient.js?v=0.0.1"></script>
     <script src="res/js/dogfeed.js"></script>
   </body>
 </html>
