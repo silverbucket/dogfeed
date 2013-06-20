@@ -162,7 +162,6 @@ function ($q, SH, CH, RS, RSutil, $rootScope) {
     }
 
     if (m.status) {
-      console.log('adding: ',m);
       data.articles.push(m);
     }
   });
@@ -229,13 +228,36 @@ function ($scope, RSS, util, $rootScope) {
   $scope.model.feeds = RSS.data;
   $scope.model.message = '';
   $scope.model.loading = true;
-  $scope.model.feeds['current'] = {
+  $scope.model.feeds.current = {
     name: '',
-    url: ''
+    indexes: []
+  };
+
+  $scope.selected = function(url, inclusive) {
+    if ($scope.model.feeds.current.indexes.length === 0) {
+      if ((inclusive) || (!url)) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      for (var i = 0, num = $scope.model.feeds.current.indexes.length; i < num; i = i + 1) {
+        if ($scope.model.feeds.current.indexes[i] === url) {
+          return true;
+        }
+      }
+    }
+    return false;
   };
 
   $scope.switchFeed = function (url) {
-    $scope.model.feeds['current'] = RSS.data.info[url];
+    if (!url) {
+      $scope.model.feeds.current.name = '';
+      $scope.model.feeds.current.indexes = [];
+    } else {
+      $scope.model.feeds.current.name = RSS.data.info[url].name;
+      $scope.model.feeds.current.indexes = [url];
+    }
   };
 
   // display friendly message when no feeds are loaded
@@ -285,14 +307,20 @@ function () {
     template: '<h4 ng-transclude></h4>' +
               '<span>{{ message }}<span>' +
               '<ul class="nav nav-list" ng-controller="feedCtrl">' +
+              '  <li ng-click="switchFeed()"' +
+              '       ng-class="{active: selected(), \'all-feeds\': true}">' +
+              '    <a href="" >' +
+              '      <i class="icon-globe"></i><span>All Items</span>' +
+              '    </a>' +
+              '  </li>' +
               '  <li ng-repeat="f in feeds.info"' +
               '      data-toggle="tooltip" ' +
               '      title="{{ f.url }}"' +
               '      ng-click="switchFeed(f.url)"' +
-              '      ng-class="{active: model.feeds.current.url == f.url, error: f.error, loading: !f.loaded}">' +
+              '      ng-class="{active: selected(f.url), error: f.error, loading: !f.loaded}">' +
               '    <a href="" ng-class="{error: f.error}">' +
               '      <i class="status" ' +
-              '         ng-class="{\'loading-icon-small\': !f.loaded}">' +
+              '         ng-class="{\'icon-loading-small\': !f.loaded}">' +
               '      </i><span>{{ f.name }}</span>' +
               '    </a>' +
               '  </li>' +
@@ -313,7 +341,9 @@ function () {
       'feeds': '='
     },
     template: '<h4>{{ feeds.current.name }}</h4>' +
-              '<div class="well" ng-repeat="a in feeds.articles | orderBy:a.object.date">' +
+              '<div ng-repeat="a in feeds.articles | orderBy:a.object.date"' +
+              '     ng-controller="feedCtrl"' +
+              '     ng-class="{well: true, hide: !selected(a.actor.address, true)}" >' +
               '  <h2>{{ a.object.title }}</h2>' +
               '  <p>feed: <i>{{ a.actor.name }}</i></p>' +
               '  <p>date: <i>{{ a.object.date | date }}</i></p>' +
