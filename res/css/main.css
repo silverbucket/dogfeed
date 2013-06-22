@@ -83,6 +83,7 @@
   padding: 2px 0 2px 5px;
   pointer-events: all;
   cursor: pointer;
+  min-width: 190px;
 }
 
 .feed-entry:hover {
@@ -121,7 +122,7 @@
 }
 
 .status:hover {
-  background-color: #eedddd;
+  cursor: pointer;
 }
 
 
