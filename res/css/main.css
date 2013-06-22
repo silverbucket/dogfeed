@@ -35,14 +35,16 @@
 
 .error {
   background-color: #ffd3d3;
-  pointer-events: none;
+  pointer-events: none !important;
 }
 .error a {
-  pointer-events: none;
+  pointer-events: none !important;
 }
 .loading, .loading a {
-  pointer-events: none;
+  pointer-events: none !important;
 }
+
+
 
 
 .contacts {
@@ -64,11 +66,44 @@
   display: inline-block;
 }
 
+
+
+
 .nav-list li {
   display: inline-block;
   width: 100%;
-  margin-left: 18px;
+  margin: 0 0 5px 18px;
   padding: 0;
+}
+
+
+.feed-entry {
+  display: inline-block;
+  width: 94%;
+  padding: 2px 0 2px 5px;
+  pointer-events: all;
+  cursor: pointer;
+}
+
+.feed-entry:hover {
+  background-color: #ffdffc;
+}
+
+.active {
+  background-color: #08c;
+  color: white;
+  pointer-events: none;
+}
+.active a {
+  color: white;
+  pointer-events: none;
+}
+.active:hover {
+  background-color: #08c;
+  color: white;
+}
+.active a:hover {
+  color: white;
 }
 
 .nav-list li a span {
@@ -76,14 +111,21 @@
 }
 
 .status {
-  width: 18px;
+  width: 14px;
   height: 14px;
-  line-height: 14px;
-  float: left;
+  line-height: 100%;
   margin: 4px 0 0 -15px;
+  display: inline-block;
   /*margin-right: 5px;
   display:inline-block;*/
 }
+
+.status:hover {
+  background-color: #eedddd;
+}
+
+
+
 
 /*.feed-entry {
   min-width: 190px;
@@ -95,7 +137,9 @@
   display: inline-block;
   height: 14px;
   line-height: 14px;
+  width: 14px;
   background-repeat: no-repeat;
+  background-position: left top;
 }
 
 
@@ -123,3 +167,4 @@
   font-style: italic;
   text-align: center;
 }
+
