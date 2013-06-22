@@ -315,6 +315,10 @@ function ($scope, RSS, util, $rootScope) {
     }
   };
 
+  $scope.showFeedSettings = function (url) {
+    $rootScope.$broadcast('showModalFeedSettings', {locked: false});
+  };
+
   $scope.markRead = function (url) {
     console.log('markRead Called!');
     for (var i = 0, num = $scope.model.feeds.articles.length; i < num; i = i + 1) {
@@ -392,8 +396,8 @@ function () {
               '  <li ng-repeat="f in feeds.info"' +
               '      data-toggle="tooltip" ' +
               '      title="{{ f.url }}">' +
-              '    <i class="status" ' +
-              '      ng-class="{\'icon-loading-small\': !f.loaded, \'icon-cog\': f.loaded}">' +
+              '    <i ng-click="showFeedSettings(f.url)"' +
+              '      ng-class="{status: true, \'icon-loading-small\': !f.loaded, \'icon-cog\': f.loaded}">' +
               '    </i>' +
               '    <div ng-click="switchFeed(f.url)"' +
               '         ng-class="{active: isSelected(f.url), error: f.error, loading: !f.loaded, \'feed-entry\': true}">' +
