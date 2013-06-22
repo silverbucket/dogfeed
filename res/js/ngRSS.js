@@ -316,13 +316,16 @@ function ($scope, RSS, util, $rootScope) {
   };
 
   $scope.markRead = function (url) {
+    console.log('markRead Called!');
     for (var i = 0, num = $scope.model.feeds.articles.length; i < num; i = i + 1) {
       //console.log('A.link: ' + $scope.model.feeds.articles[i].object.link + ' url: '+url);
       if ($scope.model.feeds.articles[i].object.link === url) {
+        //console.log('subtracting 1 from : '+ $scope.model.feeds.info[$scope.model.feeds.articles[i].actor.address].unread);
         $scope.model.feeds.info[$scope.model.feeds.articles[i].actor.address].unread =
             $scope.model.feeds.info[$scope.model.feeds.articles[i].actor.address].unread - 1;
         $scope.model.feeds.articles[i].object.read = true;
         RSS.func.updateArticle($scope.model.feeds.articles[i]);
+        return;
       }
     }
   };
