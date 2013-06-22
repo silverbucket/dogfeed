@@ -320,11 +320,13 @@ function ($scope, RSS, util, $rootScope) {
     for (var i = 0, num = $scope.model.feeds.articles.length; i < num; i = i + 1) {
       //console.log('A.link: ' + $scope.model.feeds.articles[i].object.link + ' url: '+url);
       if ($scope.model.feeds.articles[i].object.link === url) {
-        //console.log('subtracting 1 from : '+ $scope.model.feeds.info[$scope.model.feeds.articles[i].actor.address].unread);
-        $scope.model.feeds.info[$scope.model.feeds.articles[i].actor.address].unread =
-            $scope.model.feeds.info[$scope.model.feeds.articles[i].actor.address].unread - 1;
-        $scope.model.feeds.articles[i].object.read = true;
-        RSS.func.updateArticle($scope.model.feeds.articles[i]);
+        if (!$scope.model.feeds.articles[i].object.read) {
+          //console.log('subtracting 1 from : '+ $scope.model.feeds.info[$scope.model.feeds.articles[i].actor.address].unread);
+          $scope.model.feeds.info[$scope.model.feeds.articles[i].actor.address].unread =
+              $scope.model.feeds.info[$scope.model.feeds.articles[i].actor.address].unread - 1;
+          $scope.model.feeds.articles[i].object.read = true;
+          RSS.func.updateArticle($scope.model.feeds.articles[i]);
+        }
         return;
       }
     }
@@ -389,14 +391,16 @@ function () {
               '  </li>' +
               '  <li ng-repeat="f in feeds.info"' +
               '      data-toggle="tooltip" ' +
-              '      title="{{ f.url }}"' +
-              '      ng-click="switchFeed(f.url)"' +
-              '      ng-class="{active: isSelected(f.url), error: f.error, loading: !f.loaded}">' +
-              '    <a href="" ng-class="{error: f.error}">' +
-              '      <i class="status" ' +
-              '         ng-class="{\'icon-loading-small\': !f.loaded}">' +
-              '      </i><span>{{ f.name }}</span> <span class="unread-count">{{ f.unread }}</span>' +
-              '    </a>' +
+              '      title="{{ f.url }}">' +
+              '    <i class="status" ' +
+              '      ng-class="{\'icon-loading-small\': !f.loaded, \'icon-cog\': f.loaded}">' +
+              '    </i>' +
+              '    <div ng-click="switchFeed(f.url)"' +
+              '         ng-class="{active: isSelected(f.url), error: f.error, loading: !f.loaded, \'feed-entry\': true}">' +
+              '      <a href="" ng-class="{error: f.error}">' +
+              '        <span>{{ f.name }}</span> <span class="unread-count">{{ f.unread }}</span>' +
+              '      </a>' +
+              '    </div>' +
               '  </li>' +
               '</ul>',
     transclude: true
