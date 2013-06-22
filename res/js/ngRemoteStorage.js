@@ -2,6 +2,7 @@ angular.module('ngRemoteStorage', []).
 
 value('RSutil', {
   encode: function encode(string) {
+    console.log("rsutil encode: ", string);
     return encodeURIComponent(escape(string));
   }
 }).
@@ -66,7 +67,7 @@ controller('remoteStorageCtrl',
   remoteStorage.util.silenceAllLoggers();
   //remoteStorage.util.unsilenceAllLoggers();
 
-  remoteStorage.claimAccess({sockethub:'rw',rss:'rw'}).then(function () {
+  remoteStorage.claimAccess({sockethub:'rw',rss:'rw',articles:'rw'}).then(function () {
     remoteStorage.displayWidget('remotestorage-connect', {
       redirectUri: window.location.protocol + '//' + window.location.host + '/rscallback.html'
     });
