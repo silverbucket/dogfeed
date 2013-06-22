@@ -1,0 +1,21 @@
+{
+  "name": "dogfeed",
+  "description": "an unhosted RSS reader",
+  "version": "0.0.1",
+  "private": false,
+  "author": "Nick Jennings <nick@silverbucket.net>",
+  "license": "AGPL",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/silverbucket/dogfeed.git"
+  },
+  "homepage": "http://github.com/silverbucket/dogfeed",
+  "devDependencies": {
+    "grunt": "*",
+    "grunt-contrib-uglify": "~0.2.2",
+    "grunt-contrib-cssmin": "~0.6.1",
+    "grunt-contrib-concat": "*",
+    "grunt-contrib-copy": "*",
+    "grunt-contrib-clean": "*"
+  }
+}
