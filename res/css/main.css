@@ -115,3 +115,11 @@
   font-weight: 600;
   margin-left: 10px;
 }
+
+.version {
+  float: right;
+  margin: 20px 50px 0 0;
+  font-size: 13px;
+  font-style: italic;
+  text-align: center;
+}
