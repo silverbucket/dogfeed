@@ -37,6 +37,8 @@ value('util', {
 }).
 
 
+
+
 ///////////////////////////////////////////////////////////////////////////
 //
 // FACTORY
@@ -86,8 +88,8 @@ function ($q, SH, CH, RS, RSutil, $rootScope) {
     RS.call('rss', 'getAll', ['']).then(function (urls) {
       for (var key in urls) {
         var url = urls[key].url;
-        data.info[url] = urls[key]; // asign existing feed info to data struct
-        func.fetchFeed(url); // fetch articles from sockethub
+        data.info[url] = urls[key];  // asign existing feed info to data struct
+        func.fetchFeed(url);  // fetch articles from sockethub
       }
     }, function (err) {
       console.log('error: unable to get feed list from remoteStorage: ', err);
@@ -101,6 +103,37 @@ function ($q, SH, CH, RS, RSutil, $rootScope) {
       console.log('feed added: ', obj);
       data.info[obj.url] = obj;
       func.fetchFeed(obj.url);
+      defer.resolve(m);
+    }, function (err) {
+      defer.reject(err);
+    });
+    return defer.promise;
+  };
+
+
+  /****
+   * ARTICLE MANAGEMENT
+   *********************/
+  // update or create an article entry on remoteStorage
+  func.updateArticle = function updateArticle(obj) {
+    var defer = $q.defer();
+    var s_obj = {
+      link: obj.object.link,
+      title: obj.object.title,
+      date: obj.object.data,
+      html: obj.object.html,
+      text: obj.object.text,
+      brief_html: obj.object.brief_html,
+      brief_text: obj.object.brief_text,
+      read: (obj.object.read) ? true : false,
+      source_link: obj.actor.address,
+      source_title: obj.actor.name
+    };
+
+    RS.call('articles', 'update', [s_obj]).then(function (m) {
+      //console.log('article added: ', m);
+      //data.info[obj.url] = obj;
+      //func.fetchFeed(obj.url);
       defer.resolve(m);
     }, function (err) {
       defer.reject(err);
@@ -127,6 +160,7 @@ function ($q, SH, CH, RS, RSutil, $rootScope) {
     SH.submit(msg, 5000).then(defer.resolve, defer.reject);
     return defer.promise;
   };
+
 
   // detect when new articles are received from Sockethub
   SH.on('rss', 'message', function (m) {
@@ -161,8 +195,28 @@ function ($q, SH, CH, RS, RSutil, $rootScope) {
       data.info[key]['loaded'] = true;
     }
 
+    if (!m.object.read) {
+      m.object.read = false;
+    }
+
     if (m.status) {
-      data.articles.push(m);
+      console.log('adding: ', m);
+      var id = RSutil.encode(m.object.link);
+      console.log('ID: ', id);
+      RS.call('articles', 'get', [id]).then(function (a) {
+        if (a) {
+          console.log('ARTICLE FETCH from RS: ', a);
+          m.object.read = a.read;
+        }
+
+        if (!m.object.read) {
+          data.info[key].unread = (typeof data.info[key].unread === "number") ? data.info[key].unread + 1 : 1;
+        }
+        data.articles.push(m);
+      }, function (e) {
+        console.log("ARTICL FETCH ERROR: ", e);
+        data.articles.push(m);
+      });
     }
   });
 
@@ -233,7 +287,7 @@ function ($scope, RSS, util, $rootScope) {
     indexes: []
   };
 
-  $scope.selected = function(url, inclusive) {
+  $scope.isSelected = function(url, inclusive) {
     if ($scope.model.feeds.current.indexes.length === 0) {
       if ((inclusive) || (!url)) {
         return true;
@@ -250,6 +304,7 @@ function ($scope, RSS, util, $rootScope) {
     return false;
   };
 
+
   $scope.switchFeed = function (url) {
     if (!url) {
       $scope.model.feeds.current.name = '';
@@ -257,6 +312,18 @@ function ($scope, RSS, util, $rootScope) {
     } else {
       $scope.model.feeds.current.name = RSS.data.info[url].name;
       $scope.model.feeds.current.indexes = [url];
+    }
+  };
+
+  $scope.markRead = function (url) {
+    for (var i = 0, num = $scope.model.feeds.articles.length; i < num; i = i + 1) {
+      //console.log('A.link: ' + $scope.model.feeds.articles[i].object.link + ' url: '+url);
+      if ($scope.model.feeds.articles[i].object.link === url) {
+        $scope.model.feeds.info[$scope.model.feeds.articles[i].actor.address].unread =
+            $scope.model.feeds.info[$scope.model.feeds.articles[i].actor.address].unread - 1;
+        $scope.model.feeds.articles[i].object.read = true;
+        RSS.func.updateArticle($scope.model.feeds.articles[i]);
+      }
     }
   };
 
@@ -271,6 +338,10 @@ function ($scope, RSS, util, $rootScope) {
     } else {
       $scope.model.message = "no feeds yet, add some!";
     }
+  });
+
+  $scope.$watch('$scope.model.feeds.articles', function (newVal, oldVal) {
+    console.log('article changed! ', newVal, oldVal);
   });
 
   $rootScope.$on('SockethubConnectFailed', function (event, e) {
@@ -308,7 +379,7 @@ function () {
               '<span>{{ message }}<span>' +
               '<ul class="nav nav-list" ng-controller="feedCtrl">' +
               '  <li ng-click="switchFeed()"' +
-              '       ng-class="{active: selected(), \'all-feeds\': true}">' +
+              '       ng-class="{active: isSelected(), \'all-feeds\': true}">' +
               '    <a href="" >' +
               '      <i class="icon-globe"></i><span>All Items</span>' +
               '    </a>' +
@@ -317,11 +388,11 @@ function () {
               '      data-toggle="tooltip" ' +
               '      title="{{ f.url }}"' +
               '      ng-click="switchFeed(f.url)"' +
-              '      ng-class="{active: selected(f.url), error: f.error, loading: !f.loaded}">' +
+              '      ng-class="{active: isSelected(f.url), error: f.error, loading: !f.loaded}">' +
               '    <a href="" ng-class="{error: f.error}">' +
               '      <i class="status" ' +
               '         ng-class="{\'icon-loading-small\': !f.loaded}">' +
-              '      </i><span>{{ f.name }}</span>' +
+              '      </i><span>{{ f.name }}</span> <span class="unread-count">{{ f.unread }}</span>' +
               '    </a>' +
               '  </li>' +
               '</ul>',
@@ -343,12 +414,34 @@ function () {
     template: '<h4>{{ feeds.current.name }}</h4>' +
               '<div ng-repeat="a in feeds.articles | orderBy:a.object.date"' +
               '     ng-controller="feedCtrl"' +
-              '     ng-class="{well: true, hide: !selected(a.actor.address, true)}" >' +
+              '     ng-click="markRead(a.object.link)"' +
+              '     ng-class="{well: true, hide: !isSelected(a.actor.address, true), unread: !a.object.read, article: true}" >' +
               '  <h2>{{ a.object.title }}</h2>' +
               '  <p>feed: <i>{{ a.actor.name }}</i></p>' +
               '  <p>date: <i>{{ a.object.date | date }}</i></p>' +
               '  <p>article link: <i><a target="_blank" href="{{ a.object.link }}">{{ a.object.link }}</a><i></p>' +
-              '  <div data-brief data-ng-bind-html-unsafe="a.object.brief_html"></div>' +
-              '</div>'
+              '  <div class="article-body" data-ng-bind-html-unsafe="a.object.brief_html"></div>' +
+              '</div>',
+    link: function (scope, element, attrs) {
+      console.log('#### LINK FUNCTION: scope: ', scope);
+      console.log('#### LINK FUNCTION: element: ', element);
+      console.log('#### LINK FUNCTION: attrs: ', attrs);
+
+
+      scope.$watch(attrs.feeds, function (val) {
+        console.log('WATCH - val:', val);
+      });
+
+      var divs = document.getElementsByClassName('article');
+      for (var i = 0, num = divs.length; i < num; i = i + 1) {
+        // grab all of the links inside the div
+        var links = divs[i].getElementsByTagName('a');
+        // Loop through those links and attach the target attribute
+        for (var j = 0, jnum = links.length; j < jnum; j = j + 1) {
+          // the _blank will make the link open in new window
+          links[j].setAttribute('target', '_blank');
+        }
+      }
+    }
   };
 }]);
