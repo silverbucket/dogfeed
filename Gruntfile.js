@@ -3,7 +3,6 @@ module.exports = function(grunt) {
   // Project configuration.
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
-    clean: ['tmp/', 'build/'],
     concat: {
      options: {
         // define a string to put between each file in the concatenated output
@@ -12,45 +11,66 @@ module.exports = function(grunt) {
       },
       dogfeed: {
         // the files to concatenate
-        src: ['res/**/*.js'],
+        src: ['res/js/dogfeed.js', 'res/js/ngRSS.js'],
         // the location of the resulting JS file
-        dest: 'tmp/<%= pkg.name %>.js'
+        dest: 'build/<%= pkg.name %>.js.tmp'
       },
       dogfeedCSS: {
         // the files to concatenate
-        src: ['res/**/*.css', 'vendor/**/*.css'],
+        src: ['res/**/*.css'],
         // the location of the resulting JS file
-        dest: 'tmp/style.css'
+        dest: 'build/dogfeed.css.tmp'
       },
-      remotestorage: {
+      flatuiCSS: {
         // the files to concatenate
-        src: ['vendor/remotestorage/*.js'],
+        src: ['vendor/flat-ui/*.css'],
         // the location of the resulting JS file
-        dest: 'tmp/remotestorage.js'
+        dest: 'build/flat-ui.css.tmp'
       },
-      sockethub: {
+      remotestorageModules: {
+        // the files to concatenate
+        src: ['vendor/remotestorage/*-*.js'],
+        // the location of the resulting JS file
+        dest: 'build/remotestorage-modules.js.tmp'
+      },
+      remotestorageAngular: {
+        // the files to concatenate
+        src: ['res/js/ngRemoteStorage.js'],
+        // the location of the resulting JS file
+        dest: 'build/remotestorage-angular.js.tmp'
+      },
+      sockethubClient: {
         // the files to concatenate
         src: ['vendor/sockethub-client/sockethub-client.js'],
         // the location of the resulting JS file
-        dest: 'tmp/sockethub-client.js'
+        dest: 'build/sockethub-client.js.tmp'
       },
-      angular: {
+      sockethubAngular: {
         // the files to concatenate
-        src: ['vendor/angular.min.js'],
+        src: ['vendor/sockethub-client/angular/ngSockethubClient.js'],
         // the location of the resulting JS file
-        dest: 'build/res/js/angular.min.js'
-      },
-      bootstrap: {
-        // the files to concatenate
-        src: ['vendor/bootstrap/js/bootstrap.min.js'],
-        // the location of the resulting JS file
-        dest: 'build/res/js/bootstrap.min.js'
-      },
-      jquery: {
-        // the files to concatenate
-        src: ['vendor/jquery.min.js'],
-        // the location of the resulting JS file
-        dest: 'build/res/js/jquery.min.js'
+        dest: 'build/sockethub-angular.js.tmp'
+      }
+    },
+    copy: {
+      main: {
+        files: [
+          {expand: true, src: ['*.html'], dest: 'build/'}, // includes files in path and its subdirs
+          {expand: true, src: ['*.ico'], dest: 'build/'}, // includes files in path and its subdirs
+          {expand: true, src: ['*.png'], dest: 'build/'}, // includes files in path and its subdirs
+          {expand: true, src: ['*.jpg'], dest: 'build/'}, // includes files in path and its subdirs
+          {expand: true, src: ['res/img/*'], dest: 'build/', filter: 'isFile'}, // includes files in path and its subdirs
+          {expand: false, src: ['vendor/bootstrap/img/glyphicons-halflings-white.png'], dest: 'build/res/img/glyphicons-halflings-white.png', filter: 'isFile'}, // includes files in path and its subdirs
+          {expand: false, src: ['vendor/bootstrap/img/glyphicons-halflings.png'], dest: 'build/res/img/glyphicons-halflings.png', filter: 'isFile'}, // includes files in path and its subdirs
+          {expand: false, src: ['vendor/jquery.min.js'], dest: 'build/res/js/jquery.min.js', filter: 'isFile'}, // includes files in path and its subdirs
+          {expand: false, src: ['vendor/angular.min.js'], dest: 'build/res/js/angular.min.js', filter: 'isFile'}, // includes files in path and its subdirs
+          {expand: false, src: ['vendor/remotestorage/remotestorage.min.js'], dest: 'build/res/js/remotestorage.min.js', filter: 'isFile'}, // includes files in path and its subdirs
+          {expand: false, src: ['vendor/bootstrap/js/bootstrap.min.js'], dest: 'build/res/js/bootstrap.min.js', filter: 'isFile'}, // includes files in path and its subdirs
+          {expand: false, src: ['vendor/bootstrap/js/bootstrap-responsive.min.js'], dest: 'build/res/js/bootstrap-responsive.min.js', filter: 'isFile'}, // includes files in path and its subdirs
+          {expand: false, src: ['vendor/bootstrap/css/bootstrap.min.css'], dest: 'build/res/css/bootstrap.min.css', filter: 'isFile'}, // includes files in path and its subdirs
+          {expand: false, src: ['vendor/bootstrap/css/bootstrap-responsive.min.css'], dest: 'build/res/css/bootstrap-responsive.min.css', filter: 'isFile'} // includes files in path and its subdirs
+
+        ]
       }
     },
     uglify: {
@@ -61,8 +81,10 @@ module.exports = function(grunt) {
       dist: {
         files: {
           'build/res/js/dogfeed.min.js': ['<%= concat.dogfeed.dest %>'],
-          'build/res/js/remotestorage.min.js': ['<%= concat.remotestorage.dest %>'],
-          'build/res/js/sockethub-client.min.js': ['<%= concat.sockethub.dest %>']
+          'build/res/js/remotestorage-modules.min.js': ['<%= concat.remotestorageModules.dest %>'],
+          'build/res/js/remotestorage-angular.min.js': ['<%= concat.remotestorageAngular.dest %>'],
+          'build/res/js/sockethub-client.min.js': ['<%= concat.sockethubClient.dest %>'],
+          'build/res/js/sockethub-angular.min.js': ['<%= concat.sockethubAngular.dest %>']
         }
       }
     },
@@ -70,25 +92,19 @@ module.exports = function(grunt) {
       minify: {
         expand: true,
         cwd: 'build/',
-        src: ['*.css', '!*.min.css'],
+        src: ['*.css.tmp', '!*.min.css'],
         dest: 'build/res/css/',
         ext: '.min.css'
       }
     },
-    copy: {
-      main: {
-        files: [
-          //{expand: true, src: ['path/*'], dest: 'dest/', filter: 'isFile'}, // includes files in path
-          {expand: true, src: ['*.html'], dest: 'build/'}, // includes files in path and its subdirs
-          {expand: true, src: ['*.ico'], dest: 'build/'}, // includes files in path and its subdirs
-          {expand: true, src: ['*.png'], dest: 'build/'}, // includes files in path and its subdirs
-          {expand: true, src: ['*.jpg'], dest: 'build/'}, // includes files in path and its subdirs
-          {expand: true, src: ['res/img/*'], dest: 'build/', filter: 'isFile'} // includes files in path and its subdirs
-          //{expand: true, cwd: 'path/', src: ['**'], dest: 'dest/'}, // makes all src relative to cwd
-          //{expand: true, flatten: true, src: ['path/**'], dest: 'dest/', filter: 'isFile'} // flattens results to a single level
-        ]
-      }
-    }
+
+    useminPrepare: {
+      html: ['build/index.html']
+    },
+    usemin: {
+      html: ['build/index.html']
+    },
+    clean: ['build/*.tmp']
   });
 
   // Load the plugin that provides the "uglify" task.
@@ -97,8 +113,9 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-clean');
+  grunt.loadNpmTasks('grunt-usemin');
 
   // Default task(s).
-  grunt.registerTask('default', ['clean', 'concat', 'uglify', 'cssmin', 'copy']);
+  grunt.registerTask('default', ['concat', 'copy', 'uglify', 'cssmin', 'usemin', 'clean']);
 
 };
