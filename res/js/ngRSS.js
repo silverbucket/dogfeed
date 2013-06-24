@@ -360,6 +360,7 @@ function ($scope, RSS, util, $rootScope) {
       timeout: false
     });
     $scope.model.loading = true;
+    $rootScope.$broadcast('showModalSockethubSettings', {locked: false});
   });
 }]).
 
