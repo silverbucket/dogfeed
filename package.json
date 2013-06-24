@@ -16,6 +16,7 @@
     "grunt-contrib-cssmin": "~0.6.1",
     "grunt-contrib-concat": "*",
     "grunt-contrib-copy": "*",
-    "grunt-contrib-clean": "*"
+    "grunt-contrib-clean": "*",
+    "grunt-usemin": "*"
   }
 }
