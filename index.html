@@ -22,6 +22,7 @@
 
   <body>
     <div id="remotestorage-connect" ng-controller="remoteStorageCtrl"></div>
+    <div sockethub-settings></div>
 
     <nav>
       <div class="navbar" ng-controller="titlebarCtrl">
@@ -31,8 +32,13 @@
             <li>
               <a href="" ng-click="addFeed()"><i class="icon-plus" alt="Add Feed"></i> Add Feed</a>
             </li>
+            <li>
+              <a href="" ng-click="sockethubSettings()"><i class="icon-cog"></i> Sockethub Settings</a>
+            </li>
           </ul>
-          <div class="version"><p>alpha release v0.0.1</p><p><a target="_blank" href="https://github.com/silverbucket/dogfeed/issues/">submit feedback or bug reports</a></p></div>
+          <div class="version">
+            <p>alpha release v0.0.1</p>
+            <p><a target="_blank" href="https://github.com/silverbucket/dogfeed/issues/">feedback and bug reports</a></p></div>
         </div>
       </div>
     </nav>
