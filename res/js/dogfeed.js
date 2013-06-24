@@ -2,25 +2,6 @@ angular.module('dogfeed', ['ngRSS', 'ngSockethubClient']).
 
 
 /**
- * settings
- */
-value('settings', {
-  sockethub: function () {
-    // figure out sockethub connect settings
-    var settings = {
-      host: 'localhost',
-      port: '10550',
-      path: '/sockethub',
-      tls: false,
-      secret: '1234567890'
-    };
-
-    return settings;
-  }
-}).
-
-
-/**
  * routes
  */
 config(['$routeProvider',
@@ -41,11 +22,10 @@ function ($routeProvider) {
  */
 run(['settings', 'SH', '$rootScope',
 function (settings, SH, $rootScope) {
-  var s = settings.sockethub();
+  var s = settings.conn;
   // connect to sockethub and register
-  SH.setConfig(s).then(function () {
-    return SH.connect();
-  }).then(function () {
+  settings.save('conn', s);
+  SH.connect().then(function () {
     return SH.register();
   }).then(function () {
     console.log('connected to sockethub');
@@ -109,6 +89,9 @@ controller('titlebarCtrl',
 function ($scope, $rootScope) {
   $scope.addFeed = function () {
     $rootScope.$broadcast('showModalAddFeed', {locked: false});
+  };
+  $scope.sockethubSettings = function () {
+    $rootScope.$broadcast('showModalSockethubSettings', {locked: false});
   };
 }]).
 
@@ -182,7 +165,11 @@ function ($rootScope, $timeout) {
           e = 'no error specified';
         }
 
-        if (typeof presets[e.message] !== 'undefined') {
+        if (e.type === 'clear') {
+          scope.haveMessage = false;
+          scope.m = {type: '', title: '', message: ''};
+          return;
+        } else if (typeof presets[e.message] !== 'undefined') {
           scope.m = presets[e.message];
         } else if (typeof e.message === 'string') {
           if (e.type === 'success') {
