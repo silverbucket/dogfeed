@@ -16,22 +16,41 @@ function ($routeProvider) {
 }]).
 
 
-
 /**
- * sockethub connect
+ * remoteStorage & sockethub connect
  */
-run(['settings', 'SH', '$rootScope',
-function (settings, SH, $rootScope) {
-  var s = settings.conn;
-  // connect to sockethub and register
-  settings.save('conn', s);
-  SH.connect().then(function () {
-    return SH.register();
-  }).then(function () {
-    console.log('connected to sockethub');
+run(['SockethubSettings', 'SH', '$rootScope', 'RS', '$timeout',
+function (settings, SH, $rootScope, RS, $timeout) {
+  if (!RS.isConnected()) {
+    $timeout(function () {
+      if (!RS.isConnected()) {
+        $rootScope.$broadcast('message', {message: 'remotestorage-connect', timeout: false});
+      }
+    }, 1000);
+  }
+}]).
+
+run(['SockethubSettings', 'SH', '$rootScope', 'RS',
+function (settings, SH, $rootScope, RS) {
+  RS.call('sockethub', 'getConfig', ['']).then(function (cfg) {
+    console.log('GOT SH CONFIG: ', cfg);
+    if (!cfg) {
+      cfg = settings.conn;
+    }
+    console.log('USING SH CONFIG: ', cfg);
+    $rootScope.$broadcast('message', {type: 'clear'});
+    // connect to sockethub and register
+    settings.save('conn', cfg);
+    SH.connect().then(function () {
+      return SH.register();
+    }).then(function () {
+      console.log('connected to sockethub');
+    }, function (err) {
+      console.log('error connection to sockethub: ', err);
+      $rootScope.$broadcast('SockethubConnectFailed', {message: err});
+    });
   }, function (err) {
-    console.log('error connection to sockethub: ', err);
-    $rootScope.$broadcast('SockethubConnectFailed', {message: err});
+    console.log("RS.call error: ",err);
   });
 }]).
 
@@ -156,7 +175,7 @@ function ($rootScope, $timeout) {
 
 
       $rootScope.$on('message', function (event, e) {
-        console.log('message event: ', e);
+        //console.log('message event: ', e);
 
         var timeout = (typeof e.timeout === 'boolean') ? e.timeout : true;
         scope.haveMessage = false;
@@ -180,7 +199,7 @@ function ($rootScope, $timeout) {
           scope.m.message = e.message;
           scope.m.type = e.type;
         }
-        console.log('done processing: ', scope.m);
+        //console.log('done processing: ', scope.m);
 
         scope.haveMessage = true;
         if (timeout) {
