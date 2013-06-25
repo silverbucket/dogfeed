@@ -24,6 +24,16 @@
                 "description": "the port number to connect to",
                 "required": true
               },
+              "path": {
+                "type": "string",
+                "description": "path portion of the URI, if any",
+                "required": false
+              },
+              "tls": {
+                "type": "boolean",
+                "description": "whether or not to use TLS",
+                "required": false
+              },
               "secret": {
                 "type": "string",
                 "description": "the secret to identify yourself with the sockethub server",
