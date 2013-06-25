@@ -13,7 +13,7 @@ function ($rootScope, $q, $timeout) {
   var ready = false;
 
   function isConnected() {
-    return ready;
+    return remoteStorage.getBearerToken();
   }
 
   remoteStorage.on('ready', function () {
@@ -31,8 +31,9 @@ function ($rootScope, $q, $timeout) {
         defer.reject('RS.call params must be an array');
       } else {
 
+        var delay = 500;
         (function callRS() {
-          if (isConnected()) {
+          if (ready) {
             //console.log('RS connected, sending call');
             try {
               remoteStorage[module][func].apply(null, params).
@@ -50,8 +51,11 @@ function ($rootScope, $q, $timeout) {
               defer.reject(e);
             }
           } else {
-            console.log('RS not connected yet, delaying call 1s');
-            $timeout(callRS, 1000);
+            console.log('RS not connected yet, delaying call ' + delay + 's');
+            if (delay < 30000) {
+              delay = delay + (delay + 500);
+            }
+            $timeout(callRS, delay);
           }
         })();
       }
