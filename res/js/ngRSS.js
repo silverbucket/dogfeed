@@ -435,13 +435,12 @@ function () {
               '  <div class="article-body" data-ng-bind-html-unsafe="a.object.brief_html"></div>' +
               '</div>',
     link: function (scope, element, attrs) {
-      console.log('#### LINK FUNCTION: scope: ', scope);
-      console.log('#### LINK FUNCTION: element: ', element);
-      console.log('#### LINK FUNCTION: attrs: ', attrs);
-
+      //console.log('#### LINK FUNCTION: scope: ', scope);
+      //console.log('#### LINK FUNCTION: element: ', element);
+      //console.log('#### LINK FUNCTION: attrs: ', attrs);
 
       scope.$watch(attrs.feeds, function (val) {
-        console.log('WATCH - val:', val);
+        console.log('WATCH attrs.feeds', val);
       });
 
       var divs = document.getElementsByClassName('article');
