@@ -9,10 +9,8 @@
   </head>
   <body>
     <div id="remotestorage-connect"></div>
-    <script type="text/javascript" src="vendor/remotestorage/remotestorage.min.js?v=0.7.2"></script>
-    <script type="text/javascript" src="vendor/remotestorage/remotestorage-sockethub.js?v=0.0.1"></script>
-    <script type="text/javascript" src="vendor/remotestorage/remotestorage-rss.js?v=0.0.1"></script>
-    <script type="text/javascript" src="vendor/remotestorage/remotestorage-articles.js?v=0.0.1"></script>
+    <script src="res/js/remotestorage.min.js"></script>
+    <script src="res/js/remotestorage-modules.min.js"></script>
     <script>
 (function initRemoteStorage() {
   remoteStorage.claimAccess({sockethub:'rw',rss:'rw',articles:'rw'}).then(function () {

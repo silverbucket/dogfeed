@@ -9,11 +9,12 @@
     <link rel="stylesheet" href="res/css/bootstrap.min.css">
     <link rel="stylesheet" href="res/css/bootstrap-responsive.min.css">
     <link rel="stylesheet" href="res/css/flat-ui.min.css">
-    <link rel="stylesheet" href="res/css/dogfeed.min.css">
+    <link rel="stylesheet" href="res/css/app.min.css">
   </head>
 
   <body>
     <div id="remotestorage-connect" ng-controller="remoteStorageCtrl"></div>
+    <div sockethub-settings></div>
 
     <nav>
       <div class="navbar" ng-controller="titlebarCtrl">
@@ -23,8 +24,13 @@
             <li>
               <a href="" ng-click="addFeed()"><i class="icon-plus" alt="Add Feed"></i> Add Feed</a>
             </li>
+            <li>
+              <a href="" ng-click="sockethubSettings()"><i class="icon-cog"></i></a>
+            </li>
           </ul>
-          <div class="version"><p>alpha release v0.0.1</p><p><a target="_blank" href="https://github.com/silverbucket/dogfeed/issues/">submit feedback or bug reports</a></p></div>
+          <div class="version">
+            <p>alpha release v0.0.1</p>
+            <p><a target="_blank" href="https://github.com/silverbucket/dogfeed/issues/">feedback and bug reports</a></p></div>
         </div>
       </div>
     </nav>
@@ -69,10 +75,8 @@
     <script src="res/js/jquery.min.js"></script>
     <script src="res/js/bootstrap.min.js"></script>
     <script src="res/js/remotestorage.min.js"></script>
-    <script src="res/js/remotestorage-modules.min.js"></script>
-    <script src="res/js/remotestorage-angular.min.js"></script>
     <script src="res/js/sockethub-client.min.js"></script>
-    <script src="res/js/sockethub-angular.min.js"></script>
-    <script src="res/js/dogfeed.min.js"></script>
+    <script src="res/js/remotestorage-modules.min.js"></script>
+    <script src="res/js/app.min.js"></script>
   </body>
 </html>
