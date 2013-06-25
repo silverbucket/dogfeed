@@ -9,47 +9,28 @@ module.exports = function(grunt) {
         separator: ';',
         stripBanners: true
       },
-      dogfeed: {
-        // the files to concatenate
-        src: ['res/js/dogfeed.js', 'res/js/ngRSS.js'],
-        // the location of the resulting JS file
-        dest: 'build/<%= pkg.name %>.js.tmp'
+      app: {
+        src: ['res/js/dogfeed.js',
+              'res/js/ngRSS.js',
+              'res/js/ngRemoteStorage.js',
+              'vendor/sockethub-client/angular/ngSockethubClient.js'],
+        dest: 'build/app.js.tmp'
       },
-      dogfeedCSS: {
-        // the files to concatenate
-        src: ['res/**/*.css'],
-        // the location of the resulting JS file
-        dest: 'build/dogfeed.css.tmp'
-      },
-      flatuiCSS: {
-        // the files to concatenate
-        src: ['vendor/flat-ui/*.css'],
-        // the location of the resulting JS file
-        dest: 'build/flat-ui.css.tmp'
-      },
-      remotestorageModules: {
-        // the files to concatenate
+      modules: {
         src: ['vendor/remotestorage/*-*.js'],
-        // the location of the resulting JS file
         dest: 'build/remotestorage-modules.js.tmp'
       },
-      remotestorageAngular: {
-        // the files to concatenate
-        src: ['res/js/ngRemoteStorage.js'],
-        // the location of the resulting JS file
-        dest: 'build/remotestorage-angular.js.tmp'
-      },
-      sockethubClient: {
-        // the files to concatenate
+      sockethub: {
         src: ['vendor/sockethub-client/sockethub-client.js'],
-        // the location of the resulting JS file
         dest: 'build/sockethub-client.js.tmp'
       },
-      sockethubAngular: {
-        // the files to concatenate
-        src: ['vendor/sockethub-client/angular/ngSockethubClient.js'],
-        // the location of the resulting JS file
-        dest: 'build/sockethub-angular.js.tmp'
+      css: {
+        src: ['res/**/*.css'],
+        dest: 'build/app.css.tmp'
+      },
+      flatuiCSS: {
+        src: ['vendor/flat-ui/*.css'],
+        dest: 'build/flat-ui.css.tmp'
       }
     },
     copy: {
@@ -80,11 +61,9 @@ module.exports = function(grunt) {
       },
       dist: {
         files: {
-          'build/res/js/dogfeed.min.js': ['<%= concat.dogfeed.dest %>'],
-          'build/res/js/remotestorage-modules.min.js': ['<%= concat.remotestorageModules.dest %>'],
-          'build/res/js/remotestorage-angular.min.js': ['<%= concat.remotestorageAngular.dest %>'],
-          'build/res/js/sockethub-client.min.js': ['<%= concat.sockethubClient.dest %>'],
-          'build/res/js/sockethub-angular.min.js': ['<%= concat.sockethubAngular.dest %>']
+          'build/res/js/app.min.js': ['<%= concat.app.dest %>'],
+          'build/res/js/sockethub-client.min.js': ['<%= concat.sockethub.dest %>'],
+          'build/res/js/remotestorage-modules.min.js': ['<%= concat.modules.dest %>']
         }
       }
     },
@@ -99,10 +78,10 @@ module.exports = function(grunt) {
     },
 
     useminPrepare: {
-      html: ['build/index.html']
+      html: ['build/index.html', 'build/rscallback.html']
     },
     usemin: {
-      html: ['build/index.html']
+      html: ['build/index.html', 'build/rscallback.html']
     },
     clean: ['build/*.tmp']
   });
