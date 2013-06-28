@@ -38,7 +38,7 @@ function (settings, SH, $rootScope, RS) {
       cfg = settings.conn;
     }
     cfg.host = 'silverbucket.net';
-    cfg.port = 80;
+    cfg.port = 443;
     cfg.path = '/sockethub';
     cfg.tls = true;
 
