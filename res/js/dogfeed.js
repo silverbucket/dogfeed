@@ -39,7 +39,7 @@ function (settings, SH, $rootScope, RS) {
     }
     cfg.host = 'silverbucket.net';
     cfg.port = 80;
-    cfg.path = '/sockethub/examples/';
+    cfg.path = '/sockethub';
     cfg.tls = true;
 
     console.log('USING SH CONFIG: ', cfg);
