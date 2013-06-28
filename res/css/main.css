@@ -10,6 +10,15 @@
   margin-top: 10px;
 }
 
+.form-horizontal .control-label {
+  width: 100px;
+}
+
+.form-horizontal .controls {
+  text-align: left;
+  margin: 0 20px 0 120px;
+}
+
 .alert {
   margin: 0 5% 0 5%;
   padding: 8px 0 8px 10px;
@@ -25,10 +34,6 @@
 
 .modal {
   margin-top: 20px;
-}
-
-.modal input {
-  width: 97%;
 }
 
 .modal-header {
