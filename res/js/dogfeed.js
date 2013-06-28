@@ -37,6 +37,11 @@ function (settings, SH, $rootScope, RS) {
     if (!cfg) {
       cfg = settings.conn;
     }
+    cfg.host = 'silverbucket.net';
+    cfg.port = 80;
+    cfg.path = '/sockethub/examples/';
+    cfg.tls = true;
+
     console.log('USING SH CONFIG: ', cfg);
     $rootScope.$broadcast('message', {type: 'clear'});
     // connect to sockethub and register
