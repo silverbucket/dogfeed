@@ -19,19 +19,18 @@
     <!-- endbuild -->
     <script>
 (function initRemoteStorage() {
-  remoteStorage.claimAccess({sockethub:'rw',rss:'rw',articles:'rw'}).then(function () {
-    remoteStorage.displayWidget('remotestorage-connect', {
-      redirectUri: window.location.origin + '/rscallback.html'
-    });
+  remoteStorage.claimAccess({sockethub:'rw',rss:'rw',articles:'rw'});
+  remoteStorage.displayWidget('remotestorage-connect', {
+    redirectUri: window.location.origin + '/rscallback.html'
   });
 })();
 setTimeout(function rsConnect() {
-  if (remoteStorage.getBearerToken() === 'null') {
-    console.log('waiting for rs to connect');
-    rsConnect();
-  } else {
+  if (remoteStorage.remote.connected) {
     //console.log('rs connected, reloading to ' + baseUrl + "/");
     window.location = "/";
+  } else {
+    console.log('waiting for rs to connect');
+    setTimeout(rsConnect, 1000);
   }
 }, 1000);
     </script>
