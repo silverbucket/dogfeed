@@ -66,9 +66,9 @@
           });
         },
 
-        on: privateClient.on,
+        on: privateClient.on.bind(privateClient),
 
-        remove: privateClient.remove,
+        remove: privateClient.remove.bind(privateClient),
 
         update: function (obj) {
           if (typeof obj.link === 'string') {
@@ -84,9 +84,9 @@
           return privateClient.storeObject(moduleName, obj.id, obj);
         },
 
-        get: privateClient.getObject,
-        getAll: privateClient.getAll,
-        getListing: privateClient.getListing
+        get: privateClient.getObject.bind(privateClient),
+        getAll: privateClient.getAll.bind(privateClient),
+        getListing: privateClient.getListing.bind(privateClient)
       }
     };
   });
