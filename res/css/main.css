@@ -54,9 +54,11 @@
   background-color: #ffd3d3;
   pointer-events: none !important;
 }
+
 .error a {
   pointer-events: none !important;
 }
+
 .loading, .loading a {
   pointer-events: none !important;
 }
@@ -143,13 +145,12 @@
   cursor: pointer;
 }
 
-
-
-
-/*.feed-entry {
+/*
+.feed-entry {
   min-width: 190px;
   display: inline-block;
-}*/
+}
+*/
 
 .icon-loading-small {
   background-image: url("/res/img/loading_14.gif");
