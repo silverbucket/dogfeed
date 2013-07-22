@@ -47,8 +47,9 @@ function ($rootScope, $q, $timeout) {
                   });
                 });
             } catch (e) {
-              console.log('error : ',e);
-              defer.reject(e);
+              //console.log('error : ',e);
+              console.log(e.stack);
+              defer.reject(e.toString());
             }
           } else {
             console.log('RS not connected yet, delaying call ' + delay + 's');
