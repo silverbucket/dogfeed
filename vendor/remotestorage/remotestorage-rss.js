@@ -1,7 +1,7 @@
 (function () {
   var moduleName = 'rss';
 
-  remoteStorage.defineModule(moduleName, function(privateClient, publicClient) {
+  RemoteStorage.defineModule(moduleName, function(privateClient, publicClient) {
     return {
       exports: {
         init: function () {

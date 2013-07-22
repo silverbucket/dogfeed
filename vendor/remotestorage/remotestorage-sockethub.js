@@ -1,14 +1,14 @@
 (function () {
   var moduleName = 'sockethub';
 
-  remoteStorage.defineModule(moduleName, function(privateClient, publicClient) {
+  RemoteStorage.defineModule(moduleName, function(privateClient, publicClient) {
     return {
       exports: {
         c: privateClient,
 
         init: function () {
-          privateClient.release('');
-          publicClient.release('');
+          //privateClient.release('');
+          //publicClient.release('');
           privateClient.declareType('config', {
             "description" : "sockethub config file",
             "type" : "object",
