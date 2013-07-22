@@ -43,9 +43,14 @@ function (settings, SH, $rootScope, RS) {
     cfg.tls = true;
 
     console.log('USING SH CONFIG: ', cfg);
-    $rootScope.$broadcast('message', {type: 'clear'});
+    //$rootScope.$broadcast('message', {type: 'clear'});
     // connect to sockethub and register
     settings.save('conn', cfg);
+    $rootScope.$broadcast('message', {
+          message: 'attempting to connect to sockethub',
+          type: 'info',
+          timeout: false
+    });
     SH.connect().then(function () {
       return SH.register();
     }).then(function () {
@@ -180,7 +185,7 @@ function ($rootScope, $timeout) {
 
 
       $rootScope.$on('message', function (event, e) {
-        //console.log('message event: ', e);
+        console.log('message event: ', e);
 
         var timeout = (typeof e.timeout === 'boolean') ? e.timeout : true;
         scope.haveMessage = false;
@@ -198,6 +203,8 @@ function ($rootScope, $timeout) {
         } else if (typeof e.message === 'string') {
           if (e.type === 'success') {
             scope.m.title = 'Success';
+          } else if (e.type === 'info') {
+            scope.m.title = 'Info';
           } else {
             scope.m.title = "Error";
           }
