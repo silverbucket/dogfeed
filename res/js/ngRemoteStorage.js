@@ -13,7 +13,7 @@ function ($rootScope, $q, $timeout) {
   var ready = false;
 
   function isConnected() {
-    return remoteStorage.getBearerToken();
+    return remoteStorage.remote.connected;
   }
 
   remoteStorage.on('ready', function () {
@@ -33,7 +33,7 @@ function ($rootScope, $q, $timeout) {
 
         var delay = 500;
         (function callRS() {
-          if (ready) {
+          if (isConnected()) {
             //console.log('RS connected, sending call');
             try {
               remoteStorage[module][func].apply(null, params).
@@ -67,17 +67,14 @@ function ($rootScope, $q, $timeout) {
 
 controller('remoteStorageCtrl',
 [function () {
-
-  remoteStorage.util.silenceAllLoggers();
+  //remoteStorage.util.silenceAllLoggers();
   //remoteStorage.util.unsilenceAllLoggers();
 
-  remoteStorage.claimAccess({sockethub:'rw',rss:'rw',articles:'rw'}).then(function () {
-    remoteStorage.displayWidget('remotestorage-connect', {
-      redirectUri: window.location.protocol + '//' + window.location.host + '/rscallback.html'
-    });
-
-    remoteStorage.sockethub.init();
-    remoteStorage.rss.init();
+  remoteStorage.claimAccess({sockethub:'rw',rss:'rw',articles:'rw'});
+  remoteStorage.displayWidget('remotestorage-connect', {
+    redirectUri: window.location.protocol + '//' + window.location.host + '/rscallback.html'
   });
 
+  remoteStorage.sockethub.init();
+  remoteStorage.rss.init();
 }]);
