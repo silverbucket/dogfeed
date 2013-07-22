@@ -93,6 +93,11 @@ function ($q, SH, CH, RS, RSutil, $rootScope) {
       }
     }, function (err) {
       console.log('error: unable to get feed list from remoteStorage: ', err);
+      $rootScope.$broadcast('message', {
+        message: 'unable to get feed list from remotestorage',
+        type: 'error',
+        timeout: false
+      });
     });
   })();
 
