@@ -86,6 +86,7 @@ function ($q, SH, CH, RS, RSutil, $rootScope) {
   // grab whatever feeds exists in remoteStorage right away
   (function getFeedUrls() {
     RS.call('rss', 'getAll', ['']).then(function (urls) {
+      console.log('RSS: got feed urls from remoteStorage ', urls);
       for (var key in urls) {
         var url = urls[key].url;
         data.info[url] = urls[key];  // asign existing feed info to data struct
@@ -391,7 +392,6 @@ function () {
       'feeds': '='
     },
     template: '<h4 ng-transclude></h4>' +
-              '<span>{{ message }}<span>' +
               '<ul class="nav nav-list" ng-controller="feedCtrl">' +
               '  <li ng-click="switchFeed()"' +
               '       ng-class="{active: isSelected(), \'all-feeds\': true}">' +
@@ -399,6 +399,7 @@ function () {
               '      <i class="icon-globe"></i><span>All Items</span>' +
               '    </a>' +
               '  </li>' +
+              '  <li><span>{{ model.message }}<span></li>' +
               '  <li ng-repeat="f in feeds.info"' +
               '      data-toggle="tooltip" ' +
               '      title="{{ f.url }}">' +
