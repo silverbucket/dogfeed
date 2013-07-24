@@ -56,7 +56,7 @@ function (settings, SH, $rootScope, RS) {
     }).then(function () {
       console.log('connected to sockethub');
     }, function (err) {
-      console.log('error connection to sockethub: ', err);
+      console.log('error connecting to sockethub: ', err);
       $rootScope.$broadcast('SockethubConnectFailed', {message: err});
     });
   }, function (err) {
