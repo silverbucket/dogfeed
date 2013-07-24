@@ -281,12 +281,12 @@ function ($scope, RSS, $rootScope) {
  * controller: feedCtrl
  */
 controller('feedCtrl',
-['$scope', 'RSS', 'util', '$rootScope',
-function ($scope, RSS, util, $rootScope) {
+['$scope', 'RSS', 'util', '$rootScope', '$timeout',
+function ($scope, RSS, util, $rootScope, $timeout) {
 
+  $scope.message = '';
   $scope.model = {};
   $scope.model.feeds = RSS.data;
-  $scope.model.message = '';
   $scope.model.loading = true;
   $scope.model.feeds.current = {
     name: '',
@@ -344,16 +344,23 @@ function ($scope, RSS, util, $rootScope) {
 
   // display friendly message when no feeds are loaded
   if (util.isEmptyObject($scope.model.feeds.info)) {
-    $scope.model.message = "loading feed list...";
+    $scope.message = "loading feed list...";
   }
 
-  $scope.$watch('$scope.model.feeds.info', function (newVal, oldVal) {
-    if (!util.isEmptyObject($scope.model.feeds.info)) {
-      $scope.model.message = '';
-    } else {
-      $scope.model.message = "no feeds yet, add some!";
-    }
-  });
+
+
+  $timeout(function () {
+    //$scope.message = 'howdy pardner!';
+    $scope.$watch('$scope.model.feeds.info', function (newVal, oldVal) {
+      console.log('FIRED: ',$scope.model.feeds.info);
+      if (!util.isEmptyObject($scope.model.feeds.info)) {
+        $scope.message = '';
+      } else {
+        $scope.message = "no feeds yet, add some!";
+      }
+      console.log('MESSAGE: '+$scope.message);
+    });
+  }, 1000);
 
   $scope.$watch('$scope.model.feeds.articles', function (newVal, oldVal) {
     console.log('article changed! ', newVal, oldVal);
@@ -399,7 +406,7 @@ function () {
               '      <i class="icon-globe"></i><span>All Items</span>' +
               '    </a>' +
               '  </li>' +
-              '  <li><span>{{ model.message }}<span></li>' +
+              '  <li class="{hidden: message}"><span>{{message}}</span></li>' +
               '  <li ng-repeat="f in feeds.info"' +
               '      data-toggle="tooltip" ' +
               '      title="{{ f.url }}">' +
