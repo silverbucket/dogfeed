@@ -51,10 +51,13 @@ function (settings, SH, $rootScope, RS) {
           type: 'info',
           timeout: false
     });
-    SH.connect().then(function () {
-      return SH.register();
-    }).then(function () {
+    SH.connect({register: true}).then(function () {
       console.log('connected to sockethub');
+      $rootScope.$broadcast('message', {
+            message: 'connected to sockethub',
+            type: 'success',
+            timeout: false
+      });
     }, function (err) {
       console.log('error connecting to sockethub: ', err);
       $rootScope.$broadcast('SockethubConnectFailed', {message: err});
