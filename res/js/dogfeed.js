@@ -1,4 +1,4 @@
-angular.module('dogfeed', ['ngRSS', 'ngSockethubClient']).
+angular.module('dogfeed', ['ngRSS', 'ngSockethubClient', 'ngRemoteStorage']).
 
 
 /**
@@ -117,14 +117,24 @@ function() {
  * controller: titlebarCtrl
  */
 controller('titlebarCtrl',
-['$scope', '$rootScope',
-function ($scope, $rootScope) {
+['$scope', '$rootScope', 'SockethubSettings', 'RS',
+function ($scope, $rootScope, settings, RS) {
   $scope.addFeed = function () {
     $rootScope.$broadcast('showModalAddFeed', {locked: false});
   };
   $scope.sockethubSettings = function () {
     $rootScope.$broadcast('showModalSockethubSettings', {locked: false});
   };
+
+  $scope.$watch('settings.connected', function (newVal, oldVal) {
+    if (settings.connected) {
+      RS.call('sockethub', 'writeConfig', [settings.conn]).then(function () {
+        console.log("Sockethub config saved to remoteStorage");
+      }, function (err) {
+        console.log('Failed saving Sockethub config to remoteStorage: ', err);
+      });
+    }
+  });
 }]).
 
 
