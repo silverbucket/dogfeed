@@ -128,6 +128,7 @@ function ($scope, $rootScope, settings, RS) {
 
   $scope.$watch('settings.connected', function (newVal, oldVal) {
     if (settings.connected) {
+      settings.conn.port = Number(settings.conn.port);
       RS.call('sockethub', 'writeConfig', [settings.conn]).then(function () {
         console.log("Sockethub config saved to remoteStorage");
       }, function (err) {
