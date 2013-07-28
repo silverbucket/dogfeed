@@ -43,11 +43,11 @@
           });
         },
 
-        getConfig: function() {
+        getConfig: function () {
           return privateClient.getObject('config.json');
         },
 
-        writeConfig: function(data) {
+        writeConfig: function (data) {
           return privateClient.storeObject('config', 'config.json', data);
         }
       }
