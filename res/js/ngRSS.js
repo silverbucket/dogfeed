@@ -39,6 +39,8 @@ value('util', {
 
 
 
+
+
 ///////////////////////////////////////////////////////////////////////////
 //
 // FACTORY
@@ -80,6 +82,16 @@ function ($q, SH, CH, RS, RSutil, $rootScope) {
   };
 
 
+  function broadcastError(url, err) {
+    data.info[url].error = true;
+    data.info[url].errorMsg = err;
+    $rootScope.$broadcast('message', {
+      message: err,
+      type: 'error'
+    });
+  }
+  function dummy () {}
+
   /****
    * FEED MANAGEMENT
    ******************/
@@ -89,8 +101,14 @@ function ($q, SH, CH, RS, RSutil, $rootScope) {
       console.log('RSS: got feed urls from remoteStorage ', urls);
       for (var key in urls) {
         var url = urls[key].url;
-        data.info[url] = urls[key];  // asign existing feed info to data struct
-        func.fetchFeed(url);  // fetch articles from sockethub
+        if (!url) {
+          console.log('ERROR processing url['+url+']: ', urls[key]);
+        } else {
+          data.info[url] = urls[key];  // asign existing feed info to data struct
+          func.fetchFeed(url).then(dummy, function (err) {
+            broadcastError(url, 'failed fetching feed list from sockethub: '+err);
+          });  // fetch articles from sockethub
+        }
       }
     }, function (err) {
       console.log('error: unable to get feed list from remoteStorage: ', err);
@@ -173,6 +191,7 @@ function ($q, SH, CH, RS, RSutil, $rootScope) {
     //console.log("RSS received message");
     var key = m.actor.address;
     if (!m.status) {
+      console.log('received error message from sockethub: ', m);
       $rootScope.$broadcast('message', {
         type: 'error',
         message: m.target[0].address + ' ' + m.object.message
@@ -322,7 +341,15 @@ function ($scope, RSS, util, $rootScope, $timeout) {
   };
 
   $scope.showFeedSettings = function (url) {
-    $rootScope.$broadcast('showModalFeedSettings', {locked: false});
+    $("#modalFeedSettings").modal({
+      show: true,
+      keyboard: true,
+      backdrop: backdrop_setting
+    });
+
+    $rootScope.$on('closeModalFeedSettings', function(event, args) {
+      $("#modalFeedSettings").modal('hide');
+    });
   };
 
   $scope.markRead = function (url) {
@@ -352,13 +379,11 @@ function ($scope, RSS, util, $rootScope, $timeout) {
   $timeout(function () {
     //$scope.message = 'howdy pardner!';
     $scope.$watch('$scope.model.feeds.info', function (newVal, oldVal) {
-      console.log('FIRED: ',$scope.model.feeds.info);
       if (!util.isEmptyObject($scope.model.feeds.info)) {
         $scope.message = '';
       } else {
         $scope.message = "no feeds yet, add some!";
       }
-      console.log('MESSAGE: '+$scope.message);
     });
   }, 1000);
 
@@ -367,6 +392,7 @@ function ($scope, RSS, util, $rootScope, $timeout) {
   });
 
   $rootScope.$on('SockethubConnectFailed', function (event, e) {
+    console.log('Sockethub connect failed! ', e);
     $rootScope.$broadcast('message', {
       message: e.message,
       type: 'error',
