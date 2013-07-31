@@ -35,12 +35,12 @@ function (settings, SH, $rootScope, RS) {
   RS.call('sockethub', 'getConfig', ['']).then(function (cfg) {
     console.log('GOT SH CONFIG: ', cfg);
     if (!cfg) {
-      cfg = settings.conn;
+      //cfg = settings.conn;
+      cfg.host = 'localhost';
+      cfg.port = 10550;
+      cfg.path = '/sockethub';
+      cfg.tls = false;
     }
-    cfg.host = 'silverbucket.net';
-    cfg.port = 443;
-    cfg.path = '/sockethub';
-    cfg.tls = true;
 
     console.log('USING SH CONFIG: ', cfg);
     //$rootScope.$broadcast('message', {type: 'clear'});
