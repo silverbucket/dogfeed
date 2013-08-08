@@ -144,7 +144,7 @@ function ($q, SH, CH, RS, RSutil, $rootScope) {
     var s_obj = {
       link: obj.object.link,
       title: obj.object.title,
-      date: obj.object.data,
+      date: obj.object.date,
       html: obj.object.html,
       text: obj.object.text,
       brief_html: obj.object.brief_html,
@@ -463,13 +463,13 @@ function () {
       'feeds': '='
     },
     template: '<h4>{{ feeds.current.name }}</h4>' +
-              '<div ng-repeat="a in feeds.articles | orderBy:a.object.date"' +
+              '<div ng-repeat="a in (filteredItems = (feeds.articles | orderBy: \'object.date\':true))"' +
               '     ng-controller="feedCtrl"' +
               '     ng-click="markRead(a.object.link)"' +
               '     ng-class="{well: true, hide: !isSelected(a.actor.address, true), unread: !a.object.read, article: true}" >' +
               '  <h2>{{ a.object.title }}</h2>' +
               '  <p>feed: <i>{{ a.actor.name }}</i></p>' +
-              '  <p>date: <i>{{ a.object.date | date }}</i></p>' +
+              '  <p>date: <i>{{ a.object.date }}</i></p>' +
               '  <p>article link: <i><a target="_blank" href="{{ a.object.link }}">{{ a.object.link }}</a><i></p>' +
               '  <div class="article-body" data-ng-bind-html-unsafe="a.object.brief_html"></div>' +
               '</div>',
