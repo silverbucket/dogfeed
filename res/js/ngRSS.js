@@ -344,7 +344,7 @@ function ($scope, RSS, util, $rootScope, $timeout) {
     $("#modalFeedSettings").modal({
       show: true,
       keyboard: true,
-      backdrop: backdrop_setting
+      backdrop: true
     });
 
     $rootScope.$on('closeModalFeedSettings', function(event, args) {
@@ -432,21 +432,21 @@ function () {
               '      <i class="icon-globe"></i><span>All Items</span>' +
               '    </a>' +
               '  </li>' +
-              '  <li class="{hidden: message}"><span>{{message}}</span></li>' +
-              '  <li ng-repeat="f in feeds.info"' +
+              '  <li class="{hidden: message}"><span>{{ message }}</span></li>' +
+              '  <li ng-repeat="f in feeds.info | orderBy: \'name\'"' + //(filteredItems = (feeds.info.reverse() | orderBy: \'name\'))"' +
               '      data-toggle="tooltip" ' +
               '      title="{{ f.url }}">' +
-              '    <i ng-click="showFeedSettings(f.url)"' +
-              '      ng-class="{status: true, \'icon-loading-small\': !f.loaded, \'icon-cog\': f.loaded}">' +
-              '    </i>' +
-              '    <div ng-click="switchFeed(f.url)"' +
-              '         ng-class="{active: isSelected(f.url), error: f.error, loading: !f.loaded, \'feed-entry\': true}">' +
-              '      <a href="" ng-class="{error: f.error}">' +
-              '        <span>{{ f.name }}</span> <span class="unread-count">{{ f.unread }}</span>' +
-              '      </a>' +
-              '    </div>' +
-              '  </li>' +
-              '</ul>',
+              '      <i ng-click="showFeedSettings(f.url)"' +
+              '         ng-class="{status: true, \'icon-loading-small\': !f.loaded, \'icon-cog\': f.loaded}">' +
+              '      </i>' +
+              '      <div ng-click="switchFeed(f.url)"' +
+              '           ng-class="{active: isSelected(f.url), error: f.error, loading: !f.loaded, \'feed-entry\': true}">' +
+              '        <a href="" ng-class="{error: f.error}">' +
+              '          <span>{{ f.name }}</span> <span class="unread-count">{{ f.unread }}</span>' +
+              '        </a>' +
+              '      </div>' +
+              '    </li>' +
+              '  </ul>',
     transclude: true
   };
 }]).
