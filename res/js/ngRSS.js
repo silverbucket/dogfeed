@@ -128,7 +128,14 @@ function ($q, SH, CH, RS, RSutil, $rootScope) {
     RS.call('rss', 'add', [obj]).then(function (m) {
       console.log('feed added: ', obj);
       data.info[obj.url] = obj;
-      data.infoArray.push(data.info[obj.url]);
+      for (var i = 0, len = data.infoArray.length; i < len; i = i + 1) {
+        if ((data.infoArray[i]) && (data.infoArray[i].url === url)) {
+          data.infoArray.splice(i, 1);
+          break;
+        }
+        console.log('adding to list: ', data.info[obj.url]);
+        data.infoArray.push(data.info[obj.url]);
+      }
       func.fetchFeed(obj.url);
       defer.resolve(m);
     }, function (err) {
@@ -155,7 +162,6 @@ function ($q, SH, CH, RS, RSutil, $rootScope) {
       console.log('feed removed: ', url);
       delete data.info[url];
       for (var i = 0, len = data.infoArray.length; i < len; i = i + 1) {
-        console.log('checking entry: ', data.infoArray[i]);
         if ((data.infoArray[i]) && (data.infoArray[i].url === url)) {
           console.log('removing from list: ',data.infoArray[i]);
           data.infoArray.splice(i, 1);
