@@ -57,7 +57,8 @@ function ($q, SH, CH, RS, RSutil, $rootScope) {
   var config = {};
   var data = {
     articles: [],
-    info: {}
+    info: {},
+    infoArray: []
   };
   var func = {};
 
@@ -105,6 +106,7 @@ function ($q, SH, CH, RS, RSutil, $rootScope) {
           console.log('ERROR processing url['+url+']: ', urls[key]);
         } else {
           data.info[url] = urls[key];  // asign existing feed info to data struct
+          data.infoArray.push(data.info[url]);
           func.fetchFeed(url).then(dummy, function (err) {
             broadcastError(url, 'failed fetching feed list from sockethub: '+err);
           });  // fetch articles from sockethub
@@ -126,6 +128,7 @@ function ($q, SH, CH, RS, RSutil, $rootScope) {
     RS.call('rss', 'add', [obj]).then(function (m) {
       console.log('feed added: ', obj);
       data.info[obj.url] = obj;
+      data.infoArray.push(data.info[obj.url]);
       func.fetchFeed(obj.url);
       defer.resolve(m);
     }, function (err) {
@@ -435,7 +438,7 @@ function () {
               '    </a>' +
               '  </li>' +
               '  <li class="{hidden: message}"><span ng-bind="message"></span></li>' +
-              '  <li ng-repeat="f in feeds.info | orderBy: \'name\'"' +
+              '  <li ng-repeat="f in feeds.infoArray | orderBy: \'name\'"' +
               '      data-toggle="tooltip" ' +
               '      title="{{ f.url }}">' +
               '      <i ng-click="showFeedSettings(f.url)"' +
