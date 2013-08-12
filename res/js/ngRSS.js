@@ -419,6 +419,8 @@ function ($scope, RSS, util, $rootScope, $timeout) {
  */
 directive('feedList', [
 function () {
+
+
   return {
     restrict: 'E',
     scope: {
@@ -432,8 +434,8 @@ function () {
               '      <i class="icon-globe"></i><span>All Items</span>' +
               '    </a>' +
               '  </li>' +
-              '  <li class="{hidden: message}"><span>{{ message }}</span></li>' +
-              '  <li ng-repeat="f in feeds.info | orderBy: \'name\'"' + //(filteredItems = (feeds.info.reverse() | orderBy: \'name\'))"' +
+              '  <li class="{hidden: message}"><span ng-bind="message"></span></li>' +
+              '  <li ng-repeat="f in feeds.info | orderBy: \'name\'"' +
               '      data-toggle="tooltip" ' +
               '      title="{{ f.url }}">' +
               '      <i ng-click="showFeedSettings(f.url)"' +
@@ -442,12 +444,18 @@ function () {
               '      <div ng-click="switchFeed(f.url)"' +
               '           ng-class="{active: isSelected(f.url), error: f.error, loading: !f.loaded, \'feed-entry\': true}">' +
               '        <a href="" ng-class="{error: f.error}">' +
-              '          <span>{{ f.name }}</span> <span class="unread-count">{{ f.unread }}</span>' +
+              '          <span ng-bind="f.name"></span> <span class="unread-count" ng-bind="f.unread"></span>' +
               '        </a>' +
               '      </div>' +
               '    </li>' +
               '  </ul>',
-    transclude: true
+    transclude: true,
+    link: function (scope, element, attrs) {
+      console.log('attrs:', attrs);
+      scope.$watch(attrs.feeds.info, function (val) {
+        console.log('attrs.feeds.info val:', val);
+      });
+    }
   };
 }]).
 
