@@ -98,11 +98,11 @@
 
             <div class="control-group">
               <div class="controls">
-                <button ng-click="deleteFeed(model.feeds.edit)" ng-disabled="model.saving" class="btn btn-danger">Delete</button>
+                <button ng-click="deleteFeed(model.feeds.edit)" ng-disabled="saving" class="btn btn-danger">Delete</button>
                 &nbsp;
-                <button ng-click="cancelFeedSettings()" class="btn" ng-disabled="model.saving">Cancel</button>
+                <button ng-click="cancelFeedSettings()" class="btn" ng-disabled="saving">Cancel</button>
                 &nbsp;
-                <button ng-click="saveFeedSettings(model.feeds.edit)" class="btn" ng-disabled="model.saving">Save</button>
+                <button ng-click="saveFeedSettings(model.feeds.edit)" class="btn" ng-disabled="saving">Save</button>
               </div>
             </div>
           </fieldset>

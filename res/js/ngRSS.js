@@ -154,6 +154,14 @@ function ($q, SH, CH, RS, RSutil, $rootScope) {
     RS.call('rss', 'remove', [url]).then(function (m) {
       console.log('feed removed: ', url);
       delete data.info[url];
+      for (var i = 0, len = data.infoArray.length; i < len; i = i + 1) {
+        console.log('checking entry: ', data.infoArray[i]);
+        if ((data.infoArray[i]) && (data.infoArray[i].url === url)) {
+          console.log('removing from list: ',data.infoArray[i]);
+          data.infoArray.splice(i, 1);
+          break;
+        }
+      }
       defer.resolve(m);
     }, function (err) {
       defer.reject(err);
@@ -399,6 +407,7 @@ function ($scope, RSS, util, $rootScope, $timeout) {
     console.log('SAVE: ', $scope.model.feeds.info[url]);
     RSS.func.updateFeed($scope.model.feeds.info[url]).then(function () {
       $("#modalFeedSettings").modal('hide');
+      $rootScope.$broadcast('message', {type: 'success', message: 'updated feed '+url});
       $scope.saving = false;
     }, function (err) {
       console.log('rss feed update failed!: ', err);
@@ -412,6 +421,7 @@ function ($scope, RSS, util, $rootScope, $timeout) {
     $scope.saving = true;
     RSS.func.removeFeed(url).then(function () {
       $("#modalFeedSettings").modal('hide');
+      $rootScope.$broadcast('message', {type: 'success', message: 'deleted feed '+url});
       $scope.saving = false;
     }, function (err) {
       console.log('error removing rss feed!: ', err);

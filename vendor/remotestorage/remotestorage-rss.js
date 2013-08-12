@@ -37,7 +37,14 @@
 
         on: privateClient.on.bind(privateClient),
 
-        remove: privateClient.remove.bind(privateClient),
+        remove: function (url) {
+          if (typeof url === 'string') {
+            url = encodeURIComponent(escape(url));
+          } else {
+            return false;
+          }
+          return privateClient.remove(url);
+        },
 
         add: function (obj) {
           if (typeof obj.url === 'string') {
