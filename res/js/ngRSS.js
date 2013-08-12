@@ -379,7 +379,7 @@ function ($scope, RSS, util, $rootScope, $timeout) {
     if (!url) {
       $scope.model.feeds.current.name = '';
       $scope.model.feeds.current.url = '';
-      $scope.model.feeds.current.indexes = [];
+      $scope.model.feeds.current.indexes.length = 0;
     } else {
       $scope.model.feeds.current.name = RSS.data.info[url].name;
       $scope.model.feeds.current.url = url;
