@@ -137,6 +137,29 @@ function ($q, SH, CH, RS, RSutil, $rootScope) {
     return defer.promise;
   };
 
+  func.updateFeed = function updateFeed(obj) {
+    var defer = $q.defer();
+    RS.call('rss', 'add', [obj]).then(function (m) {
+      console.log('feed updated: ', obj);
+      data.info[obj.url] = obj;
+      defer.resolve(m);
+    }, function (err) {
+      defer.reject(err);
+    });
+    return defer.promise;
+  };
+
+  func.removeFeed = function removeFeed(url) {
+    var defer = $q.defer();
+    RS.call('rss', 'remove', [url]).then(function (m) {
+      console.log('feed removed: ', url);
+      delete data.info[url];
+      defer.resolve(m);
+    }, function (err) {
+      defer.reject(err);
+    });
+    return defer.promise;
+  };
 
   /****
    * ARTICLE MANAGEMENT
@@ -314,6 +337,11 @@ function ($scope, RSS, util, $rootScope, $timeout) {
     name: '',
     indexes: []
   };
+  if (!$scope.model.feeds.edit) {
+    $scope.model.feeds.edit = '';
+  }
+  $scope.model.feeds._editName = '';
+  $scope.model.saving = false;
 
   $scope.isSelected = function(url, inclusive) {
     if ($scope.model.feeds.current.indexes.length === 0) {
@@ -336,22 +364,60 @@ function ($scope, RSS, util, $rootScope, $timeout) {
   $scope.switchFeed = function (url) {
     if (!url) {
       $scope.model.feeds.current.name = '';
+      $scope.model.feeds.current.url = '';
       $scope.model.feeds.current.indexes = [];
     } else {
       $scope.model.feeds.current.name = RSS.data.info[url].name;
+      $scope.model.feeds.current.url = url;
       $scope.model.feeds.current.indexes = [url];
     }
   };
 
   $scope.showFeedSettings = function (url) {
+    console.log('showFeedSettings: '+url);
+    if (!url) { return; }
+    //$scope.switchFeed(url);
+    $scope.model.feeds.edit = url;
+    $scope.model.feeds._editName = $scope.model.feeds.info[$scope.model.feeds.edit].name;
+    console.log('EDIT: ', $scope.model.feeds.edit);
     $("#modalFeedSettings").modal({
       show: true,
       keyboard: true,
       backdrop: true
     });
+  };
 
-    $rootScope.$on('closeModalFeedSettings', function(event, args) {
+  $scope.cancelFeedSettings = function () {
+    $("#modalFeedSettings").modal('hide');
+    $scope.model.feeds.info[$scope.model.feeds.edit].name = $scope.model.feeds._editName;
+    $scope.saving = false;
+  };
+
+  $scope.saveFeedSettings = function (url) {
+    $scope.saving = true;
+    //$scope.model.feeds.info[$scope.model.feeds.edit].name = $scope.model.feeds.edit.name;
+    console.log('SAVE: ', $scope.model.feeds.info[url]);
+    RSS.func.updateFeed($scope.model.feeds.info[url]).then(function () {
       $("#modalFeedSettings").modal('hide');
+      $scope.saving = false;
+    }, function (err) {
+      console.log('rss feed update failed!: ', err);
+      $rootScope.$broadcast('message', {type: 'error', message: err.message});
+      $("#modalFeedSettings").modal('hide');
+      $scope.saving = false;
+    });
+  };
+
+  $scope.deleteFeed = function (url) {
+    $scope.saving = true;
+    RSS.func.removeFeed(url).then(function () {
+      $("#modalFeedSettings").modal('hide');
+      $scope.saving = false;
+    }, function (err) {
+      console.log('error removing rss feed!: ', err);
+      $rootScope.$broadcast('message', {type: 'error', message: err.message});
+      $("#modalFeedSettings").modal('hide');
+      $scope.saving = false;
     });
   };
 
@@ -377,8 +443,6 @@ function ($scope, RSS, util, $rootScope, $timeout) {
     $scope.message = "loading feed list...";
   }
 
-
-
   $timeout(function () {
     //$scope.message = 'howdy pardner!';
     $scope.$watch('$scope.model.feeds.info', function (newVal, oldVal) {
@@ -388,7 +452,7 @@ function ($scope, RSS, util, $rootScope, $timeout) {
         $scope.message = "no feeds yet, add some!";
       }
     });
-  }, 1000);
+  }, 3000);
 
   $scope.$watch('$scope.model.feeds.articles', function (newVal, oldVal) {
     console.log('article changed! ', newVal, oldVal);
@@ -405,7 +469,6 @@ function ($scope, RSS, util, $rootScope, $timeout) {
     $rootScope.$broadcast('showModalSockethubSettings', {locked: false});
   });
 }]).
-
 
 
 

@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap-responsive.min.css?v=2.3.2" />
     <!-- endbuild -->
     <!-- build:css res/css/flat-ui.min.css -->
-    <link rel="stylesheet" href="vendor/flat-ui/flat-ui.css">
+    <!--<link rel="stylesheet" href="vendor/flat-ui/flat-ui.css">-->
     <!-- endbuild -->
     <!-- build:css res/css/app.min.css -->
     <link rel="stylesheet" href="res/css/main.css" />
@@ -37,8 +37,10 @@
             </li>
           </ul>
           <div class="version">
-            <p>v0.1 alpha 7</p>
-            <p><a target="_blank" href="https://github.com/silverbucket/dogfeed/issues/">feedback and bug reports</a></p></div>
+            <p>v0.1 alpha 7<br />
+              <a target="_blank" href="https://github.com/silverbucket/dogfeed/issues/">feedback and bug reports</a>
+            </p>
+          </div>
         </div>
       </div>
     </nav>
@@ -51,7 +53,6 @@
     <!-- add feed modal window -->
     <div id="modalAddFeed" class="modal hide fade" ng-controller="addFeedCtrl">
       <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
         <h4>Add Feed</h4>
       </div>
         <div class="modal-body">
@@ -79,6 +80,37 @@
       </section>
     </script>
 
+    <!-- feed settings modal window -->
+    <div id="modalFeedSettings" ng-controller="feedCtrl" class="modal hide fade">
+      <div class="modal-header">
+        <h4>Feed settings</h4>
+        <p>url: <span ng-bind="model.feeds.edit"></span></p>
+      </div>
+      <div class="modal-body">
+        <form name="feedSettings" class="form-horizontal" novalidate>
+          <fieldset>
+            <div class="control-group">
+              <label for="displayname" class="control-label">Display Name</label>
+              <div class="controls">
+                <input type="text" class="required input-large" name="username" placeholder="Enter display name..." ng-model="model.feeds.info[model.feeds.edit].name">
+              </div>
+            </div>
+
+            <div class="control-group">
+              <div class="controls">
+                <button ng-click="deleteFeed(model.feeds.edit)" ng-disabled="model.saving" class="btn btn-danger">Delete</button>
+                &nbsp;
+                <button ng-click="cancelFeedSettings()" class="btn" ng-disabled="model.saving">Cancel</button>
+                &nbsp;
+                <button ng-click="saveFeedSettings(model.feeds.edit)" class="btn" ng-disabled="model.saving">Save</button>
+              </div>
+            </div>
+          </fieldset>
+        </form>
+        <p></p>
+      </div>
+      <div class="modal-footer"></div>
+    </div>
 
     <!-- build:js res/js/jquery.min.js -->
     <script src="vendor/jquery.min.js?v=1.10.1"></script>

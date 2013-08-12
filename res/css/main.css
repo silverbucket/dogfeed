@@ -81,18 +81,15 @@
   margin: 0 0 10px 20px;
 }
 
-.nav-list {
+.nav-tabs {
   padding: 0;
   display: inline-block;
+  border: none;
 }
 
-
-
-
-.nav-list li {
+.nav-tabs li {
   display: inline-block;
-  width: 100%;
-  margin: 0 0 5px 18px;
+  margin: 5px 0 0 18px;
   padding: 0;
 }
 
@@ -135,7 +132,7 @@
   width: 14px;
   height: 14px;
   line-height: 100%;
-  margin: 4px 0 0 -15px;
+  margin: auto 0 auto -15px;
   display: inline-block;
   /*margin-right: 5px;
   display:inline-block;*/
@@ -176,15 +173,16 @@
 
 .unread-count {
   color: black;
-  font-weight: 600;
+  font-weight: 900;
   margin-left: 10px;
 }
 
 .version {
   float: right;
-  margin: 20px 50px 0 0;
-  font-size: 13px;
+  margin: 5px 50px 0 0;
+  font-size: 12px;
   font-style: italic;
   text-align: center;
 }
+
 
