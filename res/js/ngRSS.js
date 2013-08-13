@@ -93,6 +93,7 @@ function ($q, SH, CH, RS, RSutil, $rootScope) {
   }
   function dummy () {}
 
+
   /****
    * FEED MANAGEMENT
    ******************/
@@ -105,11 +106,7 @@ function ($q, SH, CH, RS, RSutil, $rootScope) {
         if (!url) {
           console.log('ERROR processing url['+url+']: ', urls[key]);
         } else {
-          data.info[url] = urls[key];  // asign existing feed info to data struct
-          data.infoArray.push(data.info[url]);
-          func.fetchFeed(url).then(dummy, function (err) {
-            broadcastError(url, 'failed fetching feed list from sockethub: '+err);
-          });  // fetch articles from sockethub
+          func.addFeed(urls[key], true); // asign existing feed info to data struct
         }
       }
     }, function (err) {
@@ -123,24 +120,39 @@ function ($q, SH, CH, RS, RSutil, $rootScope) {
   })();
 
   // add a new feed to remoteStorage
-  func.addFeed = function addFeed(obj) {
-    var defer = $q.defer();
-    RS.call('rss', 'add', [obj]).then(function (m) {
-      console.log('feed added: ', obj);
-      data.info[obj.url] = obj;
-      for (var i = 0, len = data.infoArray.length; i < len; i = i + 1) {
-        if ((data.infoArray[i]) && (data.infoArray[i].url === url)) {
-          data.infoArray.splice(i, 1);
-          break;
-        }
-        console.log('adding to list: ', data.info[obj.url]);
-        data.infoArray.push(data.info[obj.url]);
+  function _add(obj) {
+    console.log('ADDING FEED TO DATA STRUCT: ', obj);
+    data.info[obj.url] = obj;
+    var match = false;
+    for (var i = 0, len = data.infoArray.length; i < len; i = i + 1) {
+      if ((data.infoArray[i]) && (data.infoArray[i].url === obj.url)) {
+        console.log('BREAK: '+obj.url);
+        match = true;
+        break;
       }
-      func.fetchFeed(obj.url);
-      defer.resolve(m);
-    }, function (err) {
-      defer.reject(err);
-    });
+    }
+    if (!match) {
+      console.log('adding to list: ', data.info[obj.url]);
+      console.log('existing feeds: ', data.info);
+      data.infoArray.push(data.info[obj.url]);
+      func.fetchFeed(obj.url).then(dummy, function (err) {
+        broadcastError(obj.url, 'failed fetching feed list from sockethub: '+err);
+      });  // fetch articles from sockethub
+    }
+  }
+  func.addFeed = function addFeed(obj, noRemoteStorage) {
+    var defer = $q.defer();
+    if (noRemoteStorage) {
+      _add(obj);
+    } else {
+      RS.call('rss', 'add', [obj]).then(function (m) {
+        console.log('feed added to rs: ', obj);
+        _add(obj);
+        defer.resolve(m);
+      }, function (err) {
+        defer.reject(err);
+      });
+    }
     return defer.promise;
   };
 
@@ -265,7 +277,7 @@ function ($q, SH, CH, RS, RSutil, $rootScope) {
     }
 
     if (m.status) {
-      console.log('adding: ', m);
+      console.log('adding article: ', m);
       var id = RSutil.encode(m.object.link);
       console.log('ID: ', id);
       RS.call('articles', 'get', [id]).then(function (a) {
@@ -354,7 +366,9 @@ function ($scope, RSS, util, $rootScope, $timeout) {
   if (!$scope.model.feeds.edit) {
     $scope.model.feeds.edit = '';
   }
-  $scope.model.feeds._editName = '';
+  if (!$scope.model.feeds._editName) {
+    $scope.model.feeds._editName = '';
+  }
   $scope.model.saving = false;
 
   $scope.isSelected = function(url, inclusive) {
