@@ -2,7 +2,7 @@ angular.module('ngRemoteStorage', []).
 
 value('RSutil', {
   encode: function encode(string) {
-    console.log("rsutil encode: ", string);
+    //console.log("rsutil encode: ", string);
     return encodeURIComponent(escape(string));
   }
 }).

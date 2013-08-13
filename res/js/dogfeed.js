@@ -52,7 +52,7 @@ function (settings, SH, $rootScope, RS) {
           timeout: false
     });
     SH.connect({register: true}).then(function () {
-      console.log('connected to sockethub');
+      //console.log('connected to sockethub');
       $rootScope.$broadcast('message', {
             message: 'connected to sockethub',
             type: 'success',
