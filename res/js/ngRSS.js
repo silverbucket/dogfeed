@@ -106,6 +106,7 @@ function ($q, SH, CH, RS, RSutil, $rootScope) {
         if (!url) {
           console.log('ERROR processing url['+url+']: ', urls[key]);
         } else {
+          urls[key].unread = 0;
           func.addFeed(urls[key], true); // asign existing feed info to data struct
         }
       }
@@ -283,10 +284,11 @@ function ($q, SH, CH, RS, RSutil, $rootScope) {
       RS.call('articles', 'get', [id]).then(function (a) {
         if (a) {
           console.log('ARTICLE FETCH from RS: ', a);
-          m.object.read = a.read;
+          m.object.read = (a.read) ? a.read : false;
         }
 
         if (!m.object.read) {
+          console.log(data.info[key].name + ' UNREAD COUNT['+data.info[key].unread+'] + 1');
           data.info[key].unread = (typeof data.info[key].unread === "number") ? data.info[key].unread + 1 : 1;
         }
         data.articles.push(m);
