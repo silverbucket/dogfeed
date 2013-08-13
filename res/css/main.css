@@ -63,7 +63,7 @@
   pointer-events: none !important;
 }
 
-.loading-articles {
+.article-text {
   font-weight: 900;
   font-size: 26px;
   color: #CCCCCC;
@@ -73,14 +73,14 @@
 
 
 
-.contacts {
+.feeds {
   margin: 0 0 30px 0;
   display: block;
   overflow: hidden;
   min-width: 220px;
 }
 
-.contacts a {
+.feeds a {
   text-decoration: none;
 }
 
