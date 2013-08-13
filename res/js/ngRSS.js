@@ -136,7 +136,11 @@ function ($q, SH, CH, RS, RSutil, $rootScope) {
       console.log('adding to list: ', data.info[obj.url]);
       console.log('existing feeds: ', data.info);
       data.infoArray.push(data.info[obj.url]);
-      func.fetchFeed(obj.url).then(dummy, function (err) {
+      data.info[obj.url]['loaded'] = false;
+      func.fetchFeed(obj.url).then(function () {
+        data.info[obj.url]['loaded'] = true;
+      }, function (err) {
+        data.info[obj.url]['loaded'] = true;
         broadcastError(obj.url, 'failed fetching feed list from sockethub: '+err);
       });  // fetch articles from sockethub
     }
@@ -259,18 +263,15 @@ function ($q, SH, CH, RS, RSutil, $rootScope) {
         //console.log('CHECKING: [tkey:' + t_key + '] data.info: ', data.info);
         if (data.info[t_key]) {
           console.log('PROBLEM FEED SETTINGS:', data.info[t_key]);
-          data.info[t_key]['loaded'] = true;
           data.info[t_key]['error'] = true;
           data.info[t_key]['errorMsg'] = m.object.message;
         }
       }
-    } else if (data.info[key].name !== m.actor.name) {
+    } else if (!data.info[key].name) { //} !== m.actor.name) {
       data.info[key]['name'] = m.actor.name;
       func.addFeed(data.info[key]);
-      data.info[key]['loaded'] = true;
     } else {
       //console.log("*** Names already match: " + m.actor.name);
-      data.info[key]['loaded'] = true;
     }
 
     if (!m.object.read) {
@@ -288,7 +289,7 @@ function ($q, SH, CH, RS, RSutil, $rootScope) {
         }
 
         if (!m.object.read) {
-          console.log(data.info[key].name + ' UNREAD COUNT['+data.info[key].unread+'] + 1');
+          //console.log(data.info[key].name + ' UNREAD COUNT['+data.info[key].unread+'] + 1');
           data.info[key].unread = (typeof data.info[key].unread === "number") ? data.info[key].unread + 1 : 1;
         }
         data.articles.push(m);
@@ -486,9 +487,9 @@ function ($scope, RSS, util, $rootScope, $timeout) {
     });
   }, 3000);
 
-  $scope.$watch('$scope.model.feeds.articles', function (newVal, oldVal) {
+  /*$scope.$watch('$scope.model.feeds.articles', function (newVal, oldVal) {
     console.log('article changed! ', newVal, oldVal);
-  });
+  });*/
 
   $rootScope.$on('SockethubConnectFailed', function (event, e) {
     console.log('Sockethub connect failed! ', e);
