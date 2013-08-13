@@ -28,8 +28,10 @@
             </li>
           </ul>
           <div class="version">
-            <p>v0.1 alpha 10<br />
-              <a target="_blank" href="https://github.com/silverbucket/dogfeed/issues/">feedback and bug reports</a>
+            <p>v0.1 alpha 11<br />
+              <a target="_blank" href="https://github.com/silverbucket/dogfeed/issues/">
+                feedback and bug reports
+              </a>
             </p>
           </div>
         </div>
@@ -47,15 +49,14 @@
         <h4>Add Feed</h4>
       </div>
         <div class="modal-body">
-      <form name="addFeed" class="form-horizontal" novalidate>
-          <input type="text" class="required input-xxlarge" name="url" placeholder="Enter URL..." ng-model="url" autofocus="autofocus" required />
-        </div>
-        <div class="modal-footer">
-          <button ng-click="add(url)" ng-disabled="addFeed.$invalid || adding">
-            <span class="icon-plus" alt="Add Feed"></span> Add Feed
-          </button>
-      </form>
-
+          <form name="addFeed" class="form-horizontal" novalidate>
+              <input type="text" class="required input-xxlarge" name="url" placeholder="Enter URL..." ng-model="url" autofocus="autofocus" required />
+            </div>
+            <div class="modal-footer">
+              <button ng-click="add(url)" ng-disabled="addFeed.$invalid || adding">
+                <span class="icon-plus" alt="Add Feed"></span> Add Feed
+              </button>
+          </form>
         </div>
     </div>
 
@@ -64,8 +65,27 @@
       <section id="talk" class="page">
         <div class="container-fluid">
           <div class="row-fluid" ng-controller="feedCtrl">
-            <feed-list class="span3 contacts" feeds="model.feeds">Feeds</feed-list>
-            <articles class="span9 articles" feeds="model.feeds"></articles>
+
+            <div class="span3">
+              <div style="min-width: 170px; background-color: #eeeeee;">
+                <form name="quickSettings" class="form-horizontal" novalidate>
+                  <div class="control-group">
+                    <label for="showRead"
+                           style="width: 130px; display: font-size: 12px; margin-right: 20px;"
+                           class="control-label">Show Read Artciles</label>
+                    <div class="controls">
+                      <input type="checkbox" name="showRead" ng-model="model.settings.showRead" />
+                    </div>
+                  </div>
+                </form>
+              </div>
+              <feed-list class="feeds" feeds="model.feeds" settings="model.settings">Feeds</feed-list>
+            </div>
+
+            <div class="span9 article-text" ng-show="model.feeds.articles.length == 0"><p>loading articles...</p></div>
+
+            <articles class="span9 articles" feeds="model.feeds" settings="model.settings">
+            </articles>
           </div>
         </div>
       </section>
@@ -87,20 +107,22 @@
               </div>
             </div>
 
-            <div class="control-group">
-              <div class="controls">
-                <button ng-click="deleteFeed(model.feeds.edit)" ng-disabled="saving" class="btn btn-danger">Delete</button>
-                &nbsp;
-                <button ng-click="cancelFeedSettings()" class="btn" ng-disabled="saving">Cancel</button>
-                &nbsp;
-                <button ng-click="saveFeedSettings(model.feeds.edit)" class="btn" ng-disabled="saving">Save</button>
-              </div>
-            </div>
+
           </fieldset>
-        </form>
         <p></p>
       </div>
-      <div class="modal-footer"></div>
+      <div class="modal-footer">
+        <div class="control-group">
+          <div class="controls">
+            <button ng-click="deleteFeed(model.feeds.edit)" ng-disabled="saving" class="btn btn-danger">Delete</button>
+            &nbsp;
+            <button ng-click="cancelFeedSettings()" class="btn" ng-disabled="saving">Cancel</button>
+            &nbsp;
+            <button ng-click="saveFeedSettings(model.feeds.edit)" class="btn" ng-disabled="saving">Save</button>
+          </div>
+        </div>
+        </form>
+      </div>
     </div>
 
     <script src="res/js/jquery.min.js"></script>
