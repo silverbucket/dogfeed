@@ -406,12 +406,16 @@ function ($scope, RSS, util, $rootScope, $timeout) {
   };
 
   // returns true if current selection is empty (has no unread articles)
-  $scope.currentIsEmpty = function () {
+  $scope.currentIsEmpty = function (settings) {
     if (!$scope.model.feeds.current.name) {
       return false;
     }
     for (var i = 0, num = $scope.model.feeds.current.indexes.length; i < num; i = i + 1) {
+      //console.log('checking '+$scope.model.feeds.current.indexes[i], $scope.model.feeds.info[$scope.model.feeds.current.indexes[i]]);
       if ($scope.model.feeds.info[$scope.model.feeds.current.indexes[i]].unread > 0) {
+        return false;
+      }
+      if (settings.showRead) {
         return false;
       }
     }
@@ -580,7 +584,7 @@ function () {
       'settings': '='
     },
     template: //'<h4><span ng-bind="feeds.current.name"></span></h4>' +
-              '<div class="article-text" ng-controller="feedCtrl" ng-show="feeds.articles.length > 0 && currentIsEmpty()"><p>no new articles</p></div>' +
+              '<div class="article-text" ng-controller="feedCtrl" ng-show="feeds.articles.length > 0 && currentIsEmpty(settings)"><p>no new articles</p></div>' +
               '<div ng-repeat="a in (filteredItems = (feeds.articles | orderBy: \'object.date\':true))"' +
               '     ng-controller="feedCtrl"' +
               '     ng-click="markRead(a.object.link)"' +
