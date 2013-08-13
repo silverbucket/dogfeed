@@ -199,7 +199,7 @@ function ($rootScope, $timeout) {
 
 
       $rootScope.$on('message', function (event, e) {
-        console.log('message event: ', e);
+        //console.log('message event: ', e);
 
         var timeout = (typeof e.timeout === 'boolean') ? e.timeout : true;
         scope.haveMessage = false;
