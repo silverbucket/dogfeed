@@ -358,7 +358,6 @@ controller('feedCtrl',
 ['$scope', 'RSS', 'util', '$rootScope', '$timeout',
 function ($scope, RSS, util, $rootScope, $timeout) {
 
-  $scope.message = '';
   $scope.model = {};
   $scope.model.feeds = RSS.data;
   $scope.model.loading = true;
@@ -471,26 +470,6 @@ function ($scope, RSS, util, $rootScope, $timeout) {
     }
   };
 
-  // display friendly message when no feeds are loaded
-  if (util.isEmptyObject($scope.model.feeds.info)) {
-    $scope.message = "loading feed list...";
-  }
-
-  $timeout(function () {
-    //$scope.message = 'howdy pardner!';
-    $scope.$watch('$scope.model.feeds.info', function (newVal, oldVal) {
-      if (!util.isEmptyObject($scope.model.feeds.info)) {
-        $scope.message = '';
-      } else {
-        $scope.message = "no feeds yet, add some!";
-      }
-    });
-  }, 3000);
-
-  /*$scope.$watch('$scope.model.feeds.articles', function (newVal, oldVal) {
-    console.log('article changed! ', newVal, oldVal);
-  });*/
-
   $rootScope.$on('SockethubConnectFailed', function (event, e) {
     console.log('Sockethub connect failed! ', e);
     $rootScope.$broadcast('message', {
@@ -533,21 +512,21 @@ function () {
               '      <i class="icon-globe"></i><span>All Items</span>' +
               '    </a>' +
               '  </li>' +
-              '  <li class="{hidden: message}"><span ng-bind="message"></span></li>' +
+              '  <li ng-show="feeds.infoArray.length ==0"><span>no feeds yet, add some!</span></li>' +
               '  <li ng-repeat="f in feeds.infoArray | orderBy: \'name\'"' +
               '      data-toggle="tooltip" ' +
               '      title="{{ f.url }}">' +
-              '      <i ng-click="showFeedSettings(f.url)"' +
-              '         ng-class="{status: true, \'icon-loading-small\': !f.loaded, \'icon-cog\': f.loaded}">' +
-              '      </i>' +
-              '      <div ng-click="switchFeed(f.url)"' +
-              '           ng-class="{active: isSelected(f.url), error: f.error, loading: !f.loaded, \'feed-entry\': true}">' +
-              '        <a href="" ng-class="{error: f.error}">' +
-              '          <span ng-bind="f.name"></span> <span class="unread-count" ng-bind="f.unread"></span>' +
-              '        </a>' +
-              '      </div>' +
-              '    </li>' +
-              '  </ul>',
+              '    <i ng-click="showFeedSettings(f.url)"' +
+              '       ng-class="{status: true, \'icon-loading-small\': !f.loaded, \'icon-cog\': f.loaded}">' +
+              '    </i>' +
+              '    <div ng-click="switchFeed(f.url)"' +
+              '         ng-class="{active: isSelected(f.url), error: f.error, loading: !f.loaded, \'feed-entry\': true}">' +
+              '      <a href="" ng-class="{error: f.error}">' +
+              '        <span ng-bind="f.name"></span> <span class="unread-count" ng-bind="f.unread"></span>' +
+              '      </a>' +
+              '    </div>' +
+              '  </li>' +
+              '</ul>',
     transclude: true,
     link: function (scope, element, attrs) {
       console.log('attrs:', attrs);

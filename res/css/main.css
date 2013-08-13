@@ -63,6 +63,13 @@
   pointer-events: none !important;
 }
 
+.loading-articles {
+  font-weight: 900;
+  font-size: 26px;
+  color: #CCCCCC;
+  margin-top: 10%;
+  text-align: center;
+}
 
 
 

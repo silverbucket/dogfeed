@@ -70,8 +70,10 @@
       <section id="talk" class="page">
         <div class="container-fluid">
           <div class="row-fluid" ng-controller="feedCtrl">
-            <feed-list class="span3 contacts" feeds="model.feeds">Feeds</feed-list>
-            <articles class="span9 articles" feeds="model.feeds"></articles>
+            <feed-list class="span3 feeds" feeds="model.feeds">Feeds</feed-list>
+            <div class="span9 loading-articles" ng-show="model.feeds.articles.length == 0">loading articles... </div>
+            <articles class="span9 articles" feeds="model.feeds">
+            </articles>
           </div>
         </div>
       </section>
