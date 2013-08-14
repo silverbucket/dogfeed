@@ -137,9 +137,11 @@ function ($q, SH, CH, RS, RSutil, $rootScope) {
       //console.log('existing feeds: ', data.info);
       data.infoArray.push(data.info[obj.url]);
       data.info[obj.url]['loaded'] = false;
-      func.fetchFeed(obj.url).then(function () {
+      func.fetchFeed(obj.url).then(function (resp) {
+        console.log('fetchFeed success: ', resp);
         data.info[obj.url]['loaded'] = true;
       }, function (err) {
+        console.log('fetchFeed failure: ', err);
         data.info[obj.url]['loaded'] = true;
         broadcastError(obj.url, 'failed fetching feed list from sockethub: '+err);
       });  // fetch articles from sockethub
@@ -263,6 +265,7 @@ function ($q, SH, CH, RS, RSutil, $rootScope) {
         //console.log('CHECKING: [tkey:' + t_key + '] data.info: ', data.info);
         if (data.info[t_key]) {
           console.log('PROBLEM FEED SETTINGS:', data.info[t_key]);
+          data.info[t_key]['loaded'] = true;
           data.info[t_key]['error'] = true;
           data.info[t_key]['errorMsg'] = m.object.message;
         }
@@ -362,7 +365,7 @@ function ($scope, RSS, util, $rootScope, $timeout) {
     showRead: false
   };
   $scope.model.feeds = RSS.data;
-  $scope.model.loading = true;
+  //$scope.model.loading = true;
   $scope.model.feeds.current = {
     name: '',
     indexes: []
@@ -506,7 +509,7 @@ function ($scope, RSS, util, $rootScope, $timeout) {
       type: 'error',
       timeout: false
     });
-    $scope.model.loading = true;
+    //$scope.model.loading = true;
     $rootScope.$broadcast('showModalSockethubSettings', {locked: false});
   });
 }]).
