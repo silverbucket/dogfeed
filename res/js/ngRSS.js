@@ -552,7 +552,7 @@ function () {
               '      <i class="icon-globe"></i><span>All Items</span>' +
               '    </a>' +
               '  </li>' +
-              '  <li ng-show="feeds.infoArray.length ==0"><span>no feeds yet, add some!</span></li>' +
+              '  <li ng-show="feeds.infoArray.length == 0"><span>no feeds yet, add some!</span></li>' +
               '  <li ng-repeat="f in feeds.infoArray | orderBy: \'name\'"' +
               '      data-toggle="tooltip" ' +
               '      title="{{ f.url }}">' +
