@@ -36,10 +36,10 @@ function (settings, SH, $rootScope, RS) {
     console.log('GOT SH CONFIG: ', cfg);
     if (!cfg) {
       //cfg = settings.conn;
-      cfg.host = 'localhost';
-      cfg.port = 10550;
+      cfg.host = 'silverbucket.net';
+      cfg.port = 443;
       cfg.path = '/sockethub';
-      cfg.tls = false;
+      cfg.tls = true;
     }
 
     console.log('USING SH CONFIG: ', cfg);
