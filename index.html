@@ -34,7 +34,7 @@
             </li>
           </ul>
           <div class="version">
-            <p>v0.1 alpha 11<br />
+            <p>v0.1 alpha 12<br />
               <a target="_blank" href="https://github.com/silverbucket/dogfeed/issues/">
                 feedback and bug reports
               </a>
@@ -122,9 +122,9 @@
           <div class="controls">
             <button ng-click="deleteFeed(model.feeds.edit)" ng-disabled="saving" class="btn btn-danger">Delete</button>
             &nbsp;
-            <button ng-click="cancelFeedSettings()" class="btn" ng-disabled="saving">Cancel</button>
+            <button ng-click="cancelFeedSettings()" class="btn btn-action" ng-disabled="saving">Cancel</button>
             &nbsp;
-            <button ng-click="saveFeedSettings(model.feeds.edit)" class="btn" ng-disabled="saving">Save</button>
+            <button ng-click="saveFeedSettings(model.feeds.edit)" class="btn btn-success" ng-disabled="saving">Save</button>
           </div>
         </div>
         </form>
