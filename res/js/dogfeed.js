@@ -41,6 +41,7 @@ function (settings, SH, $rootScope, RS) {
       cfg.port = 443;
       cfg.path = '/sockethub';
       cfg.tls = true;
+      cfg.secret = '1234567890';
     } else {
       cfg = c;
     }
@@ -48,7 +49,7 @@ function (settings, SH, $rootScope, RS) {
     console.log('USING SH CONFIG: ', cfg);
     //$rootScope.$broadcast('message', {type: 'clear'});
     // connect to sockethub and register
-    settings.save('conn', cfg);
+    if (settings.save('conn', cfg));
     $rootScope.$broadcast('message', {
           message: 'attempting to connect to sockethub',
           type: 'info',
