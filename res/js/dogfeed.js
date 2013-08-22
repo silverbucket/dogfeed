@@ -34,7 +34,7 @@ run(['SockethubSettings', 'SH', '$rootScope', 'RS',
 function (settings, SH, $rootScope, RS) {
   RS.call('sockethub', 'getConfig', ['']).then(function (cfg) {
     console.log('GOT SH CONFIG: ', cfg);
-    if (!cfg) {
+    if ((!cfg) || (typeof cfg.host === 'undefined')) {
       cfg = {};
       //cfg = settings.conn;
       cfg.host = 'silverbucket.net';
