@@ -35,7 +35,7 @@ function (settings, SH, $rootScope, RS) {
   RS.call('sockethub', 'getConfig', ['']).then(function (c) {
     console.log('GOT SH CONFIG: ', c);
     var cfg = {};
-    if ((!c) || (typeof c.host === 'undefined')) {
+    if (typeof c !== 'object') {
       //cfg = settings.conn;
       cfg.host = 'silverbucket.net';
       cfg.port = 443;
