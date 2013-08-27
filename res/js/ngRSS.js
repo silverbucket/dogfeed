@@ -102,10 +102,10 @@ function ($q, SH, CH, RS, RSutil, $rootScope) {
     RS.call('rss', 'getAll', ['']).then(function (urls) {
       console.log('RSS: got feed urls from remoteStorage ', urls);
       for (var key in urls) {
-        var url = urls[key].url;
-        if (!url) {
-          console.log('ERROR processing url['+url+']: ', urls[key]);
+        if ((!urls[key]) || (typeof urls[key].url === 'undefined')) {
+          console.log('ERROR processing url['+key+']: ', urls[key]);
         } else {
+          var url = urls[key].url;
           urls[key].unread = 0;
           func.addFeed(urls[key], true); // asign existing feed info to data struct
         }
