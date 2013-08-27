@@ -7,7 +7,7 @@
     <link rel="shortcut icon" href="favicon.ico" />
 
     <link rel="stylesheet" href="res/css/bootstrap.min.css">
-    <link rel="stylesheet" href="res/css/bootstrap-responsive.min.css">
+    <link rel="stylesheet" href="res/css/bootstrap-theme.min.css">
     <link rel="stylesheet" href="res/css/app.min.css">
   </head>
 
@@ -16,23 +16,36 @@
     <div sockethub-settings></div>
 
     <nav>
-      <div class="navbar" ng-controller="titlebarCtrl">
-        <div class="navbar-inner">
-          <a class="brand" href="#"><img src="res/img/dogfeed-logo.svg" width="115" alt="Dogfeed" /></a>
-          <ul class="nav nav-tabs">
-            <li>
-              <a href="" ng-click="addFeed()"><i class="icon-plus" alt="Add Feed"></i> Add Feed</a>
-            </li>
-            <li>
-              <a href="" ng-click="sockethubSettings()"><i class="icon-cog"></i></a>
-            </li>
-          </ul>
-          <div class="version">
-            <p>v0.1 alpha 14<br />
-              <a target="_blank" href="https://github.com/silverbucket/dogfeed/issues/">
-                feedback and bug reports
-              </a>
-            </p>
+      <div class="navbar navbar-default" ng-controller="titlebarCtrl">
+        <div class="container">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+              <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">
+              <img src="res/img/dogfeed-logo.svg" width="115" alt="Dogfeed" />
+            </a>
+          </div>
+          <div class="collapse navbar-collapse">
+            <ul class="nav navbar-nav">
+              <li>
+                <a href="" ng-click="addFeed()">
+                  <span class="glyphicon glyphicon-plus" alt="Add Feed"></span> Add Feed
+                </a>
+              </li>
+              <li>
+                <a href="" ng-click="sockethubSettings()">
+                  <span class="glyphicon glyphicon-cog"></span> Settings
+                </a>
+              </li>
+            </ul>
+            <div class="version">
+              <p>v0.1 alpha 15<br />
+                <a target="_blank" href="https://github.com/silverbucket/dogfeed/issues/">
+                  feedback and bug reports
+                </a>
+              </p>
+            </div>
           </div>
         </div>
       </div>
@@ -43,8 +56,36 @@
     </div>
     <ng-view></ng-view>
 
+
+    <!-- feeds -->
+    <script type="text/ng-template" id="feeds.html">
+      <section id="talk" class="page">
+        <div class="container">
+          <div class="row" ng-controller="feedCtrl">
+
+            <div class="col-md-3">
+              <div style="min-width: 190px; background-color: #eeeeee; display: inline-block; font-size: 12px; margin: 0 100px 0 20px; padding: 0px 20px 5px 15px;">
+                <form name="quickSettings" class="form-horizontal" novalidate>
+                    <label for="showRead" style="width: 125px; margin-right: 5px;"
+                           class="control-label">Show Read Artciles</label>
+                    <input type="checkbox" name="showRead" ng-model="model.settings.showRead" />
+                </form>
+              </div>
+              <feed-list class="feeds" feeds="model.feeds" settings="model.settings">Feeds</feed-list>
+            </div>
+
+            <div class="col-md-8 article-text" ng-show="(model.feeds.articles.length == 0) && (model.feeds.infoArray.length > 0)"><p>loading articles...</p><img src="res/img/loading.gif" /></div>
+
+            <articles class="col-md-8 articles" feeds="model.feeds" settings="model.settings">
+            </articles>
+          </div>
+        </div>
+      </section>
+    </script>
+
+
     <!-- add feed modal window -->
-    <div id="modalAddFeed" class="modal hide fade" ng-controller="addFeedCtrl">
+    <div id="modalAddFeed" class="modal modal-content hide fade" ng-controller="addFeedCtrl">
       <div class="modal-header">
         <h4>Add Feed</h4>
       </div>
@@ -60,39 +101,8 @@
         </div>
     </div>
 
-    <!-- feeds -->
-    <script type="text/ng-template" id="feeds.html">
-      <section id="talk" class="page">
-        <div class="container-fluid">
-          <div class="row-fluid" ng-controller="feedCtrl">
-
-            <div class="span3">
-              <div style="min-width: 170px; background-color: #eeeeee;">
-                <form name="quickSettings" class="form-horizontal" novalidate>
-                  <div class="control-group">
-                    <label for="showRead"
-                           style="width: 130px; display: font-size: 12px; margin-right: 20px;"
-                           class="control-label">Show Read Artciles</label>
-                    <div class="controls">
-                      <input type="checkbox" name="showRead" ng-model="model.settings.showRead" />
-                    </div>
-                  </div>
-                </form>
-              </div>
-              <feed-list class="feeds" feeds="model.feeds" settings="model.settings">Feeds</feed-list>
-            </div>
-
-            <div class="span9 article-text" ng-show="(model.feeds.articles.length == 0) && (model.feeds.infoArray.length > 0)"><p>loading articles...</p><img src="res/img/loading.gif" /></div>
-
-            <articles class="span9 articles" feeds="model.feeds" settings="model.settings">
-            </articles>
-          </div>
-        </div>
-      </section>
-    </script>
-
     <!-- feed settings modal window -->
-    <div id="modalFeedSettings" ng-controller="feedCtrl" class="modal hide fade">
+    <div id="modalFeedSettings" ng-controller="feedCtrl" class="modal-content modalhide fade">
       <div class="modal-header">
         <h4>Feed settings</h4>
         <p>url: <span ng-bind="model.feeds.edit"></span></p>
@@ -106,8 +116,6 @@
                 <input type="text" class="required input-large" name="username" placeholder="Enter display name..." ng-model="model.feeds.info[model.feeds.edit].name">
               </div>
             </div>
-
-
           </fieldset>
         <p></p>
       </div>
