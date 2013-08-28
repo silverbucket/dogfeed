@@ -41,15 +41,17 @@ module.exports = function(grunt) {
           {expand: true, src: ['*.png'], dest: 'build/'}, // includes files in path and its subdirs
           {expand: true, src: ['*.jpg'], dest: 'build/'}, // includes files in path and its subdirs
           {expand: true, src: ['res/img/*'], dest: 'build/', filter: 'isFile'}, // includes files in path and its subdirs
-          {expand: false, src: ['vendor/bootstrap/img/glyphicons-halflings-white.png'], dest: 'build/res/img/glyphicons-halflings-white.png', filter: 'isFile'}, // includes files in path and its subdirs
-          {expand: false, src: ['vendor/bootstrap/img/glyphicons-halflings.png'], dest: 'build/res/img/glyphicons-halflings.png', filter: 'isFile'}, // includes files in path and its subdirs
+          {expand: false, src: ['vendor/bootstrap/fonts/glyphicons-halflings-regular.eot'], dest: 'build/res/fonts/glyphicons-halflings-regular.eot', filter: 'isFile'}, // includes files in path and its subdirs
+          {expand: false, src: ['vendor/bootstrap/fonts/glyphicons-halflings-regular.svg'], dest: 'build/res/fonts/glyphicons-halflings-regular.svg', filter: 'isFile'}, // includes files in path and its subdirs
+          {expand: false, src: ['vendor/bootstrap/fonts/glyphicons-halflings-regular.ttf'], dest: 'build/res/fonts/glyphicons-halflings-regular.ttf', filter: 'isFile'}, // includes files in path and its subdirs
+          {expand: false, src: ['vendor/bootstrap/fonts/glyphicons-halflings-regular.woff'], dest: 'build/res/fonts/glyphicons-halflings-regular.woff', filter: 'isFile'}, // includes files in path and its subdirs
           {expand: false, src: ['vendor/jquery.min.js'], dest: 'build/res/js/jquery.min.js', filter: 'isFile'}, // includes files in path and its subdirs
           {expand: false, src: ['vendor/angular.min.js'], dest: 'build/res/js/angular.min.js', filter: 'isFile'}, // includes files in path and its subdirs
           {expand: false, src: ['vendor/remotestorage/remotestorage.min.js'], dest: 'build/res/js/remotestorage.min.js', filter: 'isFile'}, // includes files in path and its subdirs
           {expand: false, src: ['vendor/bootstrap/js/bootstrap.min.js'], dest: 'build/res/js/bootstrap.min.js', filter: 'isFile'}, // includes files in path and its subdirs
-          {expand: false, src: ['vendor/bootstrap/js/bootstrap-responsive.min.js'], dest: 'build/res/js/bootstrap-responsive.min.js', filter: 'isFile'}, // includes files in path and its subdirs
+          {expand: false, src: ['vendor/bootstrap/js/bootstrap-theme.min.js'], dest: 'build/res/js/bootstrap-theme.min.js', filter: 'isFile'}, // includes files in path and its subdirs
           {expand: false, src: ['vendor/bootstrap/css/bootstrap.min.css'], dest: 'build/res/css/bootstrap.min.css', filter: 'isFile'}, // includes files in path and its subdirs
-          {expand: false, src: ['vendor/bootstrap/css/bootstrap-responsive.min.css'], dest: 'build/res/css/bootstrap-responsive.min.css', filter: 'isFile'} // includes files in path and its subdirs
+          {expand: false, src: ['vendor/bootstrap/css/bootstrap-theme.min.css'], dest: 'build/res/css/bootstrap-theme.min.css', filter: 'isFile'} // includes files in path and its subdirs
 
         ]
       }
