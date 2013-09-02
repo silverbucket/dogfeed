@@ -40,7 +40,7 @@
               </li>
             </ul>
             <div class="version">
-              <p>v0.1 alpha 16<br />
+              <p>v0.1 alpha 17<br />
                 <a target="_blank" href="https://github.com/silverbucket/dogfeed/issues/">
                   feedback and bug reports
                 </a>
@@ -64,7 +64,7 @@
           <div class="row" ng-controller="feedCtrl">
 
             <div class="col-md-3">
-              <div style="min-width: 190px; background-color: #eeeeee; display: inline-block; font-size: 12px; margin: 0 100px 0 20px; padding: 0px 20px 5px 15px;">
+              <div class="feed-controls">
                 <form name="quickSettings" class="form-horizontal" novalidate>
                     <label for="showRead" style="width: 125px; margin-right: 5px;"
                            class="control-label">Show Read Artciles</label>
@@ -88,17 +88,17 @@
     <div id="modalAddFeed" class="modal fade" ng-controller="addFeedCtrl">
       <div class="modal-dialog">
         <div class="modal-content">
+
           <div class="modal-header">
-            <h4>Add Feed</h4>
+            <h4 class="modal-title">Add Feed</h4>
           </div>
           <div class="modal-body">
             <form name="addFeed" class="form-horizontal" novalidate>
-                <input type="text" class="required input-xxlarge" name="url" placeholder="Enter URL..." ng-model="url" autofocus="autofocus" required />
-              </div>
-              <div class="modal-footer">
-                <button ng-click="add(url)" ng-disabled="addFeed.$invalid || adding">
-                  <span class="icon-plus" alt="Add Feed"></span> Add Feed
-                </button>
+              <input type="text" class="required form-control" name="url" placeholder="Enter URL..." ng-model="url" autofocus="autofocus" required />
+          </div>
+          <div class="modal-footer">
+              <button ng-click="add(url)" ng-disabled="addFeed.$invalid || adding">
+              <span class="icon-plus" alt="Add Feed"></span> Add Feed</button>
             </form>
           </div>
         </div>
