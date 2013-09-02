@@ -91,51 +91,59 @@
 
 
     <!-- add feed modal window -->
-    <div id="modalAddFeed" class="modal modal-content hide fade" ng-controller="addFeedCtrl">
-      <div class="modal-header">
-        <h4>Add Feed</h4>
-      </div>
-        <div class="modal-body">
-          <form name="addFeed" class="form-horizontal" novalidate>
-              <input type="text" class="required input-xxlarge" name="url" placeholder="Enter URL..." ng-model="url" autofocus="autofocus" required />
-            </div>
-            <div class="modal-footer">
-              <button ng-click="add(url)" ng-disabled="addFeed.$invalid || adding">
-                <span class="icon-plus" alt="Add Feed"></span> Add Feed
-              </button>
-          </form>
+    <div id="modalAddFeed" class="modal modal-content fade" ng-controller="addFeedCtrl">
+      <div class="modal-dialog">
+        <div class="modal-container">
+          <div class="modal-header">
+            <h4>Add Feed</h4>
+          </div>
+          <div class="modal-body">
+            <form name="addFeed" class="form-horizontal" novalidate>
+                <input type="text" class="required input-xxlarge" name="url" placeholder="Enter URL..." ng-model="url" autofocus="autofocus" required />
+              </div>
+              <div class="modal-footer">
+                <button ng-click="add(url)" ng-disabled="addFeed.$invalid || adding">
+                  <span class="icon-plus" alt="Add Feed"></span> Add Feed
+                </button>
+            </form>
+          </div>
         </div>
+      </div>
     </div>
 
     <!-- feed settings modal window -->
-    <div id="modalFeedSettings" ng-controller="feedCtrl" class="modal-content modalhide fade">
-      <div class="modal-header">
-        <h4>Feed settings</h4>
-        <p>url: <span ng-bind="model.feeds.edit"></span></p>
-      </div>
-      <div class="modal-body">
-        <form name="feedSettings" class="form-horizontal" novalidate>
-          <fieldset>
+    <div id="modalFeedSettings" ng-controller="feedCtrl" class="modal-content modal fade">
+      <div class="modal-dialog">
+        <div class="modal-container">
+          <div class="modal-header">
+            <h4>Feed settings</h4>
+            <p>url: <span ng-bind="model.feeds.edit"></span></p>
+          </div>
+          <div class="modal-body">
+            <form name="feedSettings" class="form-horizontal" novalidate>
+              <fieldset>
+                <div class="control-group">
+                  <label for="displayname" class="control-label">Display Name</label>
+                  <div class="controls">
+                    <input type="text" class="required input-large" name="username" placeholder="Enter display name..." ng-model="model.feeds.info[model.feeds.edit].name">
+                  </div>
+                </div>
+              </fieldset>
+            <p></p>
+          </div>
+          <div class="modal-footer">
             <div class="control-group">
-              <label for="displayname" class="control-label">Display Name</label>
               <div class="controls">
-                <input type="text" class="required input-large" name="username" placeholder="Enter display name..." ng-model="model.feeds.info[model.feeds.edit].name">
+                <button ng-click="deleteFeed(model.feeds.edit)" ng-disabled="saving" class="btn btn-danger">Delete</button>
+                &nbsp;
+                <button ng-click="cancelFeedSettings()" class="btn btn-action" ng-disabled="saving">Cancel</button>
+                &nbsp;
+                <button ng-click="saveFeedSettings(model.feeds.edit)" class="btn btn-success" ng-disabled="saving">Save</button>
               </div>
             </div>
-          </fieldset>
-        <p></p>
-      </div>
-      <div class="modal-footer">
-        <div class="control-group">
-          <div class="controls">
-            <button ng-click="deleteFeed(model.feeds.edit)" ng-disabled="saving" class="btn btn-danger">Delete</button>
-            &nbsp;
-            <button ng-click="cancelFeedSettings()" class="btn btn-action" ng-disabled="saving">Cancel</button>
-            &nbsp;
-            <button ng-click="saveFeedSettings(model.feeds.edit)" class="btn btn-success" ng-disabled="saving">Save</button>
+            </form>
           </div>
         </div>
-        </form>
       </div>
     </div>
 

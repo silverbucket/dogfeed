@@ -548,7 +548,7 @@ function () {
               '</div>' +
               */
               '<h4 ng-transclude></h4>' +
-              '<ul class="nav nav-list" ng-controller="feedCtrl">' +
+              '<ul class="nav nav-list nav-pills nav-stacked" ng-controller="feedCtrl">' +
               '  <li ng-click="switchFeed()"' +
               '       ng-class="{active: isSelected(), \'all-feeds\': true}">' +
               '    <a href="" >' +
