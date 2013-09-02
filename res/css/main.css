@@ -32,7 +32,7 @@
  margin-right: 5px;
 }
 
-.modal {
+/*.modal {
   margin-top: 20px;
 }
 
@@ -43,7 +43,7 @@
 
 .modal-header img {
   margin: 0 auto 0 40%;
-}
+}*/
 
 .message-container {
   height: 40px;
@@ -72,6 +72,15 @@
 }
 
 
+
+.feed-controls {
+  min-width: 190px;
+  background-color: #eeeeee;
+  display: inline-block;
+  font-size: 12px;
+  margin: 0 100px 0 20px;
+  padding: 0 20px 5px 15px;
+}
 
 .feeds {
   margin: 0 0 30px 0;
@@ -172,7 +181,10 @@
   margin: 0 0 0 1%;
 }
 
-.unread {
+.article {
+  padding: 0 0 2% 2%;
+  margin: 0 0 2% 0;
+
   border: 2px solid #eeffee;
   box-shadow: -1px -1px 10px #AAAAAA;
   background-color: #FFFFFF;
@@ -192,4 +204,8 @@
   text-align: center;
 }
 
-
+.read {
+  color: #aaaaaa;
+  border-color: white;
+  box-shadow: none;
+}

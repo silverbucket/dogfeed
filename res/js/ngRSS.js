@@ -283,9 +283,8 @@ function ($q, SH, CH, RS, RSutil, $rootScope) {
 
     if (m.status) {
       //console.log('adding article: ', m);
-      var id = RSutil.encode(m.object.link);
       //console.log('ID: ', id);
-      RS.call('articles', 'get', [id]).then(function (a) {
+      RS.call('articles', 'getByUrl', [m.object.link]).then(function (a) {
         if (a) {
           //console.log('ARTICLE FETCH from RS: ', a);
           m.object.read = (a.read) ? a.read : false;
@@ -362,7 +361,7 @@ controller('feedCtrl',
 function ($scope, RSS, util, $rootScope, $timeout) {
   $scope.model = {};
   $scope.model.settings = {
-    showRead: false
+    showRead: true
   };
   $scope.model.feeds = RSS.data;
   //$scope.model.loading = true;
@@ -591,7 +590,7 @@ function () {
               '<div ng-repeat="a in (filteredItems = (feeds.articles | orderBy: \'object.date\':true))"' +
               '     ng-controller="feedCtrl"' +
               '     ng-click="markRead(a.object.link)"' +
-              '     ng-class="{well: true, unread: !a.object.read, article: true}"' +
+              '     ng-class="{read: a.object.read, article: true}"' +
               '     ng-show="isShowable(a.actor.address, a.object.read, settings)">' +
               '  <h2>{{ a.object.title }}</h2>' +
               '  <p>feed: <i>{{ a.actor.name }}</i></p>' +
