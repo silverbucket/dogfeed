@@ -19,7 +19,13 @@
     <!-- endbuild -->
     <script>
 (function initRemoteStorage() {
-  remoteStorage.claimAccess({sockethub:'rw',rss:'rw',articles:'rw'});
+  //remoteStorage.claimAccess({ sockethub:'rw', rss:'rw', articles:'rw' });
+  remoteStorage.access.claim('sockethub', 'rw');
+  remoteStorage.access.claim('rss', 'rw');
+  remoteStorage.access.claim('articles', 'rw');
+  remoteStorage.caching.disable('/sockethub/');
+  remoteStorage.caching.disable('/rss/');
+  remoteStorage.caching.disable('/articles/');
   remoteStorage.displayWidget('remotestorage-connect', {
     redirectUri: window.location.origin + '/rscallback.html'
   });
