@@ -100,11 +100,14 @@
             <h4 class="modal-title">Add Feed</h4>
           </div>
           <div class="modal-body">
+            <div class="message-container">
+              <div message></div>
+            </div>
             <form name="addFeed" role="form" novalidate>
-              <input type="text" class="required form-control" name="url" placeholder="Enter URL..." ng-model="url" autofocus="autofocus" required />
+              <input type="url" class="required form-control" name="url" placeholder="Enter URL..." ng-model="url" autofocus="autofocus" required />
           </div>
           <div class="modal-footer">
-              <button class="btn btn-default" ng-click="add(url)" ng-disabled="addFeed.$invalid || adding">
+              <button class="btn btn-primary" ng-click="add(url)" ng-disabled="addFeed.$invalid || adding">
               <span class="icon-plus" alt="Add Feed"></span> Add Feed</button>
             </form>
           </div>
@@ -136,11 +139,11 @@
           </div>
           <div class="modal-footer">
               <div class="form-group">
-                <button ng-click="deleteFeed(model.feeds.edit)" ng-disabled="saving" class="btn btn-danger">Delete</button>
+                <button type="default" ng-click="saveFeedSettings(model.feeds.edit)" class="btn btn-primary" ng-disabled="saving">Save</button>
                   &nbsp;
                 <button ng-click="cancelFeedSettings()" class="btn btn-action" ng-disabled="saving">Cancel</button>
                   &nbsp;
-                <button ng-click="saveFeedSettings(model.feeds.edit)" class="btn btn-success" ng-disabled="saving">Save</button>
+                <button style="float: left;" ng-click="deleteFeed(model.feeds.edit)" ng-disabled="saving" class="btn btn-danger">Delete</button>
               </div>
             </form>
           </div>
