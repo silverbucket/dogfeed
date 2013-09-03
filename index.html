@@ -100,11 +100,11 @@
             <h4 class="modal-title">Add Feed</h4>
           </div>
           <div class="modal-body">
-            <form name="addFeed" class="form-horizontal" novalidate>
+            <form name="addFeed" role="form" novalidate>
               <input type="text" class="required form-control" name="url" placeholder="Enter URL..." ng-model="url" autofocus="autofocus" required />
           </div>
           <div class="modal-footer">
-              <button ng-click="add(url)" ng-disabled="addFeed.$invalid || adding">
+              <button class="btn btn-default" ng-click="add(url)" ng-disabled="addFeed.$invalid || adding">
               <span class="icon-plus" alt="Add Feed"></span> Add Feed</button>
             </form>
           </div>
@@ -119,30 +119,29 @@
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
             <h4 class="modal-title">Feed settings</h4>
-            <p>url: <span ng-bind="model.feeds.edit"></span></p>
           </div>
           <div class="modal-body">
-            <form name="feedSettings" class="form-horizontal" novalidate>
-              <fieldset>
-                <div class="control-group">
-                  <label for="displayname" class="control-label">Display Name</label>
-                  <div class="controls">
-                    <input type="text" class="required input-large" name="username" placeholder="Enter display name..." ng-model="model.feeds.info[model.feeds.edit].name">
-                  </div>
+            <form name="feedSettings" role="form" novalidate>
+              <div class="form-group">
+                <label for="url">URL</label>
+                <span ng-bind="model.feeds.edit"></span>
+              </div>
+              <div class="form-group">
+                <label for="displayname">Display Name</label>
+                <div class="controls">
+                  <input type="text" class="required form-control" name="username" placeholder="Enter display name..." ng-model="model.feeds.info[model.feeds.edit].name">
                 </div>
-              </fieldset>
-            <p></p>
+              </div>
+              <p></p>
           </div>
           <div class="modal-footer">
-            <div class="control-group">
-              <div class="controls">
+              <div class="form-group">
                 <button ng-click="deleteFeed(model.feeds.edit)" ng-disabled="saving" class="btn btn-danger">Delete</button>
-                &nbsp;
+                  &nbsp;
                 <button ng-click="cancelFeedSettings()" class="btn btn-action" ng-disabled="saving">Cancel</button>
-                &nbsp;
+                  &nbsp;
                 <button ng-click="saveFeedSettings(model.feeds.edit)" class="btn btn-success" ng-disabled="saving">Save</button>
               </div>
-            </div>
             </form>
           </div>
         </div>
