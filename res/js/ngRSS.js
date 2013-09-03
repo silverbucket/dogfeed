@@ -270,7 +270,7 @@ function ($q, SH, CH, RS, RSutil, $rootScope) {
           data.info[t_key]['errorMsg'] = m.object.message;
         }
       }
-    } else if ((!data.info[key].name)) { // || (data.info[key].name !== m.actor.name)) { //} !== m.actor.name) {
+    } else if ((!data.info[key].name) || (data.info[key].name === data.info[key].url)) {
       data.info[key]['name'] = m.actor.name;
       func.addFeed(data.info[key]);
     } else {
@@ -414,7 +414,8 @@ function ($scope, RSS, util, $rootScope, $timeout) {
     }
     for (var i = 0, num = $scope.model.feeds.current.indexes.length; i < num; i = i + 1) {
       //console.log('checking '+$scope.model.feeds.current.indexes[i], $scope.model.feeds.info[$scope.model.feeds.current.indexes[i]]);
-      if ($scope.model.feeds.info[$scope.model.feeds.current.indexes[i]].unread > 0) {
+      if (($scope.model.feeds.info[$scope.model.feeds.current.indexes[i]]) &&
+          ($scope.model.feeds.info[$scope.model.feeds.current.indexes[i]].unread > 0)) {
         return false;
       }
       if (settings.showRead) {
