@@ -117,7 +117,7 @@
  */
 .feed-entry {
   display: inline-block;
-  pointer-events: all;
+  /*pointer-events: all;*/
   cursor: pointer;
   min-width: 200px;
   padding: 2px 0 2px 5px;
@@ -178,7 +178,7 @@
  * ARTICLES
  */
 .articles {
-  width: 100%;
+  /*width: 100%;*/
   margin: 0 0 0 1%;
 }
 
