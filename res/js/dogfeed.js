@@ -170,32 +170,32 @@ function ($rootScope, $timeout) {
 
       var presets = {
         'remotestorage-connect': {
-          type: 'error',
+          type: 'warning',
           title : 'Connect to remoteStorage',
           message: 'First things first. You must connect to your remoteStorage'
         },
         'sockethub-config': {
-          type: 'error',
+          type: 'warning',
           title: 'Sockethub configuration needed',
           message: 'You must fill in your Sockethub connection details'
         },
         'sockethub-connect': {
-          type: 'error',
+          type: 'danger',
           title: 'Sockethub connection error',
           message: 'Unable to connect to Sockethub please check your configuration and try again'
         },
         'sockethub-register': {
-          type: 'error',
+          type: 'danger',
           title: 'Sockethub registration problem',
           message: 'We were unable to register with your Sockethub instance'
         },
         'xmpp-connect': {
-          type: 'error',
+          type: 'danger',
           title: 'XMPP connection failed',
           message: 'There was a problem connecting to the XMPP server, please verify you settings'
         },
         'unknown': {
-          type: 'error',
+          type: 'danger',
           title: 'An unknown error has occurred',
           message: ''
         }

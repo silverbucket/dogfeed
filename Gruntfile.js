@@ -4,7 +4,7 @@ module.exports = function(grunt) {
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
     concat: {
-     options: {
+      options: {
         // define a string to put between each file in the concatenated output
         separator: ';',
         stripBanners: true
@@ -96,7 +96,8 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-usemin');
 
+  //grunt.file.write('build/VERSION', grunt.pkg.version);
+
   // Default task(s).
   grunt.registerTask('default', ['concat', 'copy', 'uglify', 'cssmin', 'usemin', 'clean']);
-
 };
