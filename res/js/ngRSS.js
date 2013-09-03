@@ -270,7 +270,7 @@ function ($q, SH, CH, RS, RSutil, $rootScope) {
           data.info[t_key]['errorMsg'] = m.object.message;
         }
       }
-    } else if ((!data.info[key].name) || (data.info[key].name !== m.actor.name)) { //} !== m.actor.name) {
+    } else if ((!data.info[key].name)) { // || (data.info[key].name !== m.actor.name)) { //} !== m.actor.name) {
       data.info[key]['name'] = m.actor.name;
       func.addFeed(data.info[key]);
     } else {
@@ -513,6 +513,7 @@ function ($scope, RSS, util, $rootScope, $timeout) {
     $rootScope.$broadcast('showModalSockethubSettings', {locked: false});
   });
 }]).
+
 
 
 
