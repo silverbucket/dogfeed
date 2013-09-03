@@ -66,13 +66,18 @@
   display: inline-block;
   border: none;
 }
-
 .nav-tabs li {
   display: inline-block;
   margin: 5px 0 0 18px;
   padding: 0;
 }
-
+.version {
+  float: right;
+  margin: 5px 50px 0 0;
+  font-size: 12px;
+  font-style: italic;
+  text-align: center;
+}
 
 
 
@@ -169,21 +174,7 @@
 /**
  * ARTICLES
  */
-.articles {
-  /*width: 100%;*/
-  margin: 0 0 0 1%;
-}
-
-.article {
-  padding: 0 0 2% 2%;
-  margin: 0 0 2% 0;
-
-  border: 2px solid #eeffee;
-  box-shadow: -1px -1px 10px #AAAAAA;
-  background-color: #FFFFFF;
-}
-
-.article-header {
+.articles-header {
   text-align: center;
   background-color: #efefef;
   color: #3d3d3d;
@@ -192,8 +183,31 @@
   font-weight: 900;
   padding: 1px 0 2px 0;
 }
-
-
+.articles {
+  /*width: 100%;*/
+  margin: 0 0 0 1%;
+}
+.article {
+  padding: 0 0 2% 2%;
+  margin: 0 0 2% 0;
+  border: 2px solid #eeffee;
+  box-shadow: -1px -1px 10px #AAAAAA;
+  background-color: #FFFFFF;
+}
+.mark-unread {
+  float: right;
+  padding: 0 2px 0 2px;
+  background-color: #efefef;
+  color: #888888;
+  font-weight: 900;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+}
+.mark-unread:hover {
+  background-color: #ffffff;
+  color: #444444;
+  cursor: pointer;
+}
 .article-text {
   font-weight: 900;
   font-size: 26px;
@@ -201,14 +215,6 @@
   margin-top: 10%;
   text-align: center;
 }
-.version {
-  float: right;
-  margin: 5px 50px 0 0;
-  font-size: 12px;
-  font-style: italic;
-  text-align: center;
-}
-
 .read {
   color: #aaaaaa;
   border-color: white;

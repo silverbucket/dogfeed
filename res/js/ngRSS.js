@@ -486,22 +486,28 @@ function ($scope, RSS, util, $rootScope, $timeout) {
     });
   };
 
-  $scope.markRead = function (url) {
-    //console.log('markRead Called!');
+  $scope.markRead = function (url, val) {
+    console.log('markRead Called! val:'+val);
     for (var i = 0, num = $scope.model.feeds.articles.length; i < num; i = i + 1) {
-      //console.log('A.link: ' + $scope.model.feeds.articles[i].object.link + ' url: '+url);
+      console.log('A.link: ' + $scope.model.feeds.articles[i].object.link + ' url: '+url);
       if ($scope.model.feeds.articles[i].object.link === url) {
-        if (!$scope.model.feeds.articles[i].object.read) {
-          //console.log('subtracting 1 from : '+ $scope.model.feeds.info[$scope.model.feeds.articles[i].actor.address].unread);
+        console.log('R:'+$scope.model.feeds.articles[i].object.read+' v:'+val);
+        if ((!$scope.model.feeds.articles[i].object.read) && (val)) {
+          console.log('subtracting 1 from : '+ $scope.model.feeds.info[$scope.model.feeds.articles[i].actor.address].unread);
           $scope.model.feeds.info[$scope.model.feeds.articles[i].actor.address].unread =
               $scope.model.feeds.info[$scope.model.feeds.articles[i].actor.address].unread - 1;
-          $scope.model.feeds.articles[i].object.read = true;
-          RSS.func.updateArticle($scope.model.feeds.articles[i]);
+        } else if (($scope.model.feeds.articles[i].object.read) && (!val)) {
+          console.log('adding 1 to : '+ $scope.model.feeds.info[$scope.model.feeds.articles[i].actor.address].unread);
+          $scope.model.feeds.info[$scope.model.feeds.articles[i].actor.address].unread =
+              $scope.model.feeds.info[$scope.model.feeds.articles[i].actor.address].unread + 1;
         }
+        $scope.model.feeds.articles[i].object.read = val;
+        RSS.func.updateArticle($scope.model.feeds.articles[i]);
         return;
       }
     }
   };
+
 
   $rootScope.$on('SockethubConnectFailed', function (event, e) {
     console.log('Sockethub connect failed! ', e);
@@ -578,14 +584,16 @@ function () {
               '<div class="article-text" ng-controller="feedCtrl" ng-show="feeds.articles.length > 0 && currentIsEmpty(settings)"><p>no new articles</p></div>' +
               '<div ng-repeat="a in (filteredItems = (feeds.articles | orderBy: \'object.date\':true))"' +
               '     ng-controller="feedCtrl"' +
-              '     ng-click="markRead(a.object.link)"' +
               '     ng-class="{read: a.object.read, article: true}"' +
               '     ng-show="isShowable(a.actor.address, a.object.read, settings)">' +
-              '  <h2>{{ a.object.title }}</h2>' +
-              '  <p>feed: <i>{{ feeds.info[a.actor.address].name }}</i></p>' +
-              '  <p>date: <i>{{ a.object.date }}</i></p>' +
-              '  <p>article link: <i><a target="_blank" href="{{ a.object.link }}">{{ a.object.link }}</a><i></p>' +
-              '  <div class="article-body" data-ng-bind-html-unsafe="a.object.brief_html"></div>' +
+              '  <div class="mark-unread" ng-show="a.object.read" ng-click="markRead(a.object.link, false)">Mark Unread</div>' +
+              '  <div class="article-content" ng-click="markRead(a.object.link, true)">' +
+              '    <h2>{{ a.object.title }}</h2>' +
+              '    <p>feed: <i>{{ feeds.info[a.actor.address].name }}</i></p>' +
+              '    <p>date: <i>{{ a.object.date }}</i></p>' +
+              '    <p>article link: <i><a target="_blank" href="{{ a.object.link }}">{{ a.object.link }}</a><i></p>' +
+              '    <div class="article-body" data-ng-bind-html-unsafe="a.object.brief_html"></div>' +
+              '  </div>' +
               '</div>',
     link: function (scope, element, attrs) {
       //console.log('#### LINK FUNCTION: scope: ', scope);
