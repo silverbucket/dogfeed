@@ -424,7 +424,8 @@ function ($scope, RSS, util, $rootScope, $timeout) {
     return true;
   };
 
-  $scope.switchFeed = function (url) {
+  $scope.switchFeed = function (url, error) {
+    if (error) { return false; }
     if (!url) {
       $scope.model.feeds.current.name = '';
       $scope.model.feeds.current.indexes.length = 0;
@@ -549,9 +550,10 @@ function () {
               '      ng-mouseover="showSettings = true" ' +
               '      ng-mouseleave="showSettings = false" ' +
               '      title="{{ f.url }}" ' +
-              '      ng-click="switchFeed(f.url)" ' +
+              '      ng-click="switchFeed(f.url, f.error)" ' +
               '      ng-class="{\'feed-entry\': true, active: isSelected(f.url), error: f.error, loading: !f.loaded}">' +
-              '    <span ng-class="{glyphicon: f.loaded, \'glyphicon-cog\': f.loaded && showSettings, settings: true, \'icon-loading-small\': !f.loaded}"></span>' +
+              '    <span ng-click="showFeedSettings(f.url)"' +
+              '          ng-class="{glyphicon: f.loaded, \'glyphicon-cog\': (f.loaded || f.error) && showSettings, settings: true, \'icon-loading-small\': !f.loaded}"></span>' +
               '    <span class="unread-count" ng-bind="f.unread"></span>' +
               '    <span ng-bind="f.name"></span>' +
               '  </li>' +
