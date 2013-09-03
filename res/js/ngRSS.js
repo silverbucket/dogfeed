@@ -296,7 +296,7 @@ function ($q, SH, CH, RS, RSutil, $rootScope) {
         }
         data.articles.push(m);
       }, function (e) {
-        console.log("ARTICL FETCH ERROR: ", e);
+        console.log("ARTICLE FETCH ERROR: ", e);
         data.articles.push(m);
       });
     }
@@ -582,7 +582,7 @@ function () {
               '     ng-class="{read: a.object.read, article: true}"' +
               '     ng-show="isShowable(a.actor.address, a.object.read, settings)">' +
               '  <h2>{{ a.object.title }}</h2>' +
-              '  <p>feed: <i>{{ a.actor.name }}</i></p>' +
+              '  <p>feed: <i>{{ feeds.info[a.actor.address].name }}</i></p>' +
               '  <p>date: <i>{{ a.object.date }}</i></p>' +
               '  <p>article link: <i><a target="_blank" href="{{ a.object.link }}">{{ a.object.link }}</a><i></p>' +
               '  <div class="article-body" data-ng-bind-html-unsafe="a.object.brief_html"></div>' +
