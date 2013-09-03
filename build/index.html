@@ -74,8 +74,8 @@
               <feed-list class="feeds" feeds="model.feeds" settings="model.settings">Feeds</feed-list>
             </div>
 
-            <div class="col-md-9 article-header">
-              <h3 ng-bind="model.feeds.current.name"></h4>
+            <div class="col-md-9 articles-header">
+              <h3 ng-bind="model.feeds.current.name"></h3>
             </div>
 
             <div class="col-md-9 article-text" ng-show="(model.feeds.articles.length == 0) && (model.feeds.infoArray.length > 0)"><p>loading articles...</p><img src="res/img/loading.gif" /></div>
