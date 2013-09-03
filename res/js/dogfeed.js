@@ -203,7 +203,7 @@ function ($rootScope, $timeout) {
 
 
       $rootScope.$on('message', function (event, e) {
-        //console.log('message event: ', e);
+        console.log('message event: ', e);
 
         var timeout = (typeof e.timeout === 'boolean') ? e.timeout : true;
         scope.haveMessage = false;
@@ -224,12 +224,13 @@ function ($rootScope, $timeout) {
           } else if (e.type === 'info') {
             scope.m.title = 'Info';
           } else {
-            scope.m.title = "Error";
+            scope.m.title = "Danger!";
+            e.type = 'danger';
           }
           scope.m.message = e.message;
           scope.m.type = e.type;
         }
-        //console.log('done processing: ', scope.m);
+        console.log('done processing: ', scope.m);
 
         scope.haveMessage = true;
         if (timeout) {

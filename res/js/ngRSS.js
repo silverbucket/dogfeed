@@ -253,7 +253,7 @@ function ($q, SH, CH, RS, RSutil, $rootScope) {
       console.log('received error message from sockethub: ', m);
       $rootScope.$broadcast('message', {
         type: 'error',
-        message: m.target[0].address + ' ' + m.object.message
+        message: m.target[0].address + ' ' + m.message
       });
     }
 
@@ -270,11 +270,11 @@ function ($q, SH, CH, RS, RSutil, $rootScope) {
           data.info[t_key]['errorMsg'] = m.object.message;
         }
       }
-    } else if (!data.info[key].name) { //} !== m.actor.name) {
+    } else if ((!data.info[key].name) || (data.info[key].name !== m.actor.name)) { //} !== m.actor.name) {
       data.info[key]['name'] = m.actor.name;
       func.addFeed(data.info[key]);
     } else {
-      //console.log("*** Names already match: " + m.actor.name);
+      //console.log("*** Names already match: " + data.info[key].name + ' === ' + m.actor.name);
     }
 
     if (!m.object.read) {
@@ -534,39 +534,26 @@ function () {
       'feeds': '=',
       'settings': '='
     },
-    template: /*
-              '<div style="min-width: 170px; background-color: #eeeeee;" ng-controller="feedCtrl">' +
-              '  <form name="quickSettings" class="form-horizontal" novalidate>' +
-              '    <div class="control-group">' +
-              '      <label for="showRead" style="width: 130px; display: font-size: 12px; margin-right: 20px;" class="control-label">Show Read Artciles</label>' +
-              '      <div class="controls">' +
-              '        <input type="checkbox" name="showRead" ng-model="model.settings.showRead" />' +
-              '      </div>' +
-              '    </div>' +
-              '  </form>' +
-              '</div>' +
-              */
-              '<h4 ng-transclude></h4>' +
+    template: '<h4 ng-transclude></h4>' +
               '<ul class="nav nav-list nav-pills nav-stacked" ng-controller="feedCtrl">' +
               '  <li ng-click="switchFeed()"' +
-              '       ng-class="{active: isSelected(), \'all-feeds\': true}">' +
+              '      ng-class="{active: isSelected(), \'all-feeds\': true}">' +
               '    <a href="" >' +
-              '      <i class="icon-globe"></i><span>All Items</span>' +
+              '      <span class="glyphicon glyphicon-globe"></span> <span>All Items</span>' +
               '    </a>' +
               '  </li>' +
               '  <li ng-show="feeds.infoArray.length == 0"><span>no feeds yet, add some!</span></li>' +
               '  <li ng-repeat="f in feeds.infoArray | orderBy: \'name\'"' +
               '      data-toggle="tooltip" ' +
-              '      title="{{ f.url }}">' +
-              '    <i ng-click="showFeedSettings(f.url)"' +
-              '       ng-class="{status: true, \'icon-loading-small\': !f.loaded, \'icon-cog\': f.loaded}">' +
-              '    </i>' +
-              '    <div ng-click="switchFeed(f.url)"' +
-              '         ng-class="{active: isSelected(f.url), error: f.error, loading: !f.loaded, \'feed-entry\': true}">' +
-              '      <a href="" ng-class="{error: f.error}">' +
-              '        <span ng-bind="f.name"></span> <span class="unread-count" ng-bind="f.unread"></span>' +
-              '      </a>' +
-              '    </div>' +
+              '      ng-init="showSettings = false" ' +
+              '      ng-mouseover="showSettings = true" ' +
+              '      ng-mouseleave="showSettings = false" ' +
+              '      title="{{ f.url }}" ' +
+              '      ng-click="switchFeed(f.url)" ' +
+              '      ng-class="{\'feed-entry\': true, active: isSelected(f.url), error: f.error, loading: !f.loaded}">' +
+              '    <span ng-class="{glyphicon: f.loaded, \'glyphicon-cog\': f.loaded && showSettings, settings: true, \'icon-loading-small\': !f.loaded}"></span>' +
+              '    <span class="unread-count" ng-bind="f.unread"></span>' +
+              '    <span ng-bind="f.name"></span>' +
               '  </li>' +
               '</ul>',
     transclude: true
