@@ -540,9 +540,7 @@ function () {
               '<ul class="nav nav-list nav-pills nav-stacked" ng-controller="feedCtrl">' +
               '  <li ng-click="switchFeed()"' +
               '      ng-class="{active: isSelected(), \'all-feeds\': true}">' +
-              '    <a href="" >' +
               '      <span class="glyphicon glyphicon-globe"></span> <span>All Items</span>' +
-              '    </a>' +
               '  </li>' +
               '  <li ng-show="feeds.infoArray.length == 0"><span>no feeds yet, add some!</span></li>' +
               '  <li ng-repeat="f in feeds.infoArray | orderBy: \'name\'"' +

@@ -134,20 +134,19 @@
 .feed-entry:hover {
   background-color: #ffdffc;
 }
+.all-feeds {
+  padding: 5px;
+}
+.all-feeds:hover {
+  background-color: #ffdffc;
+}
 .active {
   background-color: #08c;
   color: white;
   pointer-events: none;
 }
-.active a {
-  color: white;
-  pointer-events: none;
-}
 .active:hover {
   background-color: #08c;
-  color: white;
-}
-.active a:hover {
   color: white;
 }
 .nav-list li a span {
