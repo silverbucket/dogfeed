@@ -178,7 +178,6 @@ function ($q, SH, CH, RS, RSutil, $rootScope) {
   func.removeFeed = function removeFeed(url) {
     var defer = $q.defer();
     RS.call('rss', 'remove', [url]).then(function (m) {
-      //console.log('feed removed: ', url);
       delete data.info[url];
       for (var i = 0, len = data.infoArray.length; i < len; i = i + 1) {
         if ((data.infoArray[i]) && (data.infoArray[i].url === url)) {
@@ -187,6 +186,15 @@ function ($q, SH, CH, RS, RSutil, $rootScope) {
           break;
         }
       }
+      console.log('articles count: '+data.articles.length);
+      for (i = 0, len = data.articles.length; i < len; i = i + 1) {
+        if ((data.articles[i]) && (data.articles[i].actor.address === url)) {
+          //console.log('removing article from list: ',data.articles[i]);
+          data.articles.splice(i, 1);
+        }
+      }
+      console.log('articles count: '+data.articles.length);
+      console.log('feed removed: ', url);
       defer.resolve(m);
     }, function (err) {
       defer.reject(err);
@@ -426,6 +434,7 @@ function ($scope, RSS, util, $rootScope, $timeout) {
   };
 
   $scope.switchFeed = function (url, error) {
+    console.log('SWITCH FEED: '+url);
     if (error) { return false; }
     if (!url) {
       $scope.model.feeds.current.name = '';
@@ -478,6 +487,9 @@ function ($scope, RSS, util, $rootScope, $timeout) {
       $("#modalFeedSettings").modal('hide');
       $rootScope.$broadcast('message', {type: 'success', message: 'deleted feed '+url});
       $scope.saving = false;
+      if ($scope.isSelected(url)) {
+        $scope.switchFeed(url);
+      }
     }, function (err) {
       console.log('error removing rss feed!: ', err);
       $rootScope.$broadcast('message', {type: 'error', message: err.message});
@@ -487,17 +499,17 @@ function ($scope, RSS, util, $rootScope, $timeout) {
   };
 
   $scope.markRead = function (url, val) {
-    console.log('markRead Called! val:'+val);
+    //console.log('markRead Called! val:'+val);
     for (var i = 0, num = $scope.model.feeds.articles.length; i < num; i = i + 1) {
-      console.log('A.link: ' + $scope.model.feeds.articles[i].object.link + ' url: '+url);
+      //console.log('A.link: ' + $scope.model.feeds.articles[i].object.link + ' url: '+url);
       if ($scope.model.feeds.articles[i].object.link === url) {
-        console.log('R:'+$scope.model.feeds.articles[i].object.read+' v:'+val);
+        //console.log('R:'+$scope.model.feeds.articles[i].object.read+' v:'+val);
         if ((!$scope.model.feeds.articles[i].object.read) && (val)) {
-          console.log('subtracting 1 from : '+ $scope.model.feeds.info[$scope.model.feeds.articles[i].actor.address].unread);
+          //console.log('subtracting 1 from : '+ $scope.model.feeds.info[$scope.model.feeds.articles[i].actor.address].unread);
           $scope.model.feeds.info[$scope.model.feeds.articles[i].actor.address].unread =
               $scope.model.feeds.info[$scope.model.feeds.articles[i].actor.address].unread - 1;
         } else if (($scope.model.feeds.articles[i].object.read) && (!val)) {
-          console.log('adding 1 to : '+ $scope.model.feeds.info[$scope.model.feeds.articles[i].actor.address].unread);
+          //console.log('adding 1 to : '+ $scope.model.feeds.info[$scope.model.feeds.articles[i].actor.address].unread);
           $scope.model.feeds.info[$scope.model.feeds.articles[i].actor.address].unread =
               $scope.model.feeds.info[$scope.model.feeds.articles[i].actor.address].unread + 1;
         }
