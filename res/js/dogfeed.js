@@ -35,7 +35,7 @@ function (settings, SH, $rootScope, RS) {
   RS.call('sockethub', 'getConfig', ['']).then(function (c) {
     console.log('GOT SH CONFIG: ', c);
     var cfg = {};
-    if (typeof c !== 'object') {
+    if ((typeof c !== 'object') || (typeof c.host !== 'string')) {
       //cfg = settings.conn;
       cfg.host = 'silverbucket.net';
       cfg.port = 443;
@@ -49,23 +49,30 @@ function (settings, SH, $rootScope, RS) {
     console.log('USING SH CONFIG: ', cfg);
     //$rootScope.$broadcast('message', {type: 'clear'});
     // connect to sockethub and register
-    if (settings.save('conn', cfg));
-    $rootScope.$broadcast('message', {
-          message: 'attempting to connect to sockethub',
-          type: 'info',
-          timeout: false
-    });
-    SH.connect({register: true}).then(function () {
-      //console.log('connected to sockethub');
+    if (settings.save('conn', cfg)) {
       $rootScope.$broadcast('message', {
-            message: 'connected to sockethub',
+            message: 'attempting to connect to sockethub',
+            type: 'info',
+            timeout: false
+      });
+      SH.connect({register: true}).then(function () {
+        //console.log('connected to sockethub');
+        $rootScope.$broadcast('message', {
+              message: 'connected to sockethub',
+              type: 'success',
+              timeout: true
+        });
+      }, function (err) {
+        console.log('error connecting to sockethub: ', err);
+        $rootScope.$broadcast('SockethubConnectFailed', {message: err});
+      });
+    } else {
+      $rootScope.$broadcast('message', {
+            message: 'failed saving sockethub credentials',
             type: 'success',
             timeout: true
       });
-    }, function (err) {
-      console.log('error connecting to sockethub: ', err);
-      $rootScope.$broadcast('SockethubConnectFailed', {message: err});
-    });
+    }
   }, function (err) {
     console.log("RS.call error: ",err);
   });
