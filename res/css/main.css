@@ -189,9 +189,9 @@
   margin: 0 0 0 1%;
 }
 .article {
-  padding: 0 0 2% 2%;
-  margin: 0 0 2% 0;
-  border: 2px solid #eeffee;
+  padding: 0 0 3% 2%;
+  margin: 0 0 1% 0;
+  border-bottom: 2px solid #efefef;
   /*box-shadow: -1px -1px 10px #AAAAAA;*/
   background-color: #FFFFFF;
 }
@@ -232,6 +232,13 @@ h2 {
   display: inline-block;
   color: black;
   font-size: 20px;
+}
+a:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+a h2:hover {
+  text-decoration: underline;
 }
 h3 {
   display: inline-block;

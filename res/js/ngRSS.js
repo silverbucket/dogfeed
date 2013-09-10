@@ -603,7 +603,7 @@ function () {
               '    <a target="_blank" href="{{ a.object.link }}">' +
               '      <h2>{{ a.object.title }}</h2></a>' +
               '    <p>feed: <i>{{ feeds.info[a.actor.address].name }}</i></p>' +
-              '    <p>date: <i>{{ a.object.date }}</i></p>' +
+              '    <p rel="{{ a.object.date }}">date: <i>{{ a.object.date | fromNow}}</i></p>' +
               //'    <p>article link: <i><a target="_blank" href="{{ a.object.link }}">{{ a.object.link }}</a><i></p>' +
               '    <div class="article-body" data-ng-bind-html-unsafe="a.object.brief_html"></div>' +
               '  </div>' +

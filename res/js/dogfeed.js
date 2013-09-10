@@ -114,6 +114,13 @@ function() {
   };
 }]).
 
+filter('fromNow', [
+function() {
+  return function(dateString) {
+    return new Date(dateString).toDateString(); ///moment(new Date(dateString)).fromNow();
+  };
+}]).
+
 
 
 
