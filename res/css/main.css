@@ -192,8 +192,15 @@
   padding: 0 0 2% 2%;
   margin: 0 0 2% 0;
   border: 2px solid #eeffee;
-  box-shadow: -1px -1px 10px #AAAAAA;
+  /*box-shadow: -1px -1px 10px #AAAAAA;*/
   background-color: #FFFFFF;
+}
+.article img {
+  position: relative;
+  max-width: 100%;
+}
+.article p {
+  font-style: normal;
 }
 .mark-unread {
   float: right;
@@ -201,8 +208,9 @@
   background-color: #efefef;
   color: #888888;
   font-weight: 900;
-  -moz-border-radius: 5px;
-  border-radius: 5px;
+  margin-top: 22px;
+  /*-moz-border-radius: 5px;
+  border-radius: 5px;*/
 }
 .mark-unread:hover {
   background-color: #ffffff;
@@ -216,8 +224,25 @@
   margin-top: 10%;
   text-align: center;
 }
+
+h1 {
+  font-size: 22px;
+}
+h2 {
+  display: inline-block;
+  color: black;
+  font-size: 20px;
+}
+h3 {
+  display: inline-block;
+  font-size: 18px;
+  font-style: normal;
+}
 .read {
   color: #aaaaaa;
   border-color: white;
   box-shadow: none;
+}
+.read h2 {
+  color: #aaaaaa;
 }

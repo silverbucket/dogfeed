@@ -600,10 +600,11 @@ function () {
               '     ng-show="isShowable(a.actor.address, a.object.read, settings)">' +
               '  <div class="mark-unread" ng-show="a.object.read" ng-click="markRead(a.object.link, false)">Mark Unread</div>' +
               '  <div class="article-content" ng-click="markRead(a.object.link, true)">' +
-              '    <h2>{{ a.object.title }}</h2>' +
+              '    <a target="_blank" href="{{ a.object.link }}">' +
+              '      <h2>{{ a.object.title }}</h2></a>' +
               '    <p>feed: <i>{{ feeds.info[a.actor.address].name }}</i></p>' +
               '    <p>date: <i>{{ a.object.date }}</i></p>' +
-              '    <p>article link: <i><a target="_blank" href="{{ a.object.link }}">{{ a.object.link }}</a><i></p>' +
+              //'    <p>article link: <i><a target="_blank" href="{{ a.object.link }}">{{ a.object.link }}</a><i></p>' +
               '    <div class="article-body" data-ng-bind-html-unsafe="a.object.brief_html"></div>' +
               '  </div>' +
               '</div>',
