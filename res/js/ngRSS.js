@@ -415,6 +415,7 @@ function ($scope, RSS, util, $rootScope, $timeout) {
 
   // returns true if current selection is empty (has no unread articles)
   $scope.currentIsEmpty = function (settings) {
+    //console.log('CALLED: ', settings);
     if (!$scope.model.feeds.current.name) {
       return false;
     }
@@ -591,7 +592,7 @@ function () {
       'settings': '='
     },
     template: //'<h4><span ng-bind="feeds.current.name"></span></h4>' +
-              '<div class="article-text" ng-controller="feedCtrl" ng-show="feeds.articles.length > 0 && currentIsEmpty(settings)"><p>no new articles</p></div>' +
+              '<div class="article-text" ng-controller="feedCtrl" ng-show="feeds.articles.length > 0 && currentIsEmpty(settings)"><p>no articles {{feeds.articles.length}} - {{currentIsEmpty(settings)}}</p></div>' +
               '<div ng-repeat="a in (filteredItems = (feeds.articles | orderBy: \'object.date\':true))"' +
               '     ng-controller="feedCtrl"' +
               '     ng-class="{read: a.object.read, article: true}"' +
