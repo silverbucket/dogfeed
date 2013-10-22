@@ -21,9 +21,71 @@ function ($rootScope, $q, $timeout) {
     ready = true;
   });
 
+  var queue = [];
+  var setTimedCheck = false;
+
+  var delay = 500;
+
+  function callRS(job) {
+    remoteStorage[job.module][job.func].apply(null, job.params).
+      then(function (res) {
+        $rootScope.$apply(function () {
+          console.log('RS JOB COMPLETE: ', job);
+          job.promise.resolve(res);
+        });
+      }, function (err) {
+        $rootScope.$apply(function () {
+          job.promise.reject(err);
+        });
+      });
+  }
+
+  (function processQueue() {
+    if (isConnected() && (setTimedCheck)) {
+      //console.log('RS connected, sending call');
+      for (var i in queue) {
+        var job = queue[i];
+        try {
+          callRS(job)
+        } catch (e) {
+          console.log('error : ',e);
+          console.log(e.stack);
+          var errmsg = (typeof e.toString === 'function') ? e.toString() : e;
+          job.promise.reject(errmsg);
+        }
+      }
+      setTimedCheck = false;
+    } else {
+      console.log('RS not connected yet, delaying calls ' + delay + 's');
+      for (var i in queue) {
+        if ((queue[i].failTimeout) &&
+            (queue[i].failTimeout < delay)) {
+          queue[i].promise.reject('timed out');
+          queue.splice(i, 1);
+        }
+      }
+      if (delay < 30000) {
+        delay = delay + (delay + 500);
+      }
+      $timeout(processQueue, delay);
+    }
+  })();
+
   return {
     isConnected: isConnected,
-    call: function (module, func, params) {
+    queue: function (module, func, params) {
+      console.log('RS.queue(' + module + ', ' + func + ', params):', params);
+
+      queue.push({
+        module: module,
+        func: func,
+        params: params,
+        promise: false,
+        failTimeout: false
+      });
+      setTimedCheck = true;
+    },
+    call: function (module, func, params, failTimeout) {
       var defer = $q.defer();
       console.log('RS.call(' + module + ', ' + func + ', params):', params);
 
@@ -31,35 +93,16 @@ function ($rootScope, $q, $timeout) {
           (typeof params[0] === 'undefined')) {
         defer.reject('RS.call params must be an array');
       } else {
-
-        var delay = 500;
-        (function callRS() {
-          if (isConnected()) {
-            //console.log('RS connected, sending call');
-            try {
-              remoteStorage[module][func].apply(null, params).
-                then(function (res) {
-                  $rootScope.$apply(function () {
-                    defer.resolve(res);
-                  });
-                }, function (err) {
-                  $rootScope.$apply(function () {
-                    defer.reject(err);
-                  });
-                });
-            } catch (e) {
-              //console.log('error : ',e);
-              console.log(e.stack);
-              defer.reject(e.toString());
-            }
-          } else {
-            console.log('RS not connected yet, delaying call ' + delay + 's');
-            if (delay < 30000) {
-              delay = delay + (delay + 500);
-            }
-            $timeout(callRS, delay);
-          }
-        })();
+        // put request onto queue
+        queue.push({
+          module: module,
+          func: func,
+          params: params,
+          promise: defer,
+          failTimeout: failTimeout
+        });
+        // toggle timed checker
+        setTimedCheck = true;
       }
       return defer.promise;
     }

@@ -16,36 +16,18 @@ function ($routeProvider) {
 }]).
 
 
-/**
- * remoteStorage & sockethub connect
- */
-run(['SockethubSettings', 'SH', '$rootScope', 'RS', '$timeout',
-function (settings, SH, $rootScope, RS, $timeout) {
-  if (!RS.isConnected()) {
-    $timeout(function () {
-      if (!RS.isConnected()) {
-        $rootScope.$broadcast('message', {message: 'remotestorage-connect', timeout: false});
-      }
-    }, 1000);
-  }
-}]).
 
 run(['SockethubSettings', 'SH', '$rootScope', 'RS',
 function (settings, SH, $rootScope, RS) {
-  RS.call('sockethub', 'getConfig', ['']).then(function (c) {
-    console.log('GOT SH CONFIG: ', c);
-    var cfg = {};
-    if ((typeof c !== 'object') || (typeof c.host !== 'string')) {
-      //cfg = settings.conn;
-      cfg.host = 'silverbucket.net';
-      cfg.port = 443;
-      cfg.path = '/sockethub';
-      cfg.tls = true;
-      cfg.secret = '1234567890';
-    } else {
-      cfg = c;
-    }
+  var default_cfg = {
+    host: 'silverbucket.net',
+    port: 443,
+    path: '/sockethub',
+    tls: true,
+    secret: '1234567890'
+  };
 
+  function sockethubConnect(cfg) {
     console.log('USING SH CONFIG: ', cfg);
     //$rootScope.$broadcast('message', {type: 'clear'});
     // connect to sockethub and register
@@ -73,9 +55,34 @@ function (settings, SH, $rootScope, RS) {
             timeout: true
       });
     }
+  }
+
+  RS.call('sockethub', 'getConfig', ['dogfeed'], 3000).then(function (c) {
+    console.log('GOT SH CONFIG: ', c);
+    if ((typeof c !== 'object') || (typeof c.host !== 'string')) {
+      //cfg = settings.conn;
+      c = default_cfg; 
+    }
+    sockethubConnect(c);
   }, function (err) {
     console.log("RS.call error: ",err);
+    sockethubConnect(default_cfg);    
   });
+}]).
+
+
+/**
+ * remoteStorage & sockethub connect
+ */
+run(['SockethubSettings', 'SH', '$rootScope', 'RS', '$timeout',
+function (settings, SH, $rootScope, RS, $timeout) {
+  if (!RS.isConnected()) {
+    $timeout(function () {
+      if (!RS.isConnected()) {
+        $rootScope.$broadcast('message', {message: 'remotestorage-connect', timeout: false});
+      }
+    }, 6000);
+  }
 }]).
 
 
@@ -186,7 +193,7 @@ function ($rootScope, $timeout) {
         'remotestorage-connect': {
           type: 'warning',
           title : 'Connect to remoteStorage',
-          message: 'First things first. You must connect to your remoteStorage'
+          message: 'No changes will be saved, you must sign in to remoteStorage for persistence'
         },
         'sockethub-config': {
           type: 'warning',
@@ -217,7 +224,7 @@ function ($rootScope, $timeout) {
 
 
       $rootScope.$on('message', function (event, e) {
-        console.log('message event: ', e);
+        //console.log('message event: ', e);
 
         var timeout = (typeof e.timeout === 'boolean') ? e.timeout : true;
         scope.haveMessage = false;
@@ -244,7 +251,7 @@ function ($rootScope, $timeout) {
           scope.m.message = e.message;
           scope.m.type = e.type;
         }
-        console.log('done processing: ', scope.m);
+        console.log('done processing: ', scope.m, timeout);
 
         scope.haveMessage = true;
         if (timeout) {

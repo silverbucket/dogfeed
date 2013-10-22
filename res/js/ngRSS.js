@@ -147,19 +147,16 @@ function ($q, SH, CH, RS, RSutil, $rootScope) {
       });  // fetch articles from sockethub
     }
   }
+
   func.addFeed = function addFeed(obj, noRemoteStorage) {
     var defer = $q.defer();
-    if (noRemoteStorage) {
-      _add(obj);
-    } else {
-      RS.call('rss', 'add', [obj]).then(function (m) {
-        //console.log('feed added to rs: ', obj);
-        _add(obj);
-        defer.resolve(m);
-      }, function (err) {
-        defer.reject(err);
-      });
+    
+    _add(obj);
+    if (!noRemoteStorage) {
+      RS.queue('rss', 'add', [obj]);
     }
+    defer.resolve(obj);
+
     return defer.promise;
   };
 
@@ -255,7 +252,7 @@ function ($q, SH, CH, RS, RSutil, $rootScope) {
 
   // detect when new articles are received from Sockethub
   SH.on('rss', 'message', function (m) {
-    //console.log("RSS received message");
+    console.log("RSS received message ",m);
     var key = m.actor.address;
     if (!m.status) {
       console.log('received error message from sockethub: ', m);
@@ -289,6 +286,7 @@ function ($q, SH, CH, RS, RSutil, $rootScope) {
       m.object.read = false;
     }
 
+    data.articles.push(m);
     if (m.status) {
       //console.log('adding article: ', m);
       //console.log('ID: ', id);
@@ -302,10 +300,9 @@ function ($q, SH, CH, RS, RSutil, $rootScope) {
           //console.log(data.info[key].name + ' UNREAD COUNT['+data.info[key].unread+'] + 1');
           data.info[key].unread = (typeof data.info[key].unread === "number") ? data.info[key].unread + 1 : 1;
         }
-        data.articles.push(m);
+        
       }, function (e) {
         console.log("ARTICLE FETCH ERROR: ", e);
-        data.articles.push(m);
       });
     }
   });
@@ -600,8 +597,10 @@ function () {
               '     ng-show="isShowable(a.actor.address, a.object.read, settings)">' +
               '  <div class="mark-unread" ng-show="a.object.read" ng-click="markRead(a.object.link, false)">Mark Unread</div>' +
               '  <div class="article-content" ng-click="markRead(a.object.link, true)">' +
-              '    <a target="_blank" href="{{ a.object.link }}">' +
-              '      <h2>{{ a.object.title }}</h2></a>' +
+              '    <div class="article-title">' + 
+              '      <a target="_blank" href="{{ a.object.link }}">' +
+              '        <h2>{{ a.object.title }}</h2></a>' +
+              '    </div>' +
               '    <p>feed: <i>{{ feeds.info[a.actor.address].name }}</i></p>' +
               '    <p rel="{{ a.object.date }}">date: <i>{{ a.object.date | fromNow}}</i></p>' +
               //'    <p>article link: <i><a target="_blank" href="{{ a.object.link }}">{{ a.object.link }}</a><i></p>' +
