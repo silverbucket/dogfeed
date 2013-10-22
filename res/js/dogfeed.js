@@ -251,13 +251,15 @@ function ($rootScope, $timeout) {
           scope.m.message = e.message;
           scope.m.type = e.type;
         }
-        console.log('done processing: ', scope.m, timeout);
-
+        scope.m.timeout = timeout;
+        console.log('done processing: ', scope.m);
         scope.haveMessage = true;
         if (timeout) {
           $timeout(function () {
-            scope.haveMessage = false;
-            scope.m = {type: '', title: '', message: ''};
+            if (scope.m.timeout) {
+              scope.haveMessage = false;
+              scope.m = {type: '', title: '', message: '', timeout: true};
+            }
           }, 4000);
         }
       });
