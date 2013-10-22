@@ -284,6 +284,7 @@ function ($q, SH, CH, RS, RSutil, $rootScope) {
 
     if (!m.object.read) {
       m.object.read = false;
+      data.info[key].unread = (typeof data.info[key].unread === "number") ? data.info[key].unread + 1 : 1;
     }
 
     data.articles.push(m);
@@ -296,9 +297,9 @@ function ($q, SH, CH, RS, RSutil, $rootScope) {
           m.object.read = (a.read) ? a.read : false;
         }
 
-        if (!m.object.read) {
-          //console.log(data.info[key].name + ' UNREAD COUNT['+data.info[key].unread+'] + 1');
-          data.info[key].unread = (typeof data.info[key].unread === "number") ? data.info[key].unread + 1 : 1;
+        if (m.object.read) {
+          // this article is read, subtract from total
+          data.info[key].unread = (typeof data.info[key].unread === "number") ? data.info[key].unread - 1 : 0;    
         }
         
       }, function (e) {
