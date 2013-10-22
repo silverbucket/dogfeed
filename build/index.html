@@ -6,9 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="favicon.ico" />
 
-    <link rel="stylesheet" href="res/css/bootstrap.min.css">
-    <link rel="stylesheet" href="res/css/bootstrap-theme.min.css">
-    <link rel="stylesheet" href="res/css/app.min.css">
+    <link rel="stylesheet" href="res/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="res/css/bootstrap-theme.min.css"/>
+    <link rel="stylesheet" href="res/css/app.min.css"/>
   </head>
 
   <body>
@@ -39,7 +39,7 @@
               </li>
             </ul>
             <div class="version">
-              <p>0.1.3<br />
+              <p>version 0.1.4<br />
                 <a target="_blank" href="https://github.com/silverbucket/dogfeed/issues/">
                   feedback and bug reports
                 </a>
@@ -74,11 +74,8 @@
               <feed-list class="feeds" feeds="model.feeds" settings="model.settings">Feeds</feed-list>
             </div>
 
-            <div class="col-md-9 articles-header">
-              <h3 ng-bind="model.feeds.current.name"></h3>
-            </div>
 
-            <div class="col-md-9 article-text" ng-show="(model.feeds.articles.length == 0) && (model.feeds.infoArray.length > 0)"><p>loading articles...</p><img src="res/img/loading.gif" /></div>
+            <div class="col-md-9 article-text" ng-show="(model.feeds.articles.length == 0) && (model.feeds.infoArray.length > 0)"><p>loading articles...</p><img src="res/img/loading_14.gif" /></div>
 
             <articles class="col-md-8 articles" feeds="model.feeds" settings="model.settings">
             </articles>
