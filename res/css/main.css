@@ -202,7 +202,7 @@ body {
   border-bottom: 1px solid black;
   border-top: 1px solid black;
   width: 100%;
-  padding: 15px auto 0 auto;
+  padding-top: 15px;
   margin-top: 15px;
 }
 .article img {
