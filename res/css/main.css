@@ -1,3 +1,6 @@
+body {
+  background-color: white;
+}
 .navbar {
   min-width: 483px;
 }
@@ -194,6 +197,13 @@
   border-bottom: 2px solid #efefef;
   /*box-shadow: -1px -1px 10px #AAAAAA;*/
   background-color: #FFFFFF;
+}
+.article-title {
+  border-bottom: 1px solid black;
+  border-top: 1px solid black;
+  width: 100%;
+  padding: 15px auto 0 auto;
+  margin-top: 15px;
 }
 .article img {
   position: relative;
