@@ -20,10 +20,10 @@ function ($routeProvider) {
 run(['SockethubSettings', 'SH', '$rootScope', 'RS',
 function (settings, SH, $rootScope, RS) {
   var default_cfg = {
-    host: 'silverbucket.net',
-    port: 443,
+    host: 'localhost',
+    port: 10550,
     path: '/sockethub',
-    tls: true,
+    tls: false,
     secret: '1234567890'
   };
 
@@ -61,12 +61,12 @@ function (settings, SH, $rootScope, RS) {
     console.log('GOT SH CONFIG: ', c);
     if ((typeof c !== 'object') || (typeof c.host !== 'string')) {
       //cfg = settings.conn;
-      c = default_cfg; 
+      c = default_cfg;
     }
     sockethubConnect(c);
   }, function (err) {
     console.log("RS.call error: ",err);
-    sockethubConnect(default_cfg);    
+    sockethubConnect(default_cfg);
   });
 }]).
 
@@ -193,7 +193,7 @@ function ($rootScope, $timeout) {
         'remotestorage-connect': {
           type: 'warning',
           title : 'Connect to remoteStorage',
-          message: 'No changes will be saved, you must sign in to remoteStorage for persistence'
+          message: 'if you want your changes to persist'
         },
         'sockethub-config': {
           type: 'warning',
@@ -245,14 +245,14 @@ function ($rootScope, $timeout) {
           } else if (e.type === 'info') {
             scope.m.title = 'Info';
           } else {
-            scope.m.title = "Danger!";
+            scope.m.title = "Error";
             e.type = 'danger';
           }
           scope.m.message = e.message;
           scope.m.type = e.type;
         }
         scope.m.timeout = timeout;
-        console.log('done processing: ', scope.m);
+        console.log('info message event set: ', scope.m);
         scope.haveMessage = true;
         if (timeout) {
           $timeout(function () {
