@@ -25,22 +25,10 @@ value('configHelper', {
   }
 }).
 
-value('util', {
-  isEmptyObject: function isEmptyObject(obj) {
-    for(var prop in obj) {
-      if (Object.prototype.hasOwnProperty.call(obj, prop)) {
-        return false;
-      }
-    }
-    return true;
-  }
-}).
-
 run(['$routeParams', '$rootScope', 'Feeds',
 function ($routeParams, $rootScope, Feeds) {
 
   $rootScope.feeds = Feeds.data;
-
 
 }]).
 
