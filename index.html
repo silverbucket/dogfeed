@@ -104,9 +104,6 @@
             <h4 class="modal-title">Add Feed</h4>
           </div>
           <div class="modal-body">
-            <div class="message-container">
-              <div message></div>
-            </div>
             <form name="addFeed" role="form" novalidate>
               <input type="url" class="required form-control" name="url" placeholder="Enter URL..." ng-model="url" autofocus="autofocus" required />
           </div>
@@ -120,7 +117,7 @@
     </div>
 
     <!-- feed settings modal window -->
-    <div id="modalFeedSettings" ng-controller="feedCtrl" class="modal fade">
+    <div id="modalFeedSettings" ng-controller="feedSettingsCtrl" class="modal fade">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
@@ -131,23 +128,23 @@
             <form name="feedSettings" role="form" novalidate>
               <div class="form-group">
                 <label for="url">URL</label>
-                <span ng-bind="model.feeds.edit"></span>
+                <span ng-bind="feeds.edit"></span>
               </div>
               <div class="form-group">
                 <label for="displayname">Display Name</label>
                 <div class="controls">
-                  <input type="text" class="required form-control" name="username" placeholder="Enter display name..." ng-model="model.feeds.info[model.feeds.edit].name">
+                  <input type="text" class="required form-control" name="username" placeholder="Enter display name..." ng-model="feeds.info[feeds.edit].name">
                 </div>
               </div>
               <p></p>
           </div>
           <div class="modal-footer">
               <div class="form-group">
-                <button type="default" ng-click="saveFeedSettings(model.feeds.edit)" class="btn btn-primary" ng-disabled="saving">Save</button>
+                <button type="default" ng-click="saveFeedSettings(feeds.edit)" class="btn btn-primary" ng-disabled="saving">Save</button>
                   &nbsp;
                 <button ng-click="cancelFeedSettings()" class="btn btn-action" ng-disabled="saving">Cancel</button>
                   &nbsp;
-                <button style="float: left;" ng-click="deleteFeed(model.feeds.edit)" ng-disabled="saving" class="btn btn-danger">Delete</button>
+                <button style="float: left;" ng-click="deleteFeed(feeds.edit)" ng-disabled="saving" class="btn btn-danger">Delete</button>
               </div>
             </form>
           </div>
