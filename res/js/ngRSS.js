@@ -94,110 +94,6 @@ function ($q, SH, CH, RS, RSutil, $rootScope) {
   function dummy () {}
 
 
-  /****
-   * FEED MANAGEMENT
-   ******************/
-  // grab whatever feeds exists in remoteStorage right away
-  (function getFeedUrls() {
-    RS.call('rss', 'getAll', ['']).then(function (urls) {
-      console.log('RSS: got feed urls from remoteStorage ', urls);
-      for (var key in urls) {
-        if ((!urls[key]) || (typeof urls[key].url === 'undefined')) {
-          console.log('ERROR processing url['+key+']: ', urls[key]);
-        } else {
-          var url = urls[key].url;
-          urls[key].unread = 0;
-          func.addFeed(urls[key], true); // asign existing feed info to data struct
-        }
-      }
-    }, function (err) {
-      console.log('error: unable to get feed list from remoteStorage: ', err);
-      $rootScope.$broadcast('message', {
-        message: 'unable to get feed list from remotestorage',
-        type: 'error',
-        timeout: false
-      });
-    });
-  })();
-
-  // add a new feed to remoteStorage
-  function _add(obj) {
-    //console.log('ADDING FEED TO DATA STRUCT: ', obj);
-    data.info[obj.url] = obj;
-    var match = false;
-    for (var i = 0, len = data.infoArray.length; i < len; i = i + 1) {
-      if ((data.infoArray[i]) && (data.infoArray[i].url === obj.url)) {
-        //console.log('BREAK: '+obj.url);
-        match = true;
-        break;
-      }
-    }
-    if (!match) {
-      ///console.log('adding to list: ', data.info[obj.url]);
-      //console.log('existing feeds: ', data.info);
-      data.infoArray.push(data.info[obj.url]);
-      data.info[obj.url]['loaded'] = false;
-      func.fetchFeed(obj.url).then(function (resp) {
-        console.log('fetchFeed success: ', resp);
-        data.info[obj.url]['loaded'] = true;
-      }, function (err) {
-        console.log('fetchFeed failure: ', err);
-        data.info[obj.url]['loaded'] = true;
-        broadcastError(obj.url, 'failed fetching feed list from sockethub: '+err);
-      });  // fetch articles from sockethub
-    }
-  }
-
-  func.addFeed = function addFeed(obj, noRemoteStorage) {
-    var defer = $q.defer();
-    
-    _add(obj);
-    if (!noRemoteStorage) {
-      RS.queue('rss', 'add', [obj]);
-    }
-    defer.resolve(obj);
-
-    return defer.promise;
-  };
-
-  func.updateFeed = function updateFeed(obj) {
-    var defer = $q.defer();
-    RS.call('rss', 'add', [obj]).then(function (m) {
-      //console.log('feed updated: ', obj);
-      data.info[obj.url] = obj;
-      defer.resolve(m);
-    }, function (err) {
-      defer.reject(err);
-    });
-    return defer.promise;
-  };
-
-  func.removeFeed = function removeFeed(url) {
-    var defer = $q.defer();
-    RS.call('rss', 'remove', [url]).then(function (m) {
-      delete data.info[url];
-      for (var i = 0, len = data.infoArray.length; i < len; i = i + 1) {
-        if ((data.infoArray[i]) && (data.infoArray[i].url === url)) {
-          //console.log('removing from list: ',data.infoArray[i]);
-          data.infoArray.splice(i, 1);
-          break;
-        }
-      }
-      console.log('articles count: '+data.articles.length);
-      for (i = 0, len = data.articles.length; i < len; i = i + 1) {
-        if ((data.articles[i]) && (data.articles[i].actor.address === url)) {
-          //console.log('removing article from list: ',data.articles[i]);
-          data.articles.splice(i, 1);
-        }
-      }
-      console.log('articles count: '+data.articles.length);
-      console.log('feed removed: ', url);
-      defer.resolve(m);
-    }, function (err) {
-      defer.reject(err);
-    });
-    return defer.promise;
-  };
 
   /****
    * ARTICLE MANAGEMENT
@@ -230,12 +126,140 @@ function ($q, SH, CH, RS, RSutil, $rootScope) {
   };
 
 
+
+
+  /****
+   * FEED MANAGEMENT
+   ******************/
+  // grab whatever feeds exists in remoteStorage right away
+  (function getFeedUrls() {
+    RS.call('rss', 'getAll', ['']).then(function (urls) {
+      console.log('RSS: got feed urls from remoteStorage ', urls);
+      for (var key in urls) {
+        if ((!urls[key]) || (typeof urls[key].url === 'undefined')) {
+          console.log('ERROR processing url['+key+']: ', urls[key]);
+        } else {
+          var url = urls[key].url;
+          urls[key].unread = 0;
+          func.fetchFeed(urls[key].url); // asign existing feed info to data struct
+        }
+      }
+    }, function (err) {
+      console.log('error: unable to get feed list from remoteStorage: ', err);
+      $rootScope.$broadcast('message', {
+        message: 'unable to get feed list from remotestorage',
+        type: 'error',
+        timeout: false
+      });
+    });
+  })();
+
+
+
+  /**
+   * Function: addFeed
+   *
+   * take a record from sockethub and creates a feed entry, queueing to store
+   * in rs
+   *
+   * Parameters:
+   *
+   *   m - article object recevied from sockethub
+   *
+   */
+  function addFeed (m) {
+    var obj = {
+      url: m.actor.address,
+      name: m.actor.name,
+      cache_articles: 20,
+      last_fetched: new Date().getTime(),
+      unread: 0
+    };
+    data.info[obj.url] = obj;
+    data.infoArray.push(obj);
+    RS.queue('rss', 'add', [obj]);
+  }
+
+
+  /**
+   * Function: updateFeed
+   *
+   * update feed with the passed in feed object
+   *
+   * Parameters:
+   *
+   *   obj - feed object (remotestorage format)
+   */
+  func.updateFeed = function (obj) {
+    var defer = $q.defer();
+    RS.call('rss', 'add', [obj]).then(function (m) {
+      //console.log('feed updated: ', obj);
+      data.info[obj.url] = obj;
+      defer.resolve(m);
+    }, function (err) {
+      defer.reject(err);
+    });
+    return defer.promise;
+  };
+
+
+  /**
+   * Function: removeFeed
+   *
+   * remove a feed from the feed lists and remotestorage
+   *
+   * Parameters:
+   *
+   *   url - feed url
+   */
+  func.removeFeed = function (url) {
+    var defer = $q.defer();
+    RS.call('rss', 'remove', [url]).then(function (m) {
+      delete data.info[url];
+      for (var i = 0, len = data.infoArray.length; i < len; i = i + 1) {
+        if ((data.infoArray[i]) && (data.infoArray[i].url === url)) {
+          //console.log('removing from list: ',data.infoArray[i]);
+          data.infoArray.splice(i, 1);
+          break;
+        }
+      }
+      console.log('articles count: '+data.articles.length);
+      for (i = 0, len = data.articles.length; i < len; i = i + 1) {
+        if ((data.articles[i]) && (data.articles[i].actor.address === url)) {
+          //console.log('removing article from list: ',data.articles[i]);
+          data.articles.splice(i, 1);
+        }
+      }
+      console.log('articles count: '+data.articles.length);
+      console.log('feed removed: ', url);
+      defer.resolve(m);
+    }, function (err) {
+      defer.reject(err);
+    });
+    return defer.promise;
+  };
+
+
+
+
   /****
    * FEED FETCHING
    ****************/
+  var feedsTried = {};
   // issue orders to fetch feeds from sockethub
   func.fetchFeed = function fetch(url) {
-    var defer = $q.defer();
+    var match = false;
+    for (var i = 0, len = data.infoArray.length; i < len; i = i + 1) {
+      if ((data.infoArray[i]) && (data.infoArray[i].url === url)) {
+        match = true;
+        break;
+      }
+    }
+    if ((match) || (feedsTried[url])) {
+      return;
+    }
+    feedsTried[url] = true;
+
     var msg = {
       actor: {},
       target: [{}]
@@ -245,11 +269,20 @@ function ($q, SH, CH, RS, RSutil, $rootScope) {
     msg.verb = 'fetch';
     msg.actor.address = "rss";
     console.log("FETCH: ", msg);
-    SH.submit(msg, 5000).then(defer.resolve, defer.reject);
-    return defer.promise;
+    SH.submit.call(msg).then(function (o) {
+      data.info[url]['loaded'] = true;
+    }, function (e) {
+      $rootScope.$broadcast('message', {
+        message: 'failed fetching feed: '+e,
+        type: 'error'
+      });
+    });
   };
 
 
+
+  //
+  //
   // detect when new articles are received from Sockethub
   SH.on('rss', 'message', function (m) {
     console.log("RSS received message ",m);
@@ -262,7 +295,7 @@ function ($q, SH, CH, RS, RSutil, $rootScope) {
       });
     }
 
-    if (!data.info[key]) {
+    /*if (!data.info[key]) {
       console.log("*** RSS: key doesn't match a feed entry [ " + key +" ]: ", m);
       if (!m.status) {
         // actor not found and error detected, probably bad feed
@@ -280,6 +313,16 @@ function ($q, SH, CH, RS, RSutil, $rootScope) {
       func.addFeed(data.info[key]);
     } else {
       //console.log("*** Names already match: " + data.info[key].name + ' === ' + m.actor.name);
+    }*/
+
+    if (!data.info[key]) {
+      console.log('#### - adding to data.info: ',m);
+      addFeed(m);
+    } else if ((!data.info[key].name) || (data.info[key].name === data.info[key].url)) {
+      console.log('#### - updating name: ',m);
+      data.info[key]['name'] = m.actor.name;
+    } else {
+      console.log('#### - neither here nor there: ',m);
     }
 
     if (!m.object.read) {
@@ -299,14 +342,18 @@ function ($q, SH, CH, RS, RSutil, $rootScope) {
 
         if (m.object.read) {
           // this article is read, subtract from total
-          data.info[key].unread = (typeof data.info[key].unread === "number") ? data.info[key].unread - 1 : 0;    
+          data.info[key].unread = (typeof data.info[key].unread === "number") ? data.info[key].unread - 1 : 0;
         }
-        
+
       }, function (e) {
         console.log("ARTICLE FETCH ERROR: ", e);
       });
     }
   });
+
+
+
+
 
 
   return {
@@ -337,23 +384,8 @@ function ($scope, RSS, $rootScope) {
 
   $scope.add = function (url) {
     $scope.adding = true;
-
-    var obj = {
-      url: url,
-      name: url,
-      cache_articles: 20,
-      last_fetched: new Date().getTime()
-    };
-
-    RSS.func.addFeed(obj).then(function (m) {
-      //console.log('rss feed url saved!: ', m);
-      $rootScope.$broadcast('closeModalAddFeed');
-      $scope.adding = false;
-      $rootScope.$broadcast('message', {type: 'success', message: 'RSS feed added: '+obj.url});
-    }, function (err) {
-      console.log('rss feed url save failed!: ', err);
-      $rootScope.$broadcast('message', {type: 'error', message: err.message});
-    });
+    RSS.func.fetchFeed(url);
+    $scope.adding = false;
   };
 
 }]).
@@ -363,8 +395,9 @@ function ($scope, RSS, $rootScope) {
  * controller: feedCtrl
  */
 controller('feedCtrl',
-['$scope', 'RSS', 'util', '$rootScope', '$timeout',
-function ($scope, RSS, util, $rootScope, $timeout) {
+['$scope', 'RSS', 'util', '$rootScope', '$timeout', '$routeParams',
+function ($scope, RSS, util, $rootScope, $timeout, $routeParams) {
+  console.log('--- feedCtrl routeParams: ',$routeParams);
   $scope.model = {};
   $scope.model.settings = {
     showRead: true
@@ -382,6 +415,15 @@ function ($scope, RSS, util, $rootScope, $timeout) {
     $scope.model.feeds._editName = '';
   }
   $scope.model.saving = false;
+
+  if ($routeParams.feed) {
+    // if we have a url as a param, we try to fetch it
+    $rootScope.$broadcast('message', {
+      message: 'attempting to fetch feed from '+$routeParams.feed,
+      type: 'info'
+    });
+    RSS.func.fetchFeed($routeParams.feed);
+  }
 
   $scope.isSelected = function (url, inclusive) {
     if ($scope.model.feeds.current.indexes.length === 0) {
@@ -599,7 +641,7 @@ function () {
               '     ng-show="isShowable(a.actor.address, a.object.read, settings)">' +
               '  <div class="mark-unread" ng-show="a.object.read" ng-click="markRead(a.object.link, false)">Mark Unread</div>' +
               '  <div class="article-content" ng-click="markRead(a.object.link, true)">' +
-              '    <div class="article-title">' + 
+              '    <div class="article-title">' +
               '      <a target="_blank" href="{{ a.object.link }}">' +
               '        <h2>{{ a.object.title }}</h2></a>' +
               '    </div>' +
