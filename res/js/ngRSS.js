@@ -122,7 +122,7 @@ function ($q, SH, CH, RS, $rootScope) {
    ******************/
   // grab whatever feeds exists in remoteStorage right away
   (function getFeedUrls() {
-    RS.call('rss', 'getAll', ['']).then(function (urls) {
+    RS.call('feeds', 'getAll', ['']).then(function (urls) {
       console.log('RSS: got feed urls from remoteStorage ', urls);
       for (var key in urls) {
         if ((!urls[key]) || (typeof urls[key].url === 'undefined')) {
@@ -164,7 +164,7 @@ function ($q, SH, CH, RS, $rootScope) {
     };
     data.info[obj.url] = obj;
     data.infoArray.push(obj);
-    RS.queue('rss', 'add', [obj]);
+    RS.queue('feeds', 'add', [obj]);
   }
 
   /**
@@ -178,7 +178,7 @@ function ($q, SH, CH, RS, $rootScope) {
    */
   func.updateFeed = function (obj) {
     var defer = $q.defer();
-    RS.call('rss', 'add', [obj]).then(function (m) {
+    RS.call('feeds', 'add', [obj]).then(function (m) {
       //console.log('feed updated: ', obj);
       data.info[obj.url] = obj;
       defer.resolve(m);
@@ -199,7 +199,7 @@ function ($q, SH, CH, RS, $rootScope) {
    */
   func.removeFeed = function (url) {
     var defer = $q.defer();
-    RS.call('rss', 'remove', [url]).then(function (m) {
+    RS.call('feeds', 'remove', [url]).then(function (m) {
       delete data.info[url];
       for (var i = 0, len = data.infoArray.length; i < len; i = i + 1) {
         if ((data.infoArray[i]) && (data.infoArray[i].url === url)) {
@@ -257,6 +257,7 @@ function ($q, SH, CH, RS, $rootScope) {
     SH.submit.call(msg).then(function (o) {
       data.info[url]['loaded'] = true;
     }, function (e) {
+      console.log('failed fetch');
       $rootScope.$broadcast('message', {
         message: 'failed fetching feed: '+e,
         type: 'error'
