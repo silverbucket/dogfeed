@@ -38,6 +38,25 @@ value('util', {
 
 
 
+run(['$routeParams', '$rootScope', 'RSS',
+function ($routeParams, $rootScope, RSS) {
+
+  $rootScope.feeds = RSS.data;
+
+  if ($routeParams.feed) {
+    // if we have a url as a param, we try to fetch it
+    $rootScope.$broadcast('message', {
+      message: 'attempting to fetch feed from '+$routeParams.feed,
+      type: 'info'
+    });
+    $rootScope.selectedFeed = $routeParams.feed;
+    RSS.func.fetchFeed($routeParams.feed);
+  }
+}]).
+
+
+
+
 
 
 
@@ -83,18 +102,6 @@ function ($q, SH, CH, RS, RSutil, $rootScope) {
   };
 
 
-  function broadcastError(url, err) {
-    data.info[url].error = true;
-    data.info[url].errorMsg = err;
-    $rootScope.$broadcast('message', {
-      message: err,
-      type: 'error'
-    });
-  }
-  function dummy () {}
-
-
-
   /****
    * ARTICLE MANAGEMENT
    *********************/
@@ -126,8 +133,6 @@ function ($q, SH, CH, RS, RSutil, $rootScope) {
   };
 
 
-
-
   /****
    * FEED MANAGEMENT
    ******************/
@@ -154,8 +159,6 @@ function ($q, SH, CH, RS, RSutil, $rootScope) {
     });
   })();
 
-
-
   /**
    * Function: addFeed
    *
@@ -180,7 +183,6 @@ function ($q, SH, CH, RS, RSutil, $rootScope) {
     RS.queue('rss', 'add', [obj]);
   }
 
-
   /**
    * Function: updateFeed
    *
@@ -201,7 +203,6 @@ function ($q, SH, CH, RS, RSutil, $rootScope) {
     });
     return defer.promise;
   };
-
 
   /**
    * Function: removeFeed
@@ -240,8 +241,6 @@ function ($q, SH, CH, RS, RSutil, $rootScope) {
   };
 
 
-
-
   /****
    * FEED FETCHING
    ****************/
@@ -261,13 +260,15 @@ function ($q, SH, CH, RS, RSutil, $rootScope) {
     feedsTried[url] = true;
 
     var msg = {
-      actor: {},
-      target: [{}]
+      verb: 'fetch',
+      platform: 'rss',
+      actor: {
+        address: 'rss'
+      },
+      target: [{
+        address: url
+      }]
     };
-    msg.target[0].address = url;
-    msg.platform = 'rss';
-    msg.verb = 'fetch';
-    msg.actor.address = "rss";
     console.log("FETCH: ", msg);
     SH.submit.call(msg).then(function (o) {
       data.info[url]['loaded'] = true;
@@ -278,7 +279,6 @@ function ($q, SH, CH, RS, RSutil, $rootScope) {
       });
     });
   };
-
 
 
   //
@@ -294,26 +294,6 @@ function ($q, SH, CH, RS, RSutil, $rootScope) {
         message: m.target[0].address + ' ' + m.message
       });
     }
-
-    /*if (!data.info[key]) {
-      console.log("*** RSS: key doesn't match a feed entry [ " + key +" ]: ", m);
-      if (!m.status) {
-        // actor not found and error detected, probably bad feed
-        var t_key = m.target[0].address;
-        //console.log('CHECKING: [tkey:' + t_key + '] data.info: ', data.info);
-        if (data.info[t_key]) {
-          console.log('PROBLEM FEED SETTINGS:', data.info[t_key]);
-          data.info[t_key]['loaded'] = true;
-          data.info[t_key]['error'] = true;
-          data.info[t_key]['errorMsg'] = m.object.message;
-        }
-      }
-    } else if ((!data.info[key].name) || (data.info[key].name === data.info[key].url)) {
-      data.info[key]['name'] = m.actor.name;
-      func.addFeed(data.info[key]);
-    } else {
-      //console.log("*** Names already match: " + data.info[key].name + ' === ' + m.actor.name);
-    }*/
 
     if (!data.info[key]) {
       console.log('#### - adding to data.info: ',m);
@@ -352,16 +332,14 @@ function ($q, SH, CH, RS, RSutil, $rootScope) {
   });
 
 
-
-
-
-
   return {
     config: config,
     data: data,
     func: func
   };
 }]).
+
+
 
 
 
@@ -377,9 +355,8 @@ function ($q, SH, CH, RS, RSutil, $rootScope) {
  * controller: addFeedCtrl
  */
 controller('addFeedCtrl',
-['$scope', 'RSS', '$rootScope',
-function ($scope, RSS, $rootScope) {
-  $scope.url = '';
+['$scope', 'RSS',
+function ($scope, RSS) {
   $scope.adding = false;
 
   $scope.add = function (url) {
@@ -392,41 +369,64 @@ function ($scope, RSS, $rootScope) {
 
 
 /**
+ * controller: feedSettingsCtrl
+ */
+controller('feedSettingsCtrl',
+['$scope', 'RSS',
+function ($scope, RSS) {
+  $scope.saving = false;
+
+  $scope.saveFeedSettings = function (feed) {
+    $scope.saving = true;
+    RSS.func.updateFeed(feed).then(function () {
+      $("#modalFeedSettings").modal('hide');
+      $rootScope.$broadcast('message', {type: 'success', message: 'updated feed ' + url});
+      $scope.saving = false;
+    }, function (err) {
+      console.log('rss feed update failed!: ', err);
+      $rootScope.$broadcast('message', {type: 'error', message: err.message});
+      $("#modalFeedSettings").modal('hide');
+      $scope.saving = false;
+    });
+  };
+
+  $scope.cancelFeedSettings = function () {
+    $("#modalFeedSettings").modal('hide');
+    $scope.model.feeds.info[$scope.feeds.edit].name = $scope.model.feeds._editName;
+    $scope.saving = false;
+  };
+
+
+}]).
+
+
+/**
  * controller: feedCtrl
  */
 controller('feedCtrl',
-['$scope', 'RSS', 'util', '$rootScope', '$timeout', '$routeParams',
-function ($scope, RSS, util, $rootScope, $timeout, $routeParams) {
-  console.log('--- feedCtrl routeParams: ',$routeParams);
-  $scope.model = {};
-  $scope.model.settings = {
-    showRead: true
+['$scope', 'RSS', 'util', '$rootScope', '$timeout',
+function ($scope, RSS, util, $rootScope, $timeout) {
+  console.log('--- feedCtrl');
+  $scope.model = {
+    settings: {
+      showRead: true
+    }
   };
-  $scope.model.feeds = RSS.data;
-  //$scope.model.loading = true;
-  $scope.model.feeds.current = {
+  $scope.saving = false;
+
+  $rootScope.feeds.current = {
     name: '',
     indexes: []
   };
-  if (!$scope.model.feeds.edit) {
-    $scope.model.feeds.edit = '';
-  }
-  if (!$scope.model.feeds._editName) {
-    $scope.model.feeds._editName = '';
-  }
-  $scope.model.saving = false;
+  $rootScope.feeds.edit = {
+    name: '',
+    url: '',
+    origName: ''
+  };
 
-  if ($routeParams.feed) {
-    // if we have a url as a param, we try to fetch it
-    $rootScope.$broadcast('message', {
-      message: 'attempting to fetch feed from '+$routeParams.feed,
-      type: 'info'
-    });
-    RSS.func.fetchFeed($routeParams.feed);
-  }
 
   $scope.isSelected = function (url, inclusive) {
-    if ($scope.model.feeds.current.indexes.length === 0) {
+    if ($rootScope.feeds.current.indexes.length === 0) {
       if ((inclusive) || (!url)) {
         return true;
       } else {
@@ -434,7 +434,7 @@ function ($scope, RSS, util, $rootScope, $timeout, $routeParams) {
       }
     } else {
       for (var i = 0, num = $scope.model.feeds.current.indexes.length; i < num; i = i + 1) {
-        if ($scope.model.feeds.current.indexes[i] === url) {
+        if ($rootScope.feeds.current.indexes[i] === url) {
           return true;
         }
       }
@@ -458,13 +458,13 @@ function ($scope, RSS, util, $rootScope, $timeout, $routeParams) {
   // returns true if current selection is empty (has no unread articles)
   $scope.currentIsEmpty = function (settings) {
     //console.log('CALLED: ', settings);
-    if (!$scope.model.feeds.current.name) {
+    if (!$rootScope.feeds.current.name) {
       return false;
     }
-    for (var i = 0, num = $scope.model.feeds.current.indexes.length; i < num; i = i + 1) {
+    for (var i = 0, num = $rootScope.feeds.current.indexes.length; i < num; i = i + 1) {
       //console.log('checking '+$scope.model.feeds.current.indexes[i], $scope.model.feeds.info[$scope.model.feeds.current.indexes[i]]);
-      if (($scope.model.feeds.info[$scope.model.feeds.current.indexes[i]]) &&
-          ($scope.model.feeds.info[$scope.model.feeds.current.indexes[i]].unread > 0)) {
+      if (($rootScope.feeds.info[$scope.model.feeds.current.indexes[i]]) &&
+          ($rootScope.feeds.info[$scope.model.feeds.current.indexes[i]].unread > 0)) {
         return false;
       }
       if (settings.showRead) {
@@ -489,36 +489,13 @@ function ($scope, RSS, util, $rootScope, $timeout, $routeParams) {
   $scope.showFeedSettings = function (url) {
     console.log('showFeedSettings: '+url);
     if (!url) { return; }
-    //$scope.switchFeed(url);
-    $scope.model.feeds.edit = url;
-    $scope.model.feeds._editName = $scope.model.feeds.info[$scope.model.feeds.edit].name;
-    //console.log('EDIT: ', $scope.model.feeds.edit);
+    $rootScope.feeds.edit.url = url;
+    $rootScope.feeds.edit.name = $rootScope.feeds.info[url].name;
+    $rootScope.feeds.edit.origName = $rootScope.feeds.info[url].name;
     $("#modalFeedSettings").modal({
       show: true,
       keyboard: true,
       backdrop: true
-    });
-  };
-
-  $scope.cancelFeedSettings = function () {
-    $("#modalFeedSettings").modal('hide');
-    $scope.model.feeds.info[$scope.model.feeds.edit].name = $scope.model.feeds._editName;
-    $scope.saving = false;
-  };
-
-  $scope.saveFeedSettings = function (url) {
-    $scope.saving = true;
-    //$scope.model.feeds.info[$scope.model.feeds.edit].name = $scope.model.feeds.edit.name;
-    //console.log('SAVE: ', $scope.model.feeds.info[url]);
-    RSS.func.updateFeed($scope.model.feeds.info[url]).then(function () {
-      $("#modalFeedSettings").modal('hide');
-      $rootScope.$broadcast('message', {type: 'success', message: 'updated feed '+url});
-      $scope.saving = false;
-    }, function (err) {
-      console.log('rss feed update failed!: ', err);
-      $rootScope.$broadcast('message', {type: 'error', message: err.message});
-      $("#modalFeedSettings").modal('hide');
-      $scope.saving = false;
     });
   };
 
@@ -597,7 +574,7 @@ function () {
       'settings': '='
     },
     template: '<h4 ng-transclude></h4>' +
-              '<ul class="nav nav-list nav-pills nav-stacked" ng-controller="feedCtrl">' +
+              '<ul class="nav nav-list nav-pills nav-stacked">' +
               '  <li ng-click="switchFeed()"' +
               '      ng-class="{active: isSelected(), \'all-feeds\': true}">' +
               '      <span class="glyphicon glyphicon-globe"></span> <span>All Items</span>' +
@@ -634,7 +611,7 @@ function () {
       'settings': '='
     },
     template: //'<h4><span ng-bind="feeds.current.name"></span></h4>' +
-              '<div class="article-text" ng-controller="feedCtrl" ng-show="feeds.articles.length > 0 && currentIsEmpty(settings)"><p>no articles {{feeds.articles.length}} - {{currentIsEmpty(settings)}}</p></div>' +
+              '<div class="article-text" ng-show="feeds.articles.length > 0 && currentIsEmpty(settings)"><p>no articles {{feeds.articles.length}} - {{currentIsEmpty(settings)}}</p></div>' +
               '<div ng-repeat="a in (filteredItems = (feeds.articles | orderBy: \'object.date\':true))"' +
               '     ng-controller="feedCtrl"' +
               '     ng-class="{read: a.object.read, article: true}"' +
