@@ -171,4 +171,3 @@ function ($scope, $rootScope, settings, RS) {
     }
   });
 }]);
-
