@@ -1,4 +1,4 @@
-angular.module('ngRSS', ['ngRemoteStorage', 'ngSockethubClient']).
+angular.module('ngFeeds', ['ngRemoteStorage', 'ngSockethubClient']).
 
 
 /**
@@ -36,10 +36,10 @@ value('util', {
   }
 }).
 
-run(['$routeParams', '$rootScope', 'RSS',
-function ($routeParams, $rootScope, RSS) {
+run(['$routeParams', '$rootScope', 'Feeds',
+function ($routeParams, $rootScope, Feeds) {
 
-  $rootScope.feeds = RSS.data;
+  $rootScope.feeds = Feeds.data;
 
 
 }]).
@@ -52,9 +52,9 @@ function ($routeParams, $rootScope, RSS) {
 ///////////////////////////////////////////////////////////////////////////
 
 /**
- * Factory: RSS
+ * Factory: Feeds
  */
-factory('RSS', ['$q', 'SH', 'configHelper', 'RS', '$rootScope',
+factory('Feeds', ['$q', 'SH', 'configHelper', 'RS', '$rootScope',
 function ($q, SH, CH, RS, $rootScope) {
 
   var config = {};
@@ -123,7 +123,7 @@ function ($q, SH, CH, RS, $rootScope) {
   // grab whatever feeds exists in remoteStorage right away
   (function getFeedUrls() {
     RS.call('feeds', 'getAll', ['']).then(function (urls) {
-      console.log('RSS: got feed urls from remoteStorage ', urls);
+      console.log('Feeds: got feed urls from remoteStorage ', urls);
       for (var key in urls) {
         if ((!urls[key]) || (typeof urls[key].url === 'undefined')) {
           console.log('ERROR processing url['+key+']: ', urls[key]);
@@ -270,7 +270,7 @@ function ($q, SH, CH, RS, $rootScope) {
   //
   // detect when new articles are received from Sockethub
   SH.on('rss', 'message', function (m) {
-    console.log("RSS received message ",m);
+    console.log("Feeds received message ",m);
     var key = m.actor.address;
     if (!m.status) {
       console.log('received error message from sockethub: ', m);
@@ -334,13 +334,13 @@ function ($q, SH, CH, RS, $rootScope) {
  * controller: addFeedCtrl
  */
 controller('addFeedCtrl',
-['$scope', 'RSS',
-function ($scope, RSS) {
+['$scope', 'Feeds',
+function ($scope, Feeds) {
   $scope.adding = false;
 
   $scope.add = function (url) {
     $scope.adding = true;
-    RSS.func.fetchFeed(url);
+    Feeds.func.fetchFeed(url);
     $scope.adding = false;
   };
 
@@ -350,13 +350,13 @@ function ($scope, RSS) {
  * controller: feedSettingsCtrl
  */
 controller('feedSettingsCtrl',
-['$scope', 'RSS',
-function ($scope, RSS) {
+['$scope', 'Feeds',
+function ($scope, Feeds) {
   $scope.saving = false;
 
   $scope.saveFeedSettings = function (feed) {
     $scope.saving = true;
-    RSS.func.updateFeed(feed).then(function () {
+    Feeds.func.updateFeed(feed).then(function () {
       $("#modalFeedSettings").modal('hide');
       $rootScope.$broadcast('message', {type: 'success', message: 'updated feed ' + url});
       $scope.saving = false;
@@ -379,8 +379,8 @@ function ($scope, RSS) {
  * controller: feedCtrl
  */
 controller('feedCtrl',
-['$scope', 'RSS', 'util', '$rootScope', '$timeout', '$routeParams',
-function ($scope, RSS, util, $rootScope, $timeout, $routeParams) {
+['$scope', 'Feeds', 'util', '$rootScope', '$timeout', '$routeParams',
+function ($scope, Feeds, util, $rootScope, $timeout, $routeParams) {
   console.log('--- feedCtrl');
   $scope.model = {
     settings: {
@@ -406,7 +406,7 @@ function ($scope, RSS, util, $rootScope, $timeout, $routeParams) {
       type: 'info'
     });
     $rootScope.selectedFeed = $routeParams.feed;
-    RSS.func.fetchFeed($routeParams.feed);
+    Feeds.func.fetchFeed($routeParams.feed);
   }
 
   $scope.isSelected = function (url, inclusive) {
@@ -465,7 +465,7 @@ function ($scope, RSS, util, $rootScope, $timeout, $routeParams) {
       $scope.model.feeds.current.name = '';
       $scope.model.feeds.current.indexes.length = 0;
     } else {
-      $scope.model.feeds.current.name = RSS.data.info[url].name;
+      $scope.model.feeds.current.name = Feeds.data.info[url].name;
       $scope.model.feeds.current.indexes = [url];
     }
   };
@@ -485,7 +485,7 @@ function ($scope, RSS, util, $rootScope, $timeout, $routeParams) {
 
   $scope.deleteFeed = function (url) {
     $scope.saving = true;
-    RSS.func.removeFeed(url).then(function () {
+    Feeds.func.removeFeed(url).then(function () {
       $("#modalFeedSettings").modal('hide');
       $rootScope.$broadcast('message', {type: 'success', message: 'deleted feed '+url});
       $scope.saving = false;
@@ -516,7 +516,7 @@ function ($scope, RSS, util, $rootScope, $timeout, $routeParams) {
               $scope.model.feeds.info[$scope.model.feeds.articles[i].actor.address].unread + 1;
         }
         $scope.model.feeds.articles[i].object.read = val;
-        RSS.func.updateArticle($scope.model.feeds.articles[i]);
+        Feeds.func.updateArticle($scope.model.feeds.articles[i]);
         return;
       }
     }

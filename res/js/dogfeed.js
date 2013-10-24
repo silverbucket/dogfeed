@@ -1,4 +1,4 @@
-angular.module('dogfeed', ['ngRSS', 'ngSockethubClient', 'ngRemoteStorage', 'ngMessages']).
+angular.module('dogfeed', ['ngFeeds', 'ngSockethubClient', 'ngRemoteStorage', 'ngMessages']).
 
 /**
  * routes
