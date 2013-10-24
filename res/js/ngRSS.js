@@ -36,28 +36,13 @@ value('util', {
   }
 }).
 
-
-
 run(['$routeParams', '$rootScope', 'RSS',
 function ($routeParams, $rootScope, RSS) {
 
   $rootScope.feeds = RSS.data;
 
-  if ($routeParams.feed) {
-    // if we have a url as a param, we try to fetch it
-    $rootScope.$broadcast('message', {
-      message: 'attempting to fetch feed from '+$routeParams.feed,
-      type: 'info'
-    });
-    $rootScope.selectedFeed = $routeParams.feed;
-    RSS.func.fetchFeed($routeParams.feed);
-  }
+
 }]).
-
-
-
-
-
 
 
 ///////////////////////////////////////////////////////////////////////////
@@ -66,12 +51,11 @@ function ($routeParams, $rootScope, RSS) {
 //
 ///////////////////////////////////////////////////////////////////////////
 
-
 /**
  * Factory: RSS
  */
-factory('RSS', ['$q', 'SH', 'configHelper', 'RS', 'RSutil', '$rootScope',
-function ($q, SH, CH, RS, RSutil, $rootScope) {
+factory('RSS', ['$q', 'SH', 'configHelper', 'RS', '$rootScope',
+function ($q, SH, CH, RS, $rootScope) {
 
   var config = {};
   var data = {
@@ -331,7 +315,6 @@ function ($q, SH, CH, RS, RSutil, $rootScope) {
     }
   });
 
-
   return {
     config: config,
     data: data,
@@ -340,16 +323,11 @@ function ($q, SH, CH, RS, RSutil, $rootScope) {
 }]).
 
 
-
-
-
-
 ///////////////////////////////////////////////////////////////////////////
 //
 // CONTROLLERS
 //
 ///////////////////////////////////////////////////////////////////////////
-
 
 /**
  * controller: addFeedCtrl
@@ -366,7 +344,6 @@ function ($scope, RSS) {
   };
 
 }]).
-
 
 /**
  * controller: feedSettingsCtrl
@@ -395,17 +372,14 @@ function ($scope, RSS) {
     $scope.model.feeds.info[$scope.feeds.edit].name = $scope.model.feeds._editName;
     $scope.saving = false;
   };
-
-
 }]).
-
 
 /**
  * controller: feedCtrl
  */
 controller('feedCtrl',
-['$scope', 'RSS', 'util', '$rootScope', '$timeout',
-function ($scope, RSS, util, $rootScope, $timeout) {
+['$scope', 'RSS', 'util', '$rootScope', '$timeout', '$routeParams',
+function ($scope, RSS, util, $rootScope, $timeout, $routeParams) {
   console.log('--- feedCtrl');
   $scope.model = {
     settings: {
@@ -424,6 +398,15 @@ function ($scope, RSS, util, $rootScope, $timeout) {
     origName: ''
   };
 
+  if ($routeParams.feed) {
+    // if we have a url as a param, we try to fetch it
+    $rootScope.$broadcast('message', {
+      message: 'attempting to fetch feed from '+$routeParams.feed,
+      type: 'info'
+    });
+    $rootScope.selectedFeed = $routeParams.feed;
+    RSS.func.fetchFeed($routeParams.feed);
+  }
 
   $scope.isSelected = function (url, inclusive) {
     if ($rootScope.feeds.current.indexes.length === 0) {
@@ -538,7 +521,6 @@ function ($scope, RSS, util, $rootScope, $timeout) {
     }
   };
 
-
   $rootScope.$on('SockethubConnectFailed', function (event, e) {
     console.log('Sockethub connect failed! ', e);
     $rootScope.$broadcast('message', {
@@ -552,15 +534,11 @@ function ($scope, RSS, util, $rootScope, $timeout) {
 }]).
 
 
-
-
 ///////////////////////////////////////////////////////////////////////////
 //
 // DIRECTIVES
 //
 ///////////////////////////////////////////////////////////////////////////
-
-
 
 /**
  * directive: feedList
@@ -597,7 +575,6 @@ function () {
     transclude: true
   };
 }]).
-
 
 /**
  * directive: articles
