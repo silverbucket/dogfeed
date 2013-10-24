@@ -1,4 +1,4 @@
-angular.module('ngRemoteStorage', []).
+angular.module('ngRemoteStorage', ['ngCommandQueue']).
 
 value('RSutil', {
   encode: function encode(string) {
@@ -8,8 +8,8 @@ value('RSutil', {
   }
 }).
 
-factory('RS', ['$rootScope', '$q', '$timeout',
-function ($rootScope, $q, $timeout) {
+factory('RS', ['$rootScope', '$q', '$timeout', 'cQueue',
+function ($rootScope, $q, $timeout, cQueue) {
 
   var ready = false;
 
@@ -21,88 +21,57 @@ function ($rootScope, $q, $timeout) {
     ready = true;
   });
 
-  var queue = [];
-  var setTimedCheck = false;
-
-  var delay = 500;
 
   function callRS(job) {
-    remoteStorage[job.module][job.func].apply(null, job.params).
+    console.log('callRS:', job);
+    remoteStorage[job.methods[0]][job.methods[1]].apply(null, job.params).
       then(function (res) {
         $rootScope.$apply(function () {
-          console.log('RS JOB COMPLETE: ', job);
-          job.promise.resolve(res);
+          if (job.defer) {
+            job.defer.resolve(res);
+          }
         });
       }, function (err) {
         $rootScope.$apply(function () {
-          job.promise.reject(err);
+          if (job.defer) {
+            job.defer.reject(err);
+          } else {
+            throw new Error(err);
+          }
+
         });
       });
   }
 
-  (function processQueue() {
-    if (isConnected() && (setTimedCheck)) {
-      //console.log('RS connected, sending call');
-      for (var i in queue) {
-        var job = queue[i];
-        try {
-          callRS(job)
-        } catch (e) {
-          console.log('error : ',e);
-          console.log(e.stack);
-          var errmsg = (typeof e.toString === 'function') ? e.toString() : e;
-          job.promise.reject(errmsg);
-        }
-      }
-      setTimedCheck = false;
-    } else {
-      console.log('RS not connected yet, delaying calls ' + delay + 's');
-      for (var i in queue) {
-        if ((queue[i].failTimeout) &&
-            (queue[i].failTimeout < delay)) {
-          queue[i].promise.reject('timed out');
-          queue.splice(i, 1);
-        }
-      }
-      if (delay < 30000) {
-        delay = delay + (delay + 500);
-      }
-      $timeout(processQueue, delay);
-    }
-  })();
+  var queue = cQueue.init(callRS);
 
   return {
     isConnected: isConnected,
     queue: function (module, func, params) {
       console.log('RS.queue(' + module + ', ' + func + ', params):', params);
-
-      queue.push({
-        module: module,
-        func: func,
+      queue.add({
+        methods: [module, func],
         params: params,
-        promise: false,
-        failTimeout: false
+        defer: false,
+        timeout: 0,
+        condition: isConnected
       });
-      setTimedCheck = true;
     },
     call: function (module, func, params, failTimeout) {
       var defer = $q.defer();
       console.log('RS.call(' + module + ', ' + func + ', params):', params);
-
       if ((typeof params === 'object') &&
           (typeof params[0] === 'undefined')) {
         defer.reject('RS.call params must be an array');
       } else {
         // put request onto queue
-        queue.push({
-          module: module,
-          func: func,
+        queue.add({
+          methods: [module, func],
           params: params,
-          promise: defer,
-          failTimeout: failTimeout
+          defer: defer,
+          timeout: failTimeout,
+          condition: isConnected
         });
-        // toggle timed checker
-        setTimedCheck = true;
       }
       return defer.promise;
     }
