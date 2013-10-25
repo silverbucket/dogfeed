@@ -27,6 +27,14 @@ function (RScfg) {
 }]).
 
 /**
+ * messages config
+ */
+run(['MessagesConfig',
+function (cfg) {
+  cfg.timeout = 15000;
+}]).
+
+/**
  * get sockethub settings and try to connect
  */
 run(['SockethubSettings', 'SH', 'RS', '$rootScope',  '$timeout',
@@ -131,7 +139,7 @@ function() {
 }]).
 
 /**
- * filger: fromNow (date)
+ * filter: fromNow (date)
  */
 filter('fromNow', [
 function() {
@@ -140,6 +148,19 @@ function() {
   };
 }]).
 
+/**
+ * filter: pagination
+ */
+filter('pagination', [
+function() {
+  var count = 0;
+  var max = 3;
+  return function(article) {
+    count = count + 1;
+    if (count > 10) { return false; }
+    return article;
+  };
+}]).
 
 ///////////////////////////////////////////////////////////////////////////
 //

@@ -269,6 +269,7 @@ function ($q, SH, CH, RS, $rootScope) {
       return;
     }
 
+
     // check if the feed entry for this article exists yet, if not add it.
     // also check to update name.
     if (!data.info[key]) {
@@ -371,7 +372,8 @@ function ($scope, Feeds, $rootScope, $timeout, $routeParams) {
   console.log('--- feedCtrl');
   $scope.model = {
     settings: {
-      showRead: true
+      showRead: true,  // show read articles or disappear them
+      articlesPerPage: 10 // number of articles to show per page
     }
   };
   $scope.saving = false;
@@ -416,14 +418,17 @@ function ($scope, Feeds, $rootScope, $timeout, $routeParams) {
   $scope.isShowable = function (feedUrl, isRead, settings) {
     if (!$scope.isSelected(feedUrl, true)) {
       return false;
-    } else if (isRead) {
+    }
+
+    if (isRead) {
       if (settings.showRead) {
         return true;
       } else {
         return false;
       }
+    } else {
+      return true;
     }
-    return true;
   };
 
   // returns true if current selection is empty (has no unread articles)

@@ -1,7 +1,7 @@
 <div class="article-text" ng-show="feeds.articles.length > 0 && currentIsEmpty(settings)">
   <p>no articles {{feeds.articles.length}} - {{currentIsEmpty(settings)}}</p>
 </div>
-<div ng-repeat="a in (filteredItems = (feeds.articles | orderBy: 'object.date':true))"
+<div ng-repeat="a in (filteredItems = (feeds.articles | orderBy: 'object.date':true | pagination))"
      ng-controller="feedCtrl"
      ng-class="{read: a.object.read, article: true}"
      ng-show="isShowable(a.actor.address, a.object.read, settings)">
