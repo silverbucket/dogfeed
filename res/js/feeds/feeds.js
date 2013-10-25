@@ -366,8 +366,8 @@ function ($scope, Feeds) {
  * controller: feedCtrl
  */
 controller('feedCtrl',
-['$scope', 'Feeds', 'util', '$rootScope', '$timeout', '$routeParams',
-function ($scope, Feeds, util, $rootScope, $timeout, $routeParams) {
+['$scope', 'Feeds', '$rootScope', '$timeout', '$routeParams',
+function ($scope, Feeds, $rootScope, $timeout, $routeParams) {
   console.log('--- feedCtrl');
   $scope.model = {
     settings: {
