@@ -373,9 +373,12 @@ function ($scope, Feeds, $rootScope, $timeout, $routeParams) {
   $scope.model = {
     settings: {
       showRead: true,  // show read articles or disappear them
-      articlesPerPage: 10 // number of articles to show per page
+      articlesPerPage: 10,  // number of articles to show per page
+      displayCap: 5,  // current limit of articles to show (increments by articlesPerPage)
+      displayed: {}  // index of displayed articles
     }
   };
+
   $scope.saving = false;
 
   $rootScope.feeds.current = {
@@ -415,18 +418,31 @@ function ($scope, Feeds, $rootScope, $timeout, $routeParams) {
     return false;
   };
 
-  $scope.isShowable = function (feedUrl, isRead, settings) {
+  $scope.isShowable = function (feedUrl, isRead, settings, articleUrl) {
     if (!$scope.isSelected(feedUrl, true)) {
+      return false;
+    }
+
+    if (settings.displayed[articleUrl]) {
+      return true;
+    }
+
+    if (Object.keys(settings.displayed).length >= settings.displayCap) {
       return false;
     }
 
     if (isRead) {
       if (settings.showRead) {
+      console.log('D');
+        settings.displayed[articleUrl] = true;
         return true;
       } else {
+      console.log('E');
         return false;
       }
     } else {
+      settings.displayed[articleUrl] = true;
+      console.log('F ', settings.displayed);
       return true;
     }
   };

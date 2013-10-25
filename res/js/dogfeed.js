@@ -143,7 +143,7 @@ function() {
  */
 filter('fromNow', [
 function() {
-  return function(dateString) {
+  return function (dateString) {
     return new Date(dateString).toDateString(); ///moment(new Date(dateString)).fromNow();
   };
 }]).
@@ -155,9 +155,15 @@ filter('pagination', [
 function() {
   var count = 0;
   var max = 3;
-  return function(article) {
+  return function (article) {
+    console.log("pagination received: ", article);
+    if (!article) { return false; }
     count = count + 1;
-    if (count > 10) { return false; }
+    if (count > 10) {
+      console.log('pagination returned false');
+      return false;
+    }
+    console.log('pagination returned article: ',article);
     return article;
   };
 }]).
