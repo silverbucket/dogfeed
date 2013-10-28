@@ -385,6 +385,7 @@ function ($scope, Feeds, $rootScope, $timeout, $routeParams) {
     name: '',
     indexes: []
   };
+
   $rootScope.feeds.edit = {
     name: '',
     url: '',
@@ -401,96 +402,6 @@ function ($scope, Feeds, $rootScope, $timeout, $routeParams) {
     Feeds.func.fetchFeed($routeParams.feed);
   }
 
-  $scope.isSelected = function (url, inclusive) {
-    if ($rootScope.feeds.current.indexes.length === 0) {
-      if ((inclusive) || (!url)) {
-        return true;
-      } else {
-        return false;
-      }
-    } else {
-      for (var i = 0, num = $scope.model.feeds.current.indexes.length; i < num; i = i + 1) {
-        if ($rootScope.feeds.current.indexes[i] === url) {
-          return true;
-        }
-      }
-    }
-    return false;
-  };
-
-  $scope.isShowable = function (feedUrl, isRead, settings, articleUrl) {
-    if (!$scope.isSelected(feedUrl, true)) {
-      return false;
-    }
-
-    if (settings.displayed[articleUrl]) {
-      return true;
-    }
-
-    if (Object.keys(settings.displayed).length >= settings.displayCap) {
-      return false;
-    }
-
-    if (isRead) {
-      if (settings.showRead) {
-      console.log('D');
-        settings.displayed[articleUrl] = true;
-        return true;
-      } else {
-      console.log('E');
-        return false;
-      }
-    } else {
-      settings.displayed[articleUrl] = true;
-      console.log('F ', settings.displayed);
-      return true;
-    }
-  };
-
-  // returns true if current selection is empty (has no unread articles)
-  $scope.currentIsEmpty = function (settings) {
-    //console.log('CALLED: ', settings);
-    if (!$rootScope.feeds.current.name) {
-      return false;
-    }
-    for (var i = 0, num = $rootScope.feeds.current.indexes.length; i < num; i = i + 1) {
-      //console.log('checking '+$scope.model.feeds.current.indexes[i], $scope.model.feeds.info[$scope.model.feeds.current.indexes[i]]);
-      if (($rootScope.feeds.info[$scope.model.feeds.current.indexes[i]]) &&
-          ($rootScope.feeds.info[$scope.model.feeds.current.indexes[i]].unread > 0)) {
-        return false;
-      }
-      if (settings.showRead) {
-        return false;
-      }
-    }
-    return true;
-  };
-
-  $scope.switchFeed = function (url, error) {
-    console.log('SWITCH FEED: '+url);
-    if (error) { return false; }
-    if (!url) {
-      $scope.model.feeds.current.name = '';
-      $scope.model.feeds.current.indexes.length = 0;
-    } else {
-      $scope.model.feeds.current.name = Feeds.data.info[url].name;
-      $scope.model.feeds.current.indexes = [url];
-    }
-  };
-
-  $scope.showFeedSettings = function (url) {
-    console.log('showFeedSettings: '+url);
-    if (!url) { return; }
-    $rootScope.feeds.edit.url = url;
-    $rootScope.feeds.edit.name = $rootScope.feeds.info[url].name;
-    $rootScope.feeds.edit.origName = $rootScope.feeds.info[url].name;
-    $("#modalFeedSettings").modal({
-      show: true,
-      keyboard: true,
-      backdrop: true
-    });
-  };
-
   $scope.deleteFeed = function (url) {
     $scope.saving = true;
     Feeds.func.removeFeed(url).then(function () {
@@ -506,28 +417,6 @@ function ($scope, Feeds, $rootScope, $timeout, $routeParams) {
       $("#modalFeedSettings").modal('hide');
       $scope.saving = false;
     });
-  };
-
-  $scope.markRead = function (url, val) {
-    //console.log('markRead Called! val:'+val);
-    for (var i = 0, num = $scope.model.feeds.articles.length; i < num; i = i + 1) {
-      //console.log('A.link: ' + $scope.model.feeds.articles[i].object.link + ' url: '+url);
-      if ($scope.model.feeds.articles[i].object.link === url) {
-        //console.log('R:'+$scope.model.feeds.articles[i].object.read+' v:'+val);
-        if ((!$scope.model.feeds.articles[i].object.read) && (val)) {
-          //console.log('subtracting 1 from : '+ $scope.model.feeds.info[$scope.model.feeds.articles[i].actor.address].unread);
-          $scope.model.feeds.info[$scope.model.feeds.articles[i].actor.address].unread =
-              $scope.model.feeds.info[$scope.model.feeds.articles[i].actor.address].unread - 1;
-        } else if (($scope.model.feeds.articles[i].object.read) && (!val)) {
-          //console.log('adding 1 to : '+ $scope.model.feeds.info[$scope.model.feeds.articles[i].actor.address].unread);
-          $scope.model.feeds.info[$scope.model.feeds.articles[i].actor.address].unread =
-              $scope.model.feeds.info[$scope.model.feeds.articles[i].actor.address].unread + 1;
-        }
-        $scope.model.feeds.articles[i].object.read = val;
-        Feeds.func.updateArticle($scope.model.feeds.articles[i]);
-        return;
-      }
-    }
   };
 
   $rootScope.$on('SockethubConnectFailed', function (event, e) {
@@ -549,11 +438,60 @@ function ($scope, Feeds, $rootScope, $timeout, $routeParams) {
 //
 ///////////////////////////////////////////////////////////////////////////
 
+value('isSelected', function ($scope, url, inclusive) {
+  if ($scope.feeds.current.indexes.length === 0) {
+    if ((inclusive) || (!url)) {
+      return true;
+    } else {
+      return false;
+    }
+  } else {
+    for (var i = 0, num = $scope.feeds.current.indexes.length; i < num; i = i + 1) {
+      if ($scope.feeds.current.indexes[i] === url) {
+        return true;
+      }
+    }
+  }
+  return false;
+}).
+
 /**
  * directive: feedList
  */
-directive('feedList', [
-function () {
+directive('feedList', ['isSelected',
+function (isSelected) {
+  function FeedListCtrl ($scope) {
+
+    $scope.isSelected = function (url, inclusive) {
+      return isSelected.apply(this, [$scope, url, inclusive]);
+    };
+
+    $scope.switchFeed = function (url, error) {
+      console.log('SWITCH FEED: '+url, $scope.feeds);
+      if (error) { return false; }
+      if (!url) {
+        $scope.feeds.current.name = '';
+        $scope.feeds.current.indexes.length = 0;
+      } else {
+        $scope.feeds.current.name = $scope.feeds.info[url].name;
+        $scope.feeds.current.indexes = [url];
+      }
+    };
+
+    $scope.showFeedSettings = function (url) {
+      console.log('showFeedSettings: '+url);
+      if (!url) { return; }
+      $scope.feeds.edit.url = url;
+      $scope.feeds.edit.name = $scope.feeds.info[url].name;
+      $scope.feeds.edit.origName = $scope.feeds.info[url].name;
+      $("#modalFeedSettings").modal({
+        show: true,
+        keyboard: true,
+        backdrop: true
+      });
+    };
+  }
+
   return {
     restrict: 'E',
     scope: {
@@ -561,6 +499,7 @@ function () {
       'settings': '='
     },
     templateUrl: 'res/js/feeds/feeds.html.tpl',
+    controller: FeedListCtrl,
     transclude: true
   };
 }]).
@@ -568,14 +507,92 @@ function () {
 /**
  * directive: articles
  */
-directive('articles', [
-function () {
+directive('articles', ['isSelected', 'Feeds',
+function (isSelected, Feeds) {
+  function ArticlesCtrl($scope) {
+
+    $scope.isSelected = function (url, inclusive) {
+      return isSelected.apply(this, [$scope, url, inclusive]);
+    };
+
+    // returns true if current selection is empty (has no unread articles)
+    $scope.currentIsEmpty = function (settings) {
+      //console.log('CALLED: ', settings);
+      if (!$scope.feeds.current.name) {
+        return false;
+      }
+      for (var i = 0, num = $scope.feeds.current.indexes.length; i < num; i = i + 1) {
+        //console.log('checking '+$scope.model.feeds.current.indexes[i], $scope.model.feeds.info[$scope.model.feeds.current.indexes[i]]);
+        if (($scope.feeds.info[$scope.feeds.current.indexes[i]]) &&
+            ($scope.feeds.info[$scope.feeds.current.indexes[i]].unread > 0)) {
+          return false;
+        }
+        if (settings.showRead) {
+          return false;
+        }
+      }
+      return true;
+    };
+
+    $scope.markRead = function (url, val) {
+      //console.log('markRead Called! val:'+val);
+      for (var i = 0, num = $scope.feeds.articles.length; i < num; i = i + 1) {
+        //console.log('A.link: ' + $scope.feeds.articles[i].object.link + ' url: '+url);
+        if ($scope.feeds.articles[i].object.link === url) {
+          //console.log('R:'+$scope.feeds.articles[i].object.read+' v:'+val);
+          if ((!$scope.feeds.articles[i].object.read) && (val)) {
+            //console.log('subtracting 1 from : '+ $scope.feeds.info[$scope.feeds.articles[i].actor.address].unread);
+            $scope.feeds.info[$scope.feeds.articles[i].actor.address].unread =
+                $scope.feeds.info[$scope.feeds.articles[i].actor.address].unread - 1;
+          } else if (($scope.feeds.articles[i].object.read) && (!val)) {
+            //console.log('adding 1 to : '+ $scope.feeds.info[$scope.feeds.articles[i].actor.address].unread);
+            $scope.feeds.info[$scope.feeds.articles[i].actor.address].unread =
+                $scope.feeds.info[$scope.feeds.articles[i].actor.address].unread + 1;
+          }
+          $scope.feeds.articles[i].object.read = val;
+          Feeds.func.updateArticle($scope.feeds.articles[i]);
+          return;
+        }
+      }
+    };
+
+    $scope.isShowable = function (feedUrl, isRead, settings, articleUrl) {
+      if (!$scope.isSelected(feedUrl, true)) {
+        return false;
+      }
+
+      if (settings.displayed[articleUrl]) {
+        return true;
+      }
+
+      if (Object.keys(settings.displayed).length >= settings.displayCap) {
+        return false;
+      }
+
+      if (isRead) {
+        if (settings.showRead) {
+        console.log('D');
+          settings.displayed[articleUrl] = true;
+          return true;
+        } else {
+        console.log('E');
+          return false;
+        }
+      } else {
+        settings.displayed[articleUrl] = true;
+        console.log('F ', settings.displayed);
+        return true;
+      }
+    };
+  }
+
   return {
     restrict: 'E',
     scope: {
       'feeds': '=',
       'settings': '='
     },
+    controller: ArticlesCtrl,
     templateUrl: 'res/js/feeds/articles.html.tpl',
     link: function (scope, element, attrs) {
       var divs = document.getElementsByClassName('article');
