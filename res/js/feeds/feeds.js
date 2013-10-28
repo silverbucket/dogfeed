@@ -49,7 +49,9 @@ function ($q, SH, CH, RS, $rootScope) {
   var data = {
     articles: [],
     info: {},
-    infoArray: []
+    infoArray: [],
+    groups: {},
+    groupArray: []
   };
   var func = {};
 
@@ -466,7 +468,7 @@ function (isSelected) {
       return isSelected.apply(this, [$scope, url, inclusive]);
     };
 
-    $scope.switchFeed = function (url, error) {
+    $scope.switchFeed = function (url, groupId, error) {
       console.log('SWITCH FEED: '+url, $scope.feeds);
       if (error) { return false; }
       if (!url) {
