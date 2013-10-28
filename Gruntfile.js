@@ -11,9 +11,12 @@ module.exports = function(grunt) {
       },
       app: {
         src: ['res/js/dogfeed.js',
-              'res/js/ngRSS.js',
-              'res/js/ngRemoteStorage.js',
-              'vendor/sockethub-client/angular/ngSockethubClient.js'],
+              'res/js/feeds/feeds.js',
+              'vendor/angular-shared/ngRemoteStorage.js',
+              'vendor/angular-shared/ngCommandQueue.js',
+              'vendor/angular-shared/ngMessages.js',
+              'vendor/sockethub-client/angular/ngSockethubClient.js',
+              'vendor/sockethub-client/angular/ngSockethubRemoteStorage.js'],
         dest: 'build/app.js.tmp'
       },
       modules: {
