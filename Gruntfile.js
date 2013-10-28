@@ -44,6 +44,7 @@ module.exports = function(grunt) {
           {expand: true, src: ['*.png'], dest: 'build/'}, // includes files in path and its subdirs
           {expand: true, src: ['*.jpg'], dest: 'build/'}, // includes files in path and its subdirs
           {expand: true, src: ['res/img/*'], dest: 'build/', filter: 'isFile'}, // includes files in path and its subdirs
+          {expand: true, src: ['res/js/feeds/*.html.tpl'], dest: 'build/', filter: 'isFile'}, // includes files in path and its subdirs
           {expand: false, src: ['vendor/bootstrap/fonts/glyphicons-halflings-regular.eot'], dest: 'build/res/fonts/glyphicons-halflings-regular.eot', filter: 'isFile'}, // includes files in path and its subdirs
           {expand: false, src: ['vendor/bootstrap/fonts/glyphicons-halflings-regular.svg'], dest: 'build/res/fonts/glyphicons-halflings-regular.svg', filter: 'isFile'}, // includes files in path and its subdirs
           {expand: false, src: ['vendor/bootstrap/fonts/glyphicons-halflings-regular.ttf'], dest: 'build/res/fonts/glyphicons-halflings-regular.ttf', filter: 'isFile'}, // includes files in path and its subdirs
