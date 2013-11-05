@@ -41,10 +41,10 @@ run(['SockethubSettings', 'SH', 'RS', '$rootScope',  '$timeout',
 function (settings, SH, RS, $rootScope, $timeout) {
 
   var default_cfg = {
-    host: 'localhost',
-    port: 10550,
+    host: 'silverbucket.net',
+    port: 443,
     path: '/sockethub',
-    tls: false,
+    tls: true,
     secret: '1234567890'
   };
 
