@@ -55,7 +55,8 @@ module.exports = function(grunt) {
           {expand: false, src: ['vendor/bootstrap/js/bootstrap.min.js'], dest: 'build/res/js/bootstrap.min.js', filter: 'isFile'}, // includes files in path and its subdirs
           {expand: false, src: ['vendor/bootstrap/js/bootstrap-theme.min.js'], dest: 'build/res/js/bootstrap-theme.min.js', filter: 'isFile'}, // includes files in path and its subdirs
           {expand: false, src: ['vendor/bootstrap/css/bootstrap.min.css'], dest: 'build/res/css/bootstrap.min.css', filter: 'isFile'}, // includes files in path and its subdirs
-          {expand: false, src: ['vendor/bootstrap/css/bootstrap-theme.min.css'], dest: 'build/res/css/bootstrap-theme.min.css', filter: 'isFile'} // includes files in path and its subdirs
+          {expand: false, src: ['vendor/bootstrap/css/bootstrap-theme.min.css'], dest: 'build/res/css/bootstrap-theme.min.css', filter: 'isFile'}, // includes files in path and its subdirs
+          {expand: false, src: ['<%= concat.app.dest %>'], dest: 'build/res/js/app.min.js', filter: 'isFile'} // includes files in path and its subdirs
 
         ]
       }
@@ -67,7 +68,7 @@ module.exports = function(grunt) {
       },
       dist: {
         files: {
-          'build/res/js/app.min.js': ['<%= concat.app.dest %>'],
+          //'build/res/js/app.min.js': ['<%= concat.app.dest %>'],
           'build/res/js/sockethub-client.min.js': ['<%= concat.sockethub.dest %>'],
           'build/res/js/remotestorage-modules.min.js': ['<%= concat.modules.dest %>']
         }
