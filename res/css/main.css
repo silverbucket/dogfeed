@@ -49,7 +49,7 @@ body {
 }*/
 
 .message-container {
-  height: 40px;
+  min-height: 40px;
   margin: -10px 0 5px 0;
 }
 
