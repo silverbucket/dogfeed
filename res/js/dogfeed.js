@@ -3,11 +3,12 @@ angular.module('dogfeed', ['ngFeeds', 'ngSockethubClient', 'ngRemoteStorage', 'n
 /**
  * routes
  */
-config(['$routeProvider',
-function ($routeProvider) {
+config(['$routeProvider', '$locationProvider',
+function ($routeProvider, $locationProvider) {
+  $locationProvider.html5Mode(true);
   $routeProvider.
     when('/', {
-      templateUrl: "res/js/feeds/feeds.html"
+      templateUrl: "res/js/feeds/feeds.html.tpl"
     }).
     otherwise({
       redirectTo: "/"
@@ -190,15 +191,24 @@ function() {
 controller('titlebarCtrl',
 ['$scope', '$rootScope', 'SockethubSettings', 'RS',
 function ($scope, $rootScope, settings, RS) {
+  var sliderOpen = false;
+
   $scope.addFeed = function () {
     $rootScope.$broadcast('showModalAddFeed', {locked: false});
   };
+
   $scope.sockethubSettings = function () {
     $rootScope.$broadcast('showModalSockethubSettings', {locked: false});
   };
+
   $scope.showFeedList = function () {
-console.log('haha ', $rootScope.snapper);
-    //$rootScope.snapper.open('left');
+    if (!sliderOpen) {
+      sliderOpen = true;
+      $rootScope.snapper.open('left');
+    } else {
+      sliderOpen = false;
+      $rootScope.snapper.close('left');
+    }
   };
 
   $scope.$watch('settings.connected', function (newVal, oldVal) {
