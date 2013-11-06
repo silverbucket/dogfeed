@@ -20,7 +20,7 @@
 
   <body>
     <div class="snap-drawers">
-      <div class="snap-drawer snap-drawer-left">
+      <div class="snap-drawer snap-drawer-left snapjs-left">
 
         <div class="settings" ng-click="showSettings()">
           <span class="glyphicon glyphicon-cog"></span> Settings
@@ -41,7 +41,7 @@
       </div>
     </div>
 
-    <div class="snap-content content">
+    <div id="content" class="snap-content">
       <div id="remotestorage-connect" ng-controller="remoteStorageCtrl"></div>
 
       <nav>
@@ -56,9 +56,9 @@
 
               <a href="#" id="open-left" ng-click="showFeedList()"></a>
 
-              <a class="navbar-brand" href="#">
-                <img src="res/img/dogfeed-logo.svg" width="115" alt="Dogfeed" />
-              </a>
+              <!-- <a class="navbar-brand" href="#"> -->
+                <img class="navbar-brand" src="res/img/dogfeed-logo.svg" width="115" alt="Dogfeed" />
+              <!-- </a> -->
               </div>
             </div>
 
