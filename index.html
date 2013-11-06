@@ -19,76 +19,77 @@
   </head>
 
   <body>
-    <div id="remotestorage-connect" ng-controller="remoteStorageCtrl"></div>
+    <div class="snap-drawers">
+      <div class="snap-drawer snap-drawer-left">
 
-    <nav>
-      <div class="navbar navbar-default" ng-controller="titlebarCtrl">
-        <div class="container">
-          <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-              <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="#">
-              <img src="res/img/dogfeed-logo.svg" width="115" alt="Dogfeed" />
-            </a>
-          </div>
-          <div class="collapse navbar-collapse">
-            <ul class="nav navbar-nav">
-              <li>
-                <a href="" ng-click="addFeed()">
-                  <span class="glyphicon glyphicon-plus" alt="Add Feed"></span> Add Feed
-                </a>
-              </li>
-              <li>
-                <a href="" ng-click="sockethubSettings()">
-                  <span class="glyphicon glyphicon-cog"></span> Settings
-                </a>
-              </li>
-            </ul>
-            <div class="version">
-              <p>version 0.2.0<br />
-                <a target="_blank" href="https://github.com/silverbucket/dogfeed/issues/">
-                  feedback and bug reports
-                </a>
-              </p>
-            </div>
-          </div>
+        <div class="settings" ng-click="showSettings()">
+          <span class="glyphicon glyphicon-cog"></span> Settings
         </div>
+
+        <div class="add-feed" ng-click="addFeed()">
+          <span class="glyphicon glyphicon-plus" alt="Add Feed"></span> Add Feed
+        </div>
+
+        <ul id="feed-list" class="feed-list scrollbox"></ul>
+
+        <footer id="credits">
+          <p>
+            dogfeed version 0.2.0, <a target="_blank" href="https://github.com/silverbucket/dogfeed/issues/">feedback and bug reports</a>
+          </p>
+        </footer>
+
       </div>
-    </nav>
-
-    <div class="message-container">
-      <div message></div>
     </div>
-    <ng-view></ng-view>
-    <div sockethub-settings></div>
 
+    <div class="snap-content content">
+      <div id="remotestorage-connect" ng-controller="remoteStorageCtrl"></div>
 
-    <!-- feeds -->
-    <script type="text/ng-template" id="feeds.html">
-      <section id="talk" class="page">
-        <div class="container">
-          <div class="row" ng-controller="feedCtrl">
+      <nav>
+        <div class="navbar navbar-default" ng-controller="titlebarCtrl">
+          <div class="container">
 
-            <div class="col-md-3">
-              <div class="feed-controls">
-                <form name="quickSettings" class="form-horizontal" novalidate>
-                    <label for="showRead" style="width: 125px; margin-right: 5px;"
-                           class="control-label">Show Read Articles</label>
-                    <input type="checkbox" name="showRead" ng-model="model.settings.showRead" />
-                </form>
+            <div class="navbar-header">
+              <!-- <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
+              </button> -->
+              <div>
+
+              <a href="#" id="open-left" ng-click="showFeedList()"></a>
+
+              <a class="navbar-brand" href="#">
+                <img src="res/img/dogfeed-logo.svg" width="115" alt="Dogfeed" />
+              </a>
               </div>
-              <feed-list class="feeds" feeds="feeds" settings="model.settings">Feeds</feed-list>
             </div>
 
-            <div class="col-md-9 article-text" ng-show="(feeds.articles.length == 0) && (feeds.infoArray.length > 0)"><p>loading articles...</p><img src="res/img/loading.gif" /></div>
+            <div>
+              <ul class="nav navbar-nav">
+                <li>
+                  <a href="" ng-click="addFeed()">
+                    <span class="glyphicon glyphicon-plus" alt="Add Feed"></span>
+                  </a>
+                </li>
+                <li>
+                  <a href="" ng-click="sockethubSettings()">
+                    <span class="glyphicon glyphicon-cog"></span>
+                  </a>
+                </li>
+              </ul>
+            </div>
 
-            <articles class="col-md-8 articles" feeds="feeds" settings="model.settings">
-            </articles>
           </div>
         </div>
-      </section>
-    </script>
+      </nav>
+
+      <div class="message-container">
+        <div message></div>
+      </div>
+
+      <ng-view></ng-view>
+
+      <div sockethub-settings></div>
+    </div>
+
 
 <!--
 <a href="#/">[TEST 1]</a>
@@ -164,6 +165,9 @@
     <!-- endbuild -->
     <!-- build:js res/js/bootstrap.min.js -->
     <script src="vendor/bootstrap/js/bootstrap.min.js?v=3.0"></script>
+    <!-- endbuild -->
+    <!-- build:js res/js/snap.min.js -->
+    <script src="vendor/snap.min.js?v=1.9.2"></script>
     <!-- endbuild -->
     <!-- build:js res/js/remotestorage.min.js -->
     <script src="vendor/remotestorage/remotestorage.min.js?v=0.8.2"></script>
