@@ -500,7 +500,7 @@ function (isSelected) {
       'feeds': '=',
       'settings': '='
     },
-    templateUrl: 'res/js/feeds/feeds.html.tpl',
+    templateUrl: 'res/js/feeds/feed-list.html.tpl',
     controller: FeedListCtrl,
     transclude: true
   };
