@@ -7,11 +7,21 @@ config(['$routeProvider',
 function ($routeProvider) {
   $routeProvider.
     when('/', {
-      templateUrl: "feeds.html"
+      templateUrl: "res/js/feeds/feeds.html"
     }).
     otherwise({
       redirectTo: "/"
     });
+}]).
+
+/**
+ * snap.js initialization
+ */
+run(['$rootScope',
+function ($rootScope) {
+  $rootScope.snapper = new Snap({
+    element: document.getElementById('content')
+  });
 }]).
 
 /**
@@ -20,9 +30,9 @@ function ($routeProvider) {
 run(['RemoteStorageConfig',
 function (RScfg) {
   RScfg.modules = [
-    ['sockethub', 'rw', {'cache': false}],
-    ['feeds', 'rw', {'cache': false}],
-    ['articles', 'rw', {'cache': false}]
+    ['sockethub', 'rw', {'cache': true}],
+    ['feeds', 'rw', {'cache': true}],
+    ['articles', 'rw', {'cache': true}]
   ];
 }]).
 
@@ -185,6 +195,10 @@ function ($scope, $rootScope, settings, RS) {
   };
   $scope.sockethubSettings = function () {
     $rootScope.$broadcast('showModalSockethubSettings', {locked: false});
+  };
+  $scope.showFeedList = function () {
+console.log('haha ', $rootScope.snapper);
+    //$rootScope.snapper.open('left');
   };
 
   $scope.$watch('settings.connected', function (newVal, oldVal) {
