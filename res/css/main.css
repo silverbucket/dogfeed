@@ -2,8 +2,17 @@
  * structure
  */
 body {
+  overflow-x: hidden;
 }
-
+.rs-bubble-text {
+  margin-top: -1px;
+}
+.rs-bubble {
+  width: 75px;
+}
+#remotestorage-widget {
+  top: 5px !important;
+}
 .content {
   z-index: 2;
   position: absolute;
@@ -11,23 +20,28 @@ body {
   right: 0;
   bottom: 0;
   left: 0;
-  overflow: auto;
   display: block;
   overflow-x: hidden;
+  overflow-y: scroll;
   background-color: rgb(240, 240, 240);
 }
 
 .sliders {
   z-index: 1;
+  overflow-x: hidden;
 }
 
 .slider-left {
   position: absolute;
+  display: block;
+  overflow-x: hidden;
   height: 100%;
   opacity: 1;
   top: 0;
   bottom: 0;
   -webkit-overflow-scrolling: touch;
+  width: 220px;
+  background-color: rgb(240, 240, 240);
 }
 
 #open-left {
@@ -38,6 +52,17 @@ body {
   margin-top: 2px;
   float: left;
 }
+
+.scrollable{
+  -webkit-transition-property: top, bottom;
+  transition-property: top, bottom;
+  -webkit-transition-duration: .2s, .2s;
+  transition-duration: .2s, .2s;
+  -webkit-transition-timing-function: linear, linear;
+  transition-timing-function: linear, linear;
+  -webkit-overflow-scrolling: touch;
+}
+
 
 /**
  * navbar
@@ -52,6 +77,9 @@ body {
   margin: 0;
   background-color: rgb(182, 202, 222);
   border-color: rgb(152, 172, 202);
+  border-left: none;
+  border-right: none;
+  border-radius: 0;
 }
 
 .navbar-toggle {
@@ -306,6 +334,18 @@ body {
   text-align: center;
 }
 
+.about {
+  padding: 0 3% 0 6%;
+  margin-top: -10px;
+}
+.about-text {
+  color: #555555;
+}
+.about-header {
+  color: #AAAAAA;
+  font-weight: 900;
+}
+
 h1 {
   font-size: 22px;
 }
@@ -314,6 +354,7 @@ h2 {
   color: black;
   font-size: 20px;
 }
+
 a:hover {
   text-decoration: underline;
   cursor: pointer;
