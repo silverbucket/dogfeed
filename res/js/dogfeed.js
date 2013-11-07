@@ -5,10 +5,16 @@ angular.module('dogfeed', ['ngFeeds', 'ngSockethubClient', 'ngRemoteStorage', 'n
  */
 config(['$routeProvider', '$locationProvider',
 function ($routeProvider, $locationProvider) {
-  $locationProvider.html5Mode(true);
+  //$locationProvider.html5Mode(true);
   $routeProvider.
     when('/', {
       templateUrl: "res/js/feeds/feeds.html.tpl"
+    }).
+    when('/settings/sockethub', {
+      templateUrl: "sockethub-settings.html"
+    }).
+    when('/feeds/add', {
+      templateUrl: 'add-feed.html'
     }).
     otherwise({
       redirectTo: "/"
@@ -21,7 +27,8 @@ function ($routeProvider, $locationProvider) {
 run(['$rootScope',
 function ($rootScope) {
   $rootScope.snapper = new Snap({
-    element: document.getElementById('content')
+    element: document.getElementById('content'),
+    disable: 'right'
   });
 }]).
 
@@ -87,17 +94,19 @@ function (settings, SH, RS, $rootScope, $timeout) {
     }
   }
 
-  RS.call('sockethub', 'getConfig', ['dogfeed'], 3000).then(function (c) {
-    console.log('GOT SH CONFIG: ', c);
-    if ((typeof c !== 'object') || (typeof c.host !== 'string')) {
-      //cfg = settings.conn;
-      c = default_cfg;
-    }
-    sockethubConnect(c);
-  }, function (err) {
-    console.log("RS.call error: ",err);
-    sockethubConnect(default_cfg);
-  });
+  if (!SH.isConnected()) {
+    RS.call('sockethub', 'getConfig', ['dogfeed'], 3000).then(function (c) {
+      console.log('GOT SH CONFIG: ', c);
+      if ((typeof c !== 'object') || (typeof c.host !== 'string')) {
+        //cfg = settings.conn;
+        c = default_cfg;
+      }
+      sockethubConnect(c);
+    }, function (err) {
+      console.log("RS.call error: ",err);
+      sockethubConnect(default_cfg);
+    });
+  }
 }]).
 
 
