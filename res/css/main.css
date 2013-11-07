@@ -1,19 +1,33 @@
+/**
+ * structure
+ */
 body {
-  background-color: rgb(240, 240, 240) !important;
 }
 
-.snap-content {
-  z-index: 1000;
-}
-
-.snap-drawers {
-  z-index: 100;
-}
-
-.snap-drawer-left {
-  display: none;
+.content {
+  z-index: 2;
+  position: absolute;
+  top: 0;
   right: 0;
-  left: auto;
+  bottom: 0;
+  left: 0;
+  overflow: auto;
+  display: block;
+  overflow-x: hidden;
+  background-color: rgb(240, 240, 240);
+}
+
+.sliders {
+  z-index: 1;
+}
+
+.slider-left {
+  position: absolute;
+  height: 100%;
+  opacity: 1;
+  top: 0;
+  bottom: 0;
+  -webkit-overflow-scrolling: touch;
 }
 
 #open-left {
@@ -21,10 +35,13 @@ body {
   display: inline-block;
   width: 44px;
   height: 44px;
-  margin-top: 5px;
+  margin-top: 2px;
   float: left;
 }
 
+/**
+ * navbar
+ */
 .container {
   padding-left: 5px;
   padding-right: 5px;
@@ -45,6 +62,10 @@ body {
   margin-left: 0;
 }
 
+
+/**
+ * forms
+ */
 .form-element {
   margin: 5px;
 }
@@ -62,6 +83,28 @@ body {
   margin: 0 20px 0 120px;
 }
 
+.add-feed {
+  display: block;
+  width: 80%;
+  max-width: 800px;
+  margin: 0 auto 0 auto;
+}
+
+.sockethub-settings {
+  display: block;
+  width: 80%;
+  max-width: 800px;
+  margin: 0 auto;
+}
+.sockethub-logo {
+  height: 75px;
+  width: 200px;
+  margin: 0 auto 0 auto;
+}
+
+/**
+ * messages
+ */
 .alert {
   margin: 0 5% 0 5%;
   padding: 8px 0 8px 10px;
@@ -74,19 +117,6 @@ body {
 .alert strong {
  margin-right: 5px;
 }
-
-/*.modal {
-  margin-top: 20px;
-}
-
-.modal-header {
-  text-align: center;
-  display: inline-block;
-}
-
-.modal-header img {
-  margin: 0 auto 0 40%;
-}*/
 
 .message-container {
   min-height: 20px;
@@ -119,13 +149,6 @@ body {
   display: inline-block;
   margin: 5px 0 0 18px;
   padding: 0;
-}
-.version {
-  float: right;
-  margin: 5px 50px 0 0;
-  font-size: 12px;
-  font-style: italic;
-  text-align: center;
 }
 
 .button-show-more {
@@ -310,4 +333,20 @@ h3 {
 }
 .read h2 {
   color: #aaaaaa;
+}
+
+
+/**
+ * footer
+ */
+ footer {
+  text-align: center;
+  margin: 0 auto 0 auto;
+ }
+.credits {
+  line-height: 90%;
+  font-size: 1.0;
+  text-align: center;
+  display: block;
+  margin: 0 auto 0 auto;
 }
