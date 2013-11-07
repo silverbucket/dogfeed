@@ -128,26 +128,26 @@ function (settings, SH, $rootScope, RS, $timeout) {
 /**
  * modal window listeners/emitters
  */
-run(['$rootScope',
-function ($rootScope) {
-  $rootScope.$on('showModalAddFeed', function(event, args) {
-    backdrop_setting = true;
-    if ((typeof args === 'object') && (typeof args.locked !== 'undefined')) {
-      if (args.locked) {
-        backdrop_setting = "static";
-      }
-    }
-    $("#modalAddFeed").modal({
-      show: true,
-      keyboard: true,
-      backdrop: backdrop_setting
-    });
-  });
+// run(['$rootScope',
+// function ($rootScope) {
+//   $rootScope.$on('showAddFeed', function(event, args) {
+//     backdrop_setting = true;
+//     if ((typeof args === 'object') && (typeof args.locked !== 'undefined')) {
+//       if (args.locked) {
+//         backdrop_setting = "static";
+//       }
+//     }
+//     $("#modalAddFeed").modal({
+//       show: true,
+//       keyboard: true,
+//       backdrop: backdrop_setting
+//     });
+//   });
 
-  $rootScope.$on('closeModalAddFeed', function(event, args) {
-    $("#modalAddFeed").modal('hide');
-  });
-}]).
+//   $rootScope.$on('closeModalAddFeed', function(event, args) {
+//     $("#modalAddFeed").modal('hide');
+//   });
+// }]).
 
 /**
  * filter: urlEncode
@@ -202,16 +202,8 @@ controller('titlebarCtrl',
 ['$scope', '$rootScope', 'SockethubSettings', 'RS',
 function ($scope, $rootScope, settings, RS) {
 
-  $scope.addFeed = function () {
-    $rootScope.$broadcast('showModalAddFeed', {locked: false});
-  };
-
-  $scope.sockethubSettings = function () {
-    $rootScope.$broadcast('showModalSockethubSettings', {locked: false});
-  };
-
   $scope.showFeedList = function () {
-    if( $rootScope.snapper.state().state=="left" ){
+    if ($rootScope.snapper.state().state === "left") {
       $rootScope.snapper.close();
     } else {
       $rootScope.snapper.open('left');
