@@ -8,7 +8,7 @@ function ($routeProvider, $locationProvider) {
   //$locationProvider.html5Mode(true);
   $routeProvider.
     when('/', {
-      templateUrl: "res/js/feeds/feeds.html.tpl"
+      templateUrl: "articles.html"
     }).
     when('/settings/sockethub', {
       templateUrl: "sockethub-settings.html"
@@ -28,7 +28,8 @@ run(['$rootScope',
 function ($rootScope) {
   $rootScope.snapper = new Snap({
     element: document.getElementById('content'),
-    disable: 'right'
+    disable: 'right',
+    maxPosition: 220
   });
 }]).
 
@@ -200,7 +201,6 @@ function() {
 controller('titlebarCtrl',
 ['$scope', '$rootScope', 'SockethubSettings', 'RS',
 function ($scope, $rootScope, settings, RS) {
-  var sliderOpen = false;
 
   $scope.addFeed = function () {
     $rootScope.$broadcast('showModalAddFeed', {locked: false});
@@ -211,12 +211,10 @@ function ($scope, $rootScope, settings, RS) {
   };
 
   $scope.showFeedList = function () {
-    if (!sliderOpen) {
-      sliderOpen = true;
-      $rootScope.snapper.open('left');
+    if( $rootScope.snapper.state().state=="left" ){
+      $rootScope.snapper.close();
     } else {
-      sliderOpen = false;
-      $rootScope.snapper.close('left');
+      $rootScope.snapper.open('left');
     }
   };
 
@@ -230,4 +228,12 @@ function ($scope, $rootScope, settings, RS) {
       });
     }
   });
+}]).
+
+directive('about', [
+function () {
+  return {
+    restrict: 'E',
+    templateUrl: 'about.html'
+  };
 }]);

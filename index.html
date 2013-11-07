@@ -22,18 +22,29 @@
 
     <!-- slider -->
     <div class="sliders">
-      <div class="slider-left">
+      <div class="slider-left scrollable">
 
-        <div class="settings" ng-click="showSettings()">
-          <span class="glyphicon glyphicon-cog"></span> Settings
+        <nav>
+          <div class="navbar navbar-default">
+            <div class="container">
+
+              <div class="navbar-header">
+                <h2>Feeds</h2>
+              </div>
+
+            </div>
+          </div>
+        </nav>
+
+        <div class="feed-controls">
+          <form name="quickSettings" class="form-horizontal" novalidate>
+              <label for="showRead" style="width: 125px; margin-right: 5px;"
+                     class="control-label">Show Read Articles</label>
+              <input type="checkbox" name="showRead" ng-model="model.settings.showRead" />
+          </form>
         </div>
 
-        <div class="add-feed" ng-click="addFeed()">
-          <span class="glyphicon glyphicon-plus" alt="Add Feed"></span> Add Feed
-        </div>
-
-        <ul id="feed-list" class="feed-list scrollbox"></ul>
-        <p>lorem ipsum and stuff</p>
+        <feed-list class="feeds" feeds="feeds" settings="model.settings">Feeds</feed-list>
 
         <footer>
           <div class="credits">
@@ -46,7 +57,7 @@
     </div>
 
     <!-- main content -->
-    <div id="content" class="content">
+    <div id="content" class="content scrollable">
       <div id="remotestorage-connect" ng-controller="remoteStorageCtrl"></div>
 
       <nav>
@@ -95,9 +106,59 @@
 <a href="#/?feed=http://guardian.comd/rss">[TEST 3]</a>
 <a href="#/?feed=https://unhosted.org/adventures/feed.rss">[TEST 4]</a>
 -->
+    <script type="text/ng-template" id="about.html">
+      <div class="about">
+        <h2 class="about-header">Welcome to Dogfeed!</h2>
+        <div class="about-text">
+          <p>It seems that this is the first time you use Dogfeed. Dogfeed is an
+          <a href="http://unhosted.org" target="_blank">Unhosted</a>
+          newsreader that allows you to access your news feeds from anywhere you
+          want on anything that has a decent web browser - on your phone, desktop,
+          tablet or Smart TV.</p>
+
+          <p>Dogfeed is
+          <a href="http://github.com/silverbucket/dogfeed" target="_blank">open source</a>,
+          so you can improve it, translate it, or use parts of it to build your own
+          applications. It leverages client-side javascript for all the
+          application logic, and
+          <a href="http://sockethub.org" target="_blank">Sockethub</a> for server
+          independant, server-side functionality, while storing all your data to
+          your private
+          <a href="http://remotestorage.io" target="_blank">remoteStorage</a>
+          instance.</p>
+
+          <p>If you have used news reader software before, just add your favorite
+          news feeds and Dogfeed away. If you are new to this, read the
+          _Quickstart Manual_, watch a _demonstration video_ or just try - its
+          pretty easy and really there is not a lot that can break.</p>
+
+          <p>(If this is not the first time you are using Dogfeed, _go to
+          Troubeshooting_)</p>
+
+          <p>Dogfeed is developed and maintained by
+          <a href="https://silverbucket.net" target="_blank">Nick
+          Jennings</a> and was made
+          possible with a grant from the
+          <a href="http://nlnet.net" target="_blank">NLnet foundation</a>.</p>
+        </div>
+      </div>
+    </script>
 
     <script type="text/ng-template" id="sockethub-settings.html">
       <div sockethub-settings></div>
+    </script>
+
+    <script type="text/ng-template" id="articles.html">
+      <section class="page">
+        <div class="container">
+          <div class="row" ng-controller="feedCtrl">
+            <div class="col-md-9 article-text" ng-show="(feeds.articles.length == 0) && (feeds.infoArray.length > 0)"><p>loading articles...</p><img src="res/img/loading.gif" /></div>
+
+            <articles class="col-md-8 articles" feeds="feeds" settings="model.settings">
+            </articles>
+          </div>
+        </div>
+      </section>
     </script>
 
     <!-- add feed modal window -->
