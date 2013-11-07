@@ -4,15 +4,21 @@
 body {
   overflow-x: hidden;
 }
+
 .rs-bubble-text {
   margin-top: -1px;
 }
 .rs-bubble {
-  width: 75px;
+  min-width: 182px !important;
+}
+.rs-hidden {
+  width: 75px !important;
+  min-width: 75px !important;
 }
 #remotestorage-widget {
   top: 5px !important;
 }
+
 .content {
   z-index: 2;
   position: absolute;
