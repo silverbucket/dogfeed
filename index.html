@@ -19,8 +19,10 @@
   </head>
 
   <body>
-    <div class="snap-drawers">
-      <div class="snap-drawer snap-drawer-left snapjs-left">
+
+    <!-- slider -->
+    <div class="sliders">
+      <div class="slider-left">
 
         <div class="settings" ng-click="showSettings()">
           <span class="glyphicon glyphicon-cog"></span> Settings
@@ -31,17 +33,20 @@
         </div>
 
         <ul id="feed-list" class="feed-list scrollbox"></ul>
+        <p>lorem ipsum and stuff</p>
 
-        <footer id="credits">
-          <p>
-            dogfeed version 0.2.0, <a target="_blank" href="https://github.com/silverbucket/dogfeed/issues/">feedback and bug reports</a>
-          </p>
+        <footer>
+          <div class="credits">
+            dogfeed version 0.2.0<br />
+            <a target="_blank" href="https://github.com/silverbucket/dogfeed/issues/">feedback and bug reports</a>
+          </div>
         </footer>
 
       </div>
     </div>
 
-    <div id="content" class="snap-content">
+    <!-- main content -->
+    <div id="content" class="content">
       <div id="remotestorage-connect" ng-controller="remoteStorageCtrl"></div>
 
       <nav>
@@ -49,28 +54,19 @@
           <div class="container">
 
             <div class="navbar-header">
-              <!-- <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
-              </button> -->
-              <div>
-
               <a href="#" id="open-left" ng-click="showFeedList()"></a>
-
-              <!-- <a class="navbar-brand" href="#"> -->
-                <img class="navbar-brand" src="res/img/dogfeed-logo.svg" width="115" alt="Dogfeed" />
-              <!-- </a> -->
-              </div>
+              <img class="navbar-brand" src="res/img/dogfeed-logo.svg" width="115" alt="Dogfeed" />
             </div>
 
             <div>
               <ul class="nav navbar-nav">
                 <li>
-                  <a href="" ng-click="addFeed()">
+                  <a href="/#/feeds/add">
                     <span class="glyphicon glyphicon-plus" alt="Add Feed"></span>
                   </a>
                 </li>
                 <li>
-                  <a href="" ng-click="sockethubSettings()">
+                  <a href="/#/settings/sockethub">
                     <span class="glyphicon glyphicon-cog"></span>
                   </a>
                 </li>
@@ -87,8 +83,9 @@
 
       <ng-view></ng-view>
 
-      <div sockethub-settings></div>
     </div>
+
+
 
 
 <!--
@@ -99,27 +96,23 @@
 <a href="#/?feed=https://unhosted.org/adventures/feed.rss">[TEST 4]</a>
 -->
 
-    <!-- add feed modal window -->
-    <div id="modalAddFeed" class="modal fade" ng-controller="addFeedCtrl">
-      <div class="modal-dialog">
-        <div class="modal-content">
+    <script type="text/ng-template" id="sockethub-settings.html">
+      <div sockethub-settings></div>
+    </script>
 
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h4 class="modal-title">Add Feed</h4>
-          </div>
-          <div class="modal-body">
-            <form name="addFeed" role="form" novalidate>
+    <!-- add feed modal window -->
+    <script type="text/ng-template" id="add-feed.html">
+      <div class="add-feed" ng-controller="addFeedCtrl">
+          <h4>Add Feed</h4>
+          <form class="inline-form" name="addFeed" role="form" novalidate>
+            <div class="form-group">
               <input type="url" class="required form-control" name="url" placeholder="Enter URL..." ng-model="url" autofocus="autofocus" required />
-          </div>
-          <div class="modal-footer">
-              <button class="btn btn-primary" ng-click="add(url)" ng-disabled="addFeed.$invalid || adding">
-              <span class="icon-plus" alt="Add Feed"></span> Add Feed</button>
-            </form>
-          </div>
-        </div>
+            </div>
+            <button class="btn btn-primary" ng-click="add(url)" ng-disabled="addFeed.$invalid || adding">
+            <span class="icon-plus" alt="Add Feed"></span> Add Feed</button>
+          </form>
       </div>
-    </div>
+    </script>
 
     <!-- feed settings modal window -->
     <div id="modalFeedSettings" ng-controller="feedSettingsCtrl" class="modal fade">
