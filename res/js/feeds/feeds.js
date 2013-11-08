@@ -244,7 +244,9 @@ function ($q, SH, CH, RS, $rootScope) {
       }]
     };
     console.log("FETCH: ", msg);
+    $rootScope.$broadcast('message', {type: 'info', message: 'attempting to fetch feed '+url});
     SH.submit.call(msg).then(function (o) {
+      $rootScope.$broadcast('message', {type: 'success', message: 'feed added '+url});
       data.info[url]['loaded'] = true;
     }, function (e) {
       console.log('failed fetch');
