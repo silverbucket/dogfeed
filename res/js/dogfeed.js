@@ -26,10 +26,29 @@ function ($routeProvider, $locationProvider) {
  */
 run(['$rootScope',
 function ($rootScope) {
+
   $rootScope.snapper = new Snap({
     element: document.getElementById('content'),
     disable: 'right',
     maxPosition: 220
+  });
+
+  $(window).on('resize', function () {
+      $rootScope.isMobile = matchMedia('(max-width:1024px)').matches;
+      $rootScope.isDesktop = !$rootScope.isMobile;
+  });
+
+  $(window).on('resize', function () {
+    if ($rootScope.isMobile) {
+      console.log("ENABLE SNAPPER ");
+      $rootScope.snapperDisabled = false;
+      $rootScope.snapper.enable();
+    } else {
+      console.log("DISABLE SNAPPER ");
+      $rootScope.snapperDisabled = true;
+      $rootScope.snapper.close();
+      $rootScope.snapper.disable();
+    }
   });
 }]).
 
@@ -60,10 +79,10 @@ run(['SockethubSettings', 'SH', 'RS', '$rootScope',  '$timeout',
 function (settings, SH, RS, $rootScope, $timeout) {
 
   var default_cfg = {
-    host: 'silverbucket.net',
-    port: 443,
+    host: 'localhost',
+    port: 10550,
     path: '/sockethub',
-    tls: true,
+    tls: false,
     secret: '1234567890'
   };
 
@@ -77,6 +96,7 @@ function (settings, SH, RS, $rootScope, $timeout) {
             timeout: false
       });
       SH.connect({register: true}).then(function () {
+        console.log('promise resolved, sockethub conntected');
         $rootScope.$broadcast('message', {
               message: 'connected to sockethub',
               type: 'success',
@@ -125,29 +145,6 @@ function (settings, SH, $rootScope, RS, $timeout) {
   }
 }]).
 
-/**
- * modal window listeners/emitters
- */
-// run(['$rootScope',
-// function ($rootScope) {
-//   $rootScope.$on('showAddFeed', function(event, args) {
-//     backdrop_setting = true;
-//     if ((typeof args === 'object') && (typeof args.locked !== 'undefined')) {
-//       if (args.locked) {
-//         backdrop_setting = "static";
-//       }
-//     }
-//     $("#modalAddFeed").modal({
-//       show: true,
-//       keyboard: true,
-//       backdrop: backdrop_setting
-//     });
-//   });
-
-//   $rootScope.$on('closeModalAddFeed', function(event, args) {
-//     $("#modalAddFeed").modal('hide');
-//   });
-// }]).
 
 /**
  * filter: urlEncode

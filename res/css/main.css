@@ -25,19 +25,15 @@ body {
   top: 0;
   right: 0;
   bottom: 0;
-  left: 0;
+  left: 220px;
   display: block;
   overflow-x: hidden;
   overflow-y: scroll;
   background-color: rgb(240, 240, 240);
 }
 
-.sliders {
-  z-index: 1;
-  overflow-x: hidden;
-}
-
 .slider-left {
+  z-index: 1;
   position: absolute;
   display: block;
   overflow-x: hidden;
@@ -52,7 +48,7 @@ body {
 
 #open-left {
   background: url("/res/img/open.png") center center no-repeat;
-  display: inline-block;
+  display: none;
   width: 44px;
   height: 44px;
   margin-top: 2px;
@@ -68,6 +64,8 @@ body {
   transition-timing-function: linear, linear;
   -webkit-overflow-scrolling: touch;
 }
+
+
 
 
 /**
@@ -396,4 +394,60 @@ h3 {
   text-align: center;
   display: block;
   margin: 0 auto 0 auto;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/** MOBILE **/
+@media (max-width: 1024px) {
+
+  #open-left {
+    display: inline-block;
+  }
+
+  .content {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 2;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+            transform: translate3d(0, 0, 0);
+    -webkit-transform: translate3d(0, 0, 0);
+       -moz-transform: translate3d(0, 0, 0);
+        -ms-transform: translate3d(0, 0, 0);
+         -o-transform: translate3d(0, 0, 0);
+  }
+
+  .slider-left {
+    opacity: 1;
+    overflow-x: hidden;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 220px;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  footer {
+    display: none;
+  }
+
+/* end of MOBILE */
 }

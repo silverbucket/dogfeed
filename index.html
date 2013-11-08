@@ -20,40 +20,36 @@
 
   <body>
 
-    <!-- slider -->
-    <div class="sliders">
-      <div class="slider-left scrollable">
+    <!-- feeds list slider -->
+    <div class="slider-left scrollable">
+      <nav>
+        <div class="navbar navbar-default">
+          <div class="container">
 
-        <nav>
-          <div class="navbar navbar-default">
-            <div class="container">
-
-              <div class="navbar-header">
-                <h2>Feeds</h2>
-              </div>
-
+            <div class="navbar-header">
+              <h2>Feeds</h2>
             </div>
-          </div>
-        </nav>
 
-        <div class="feed-controls">
-          <form name="quickSettings" class="form-horizontal" novalidate>
-              <label for="showRead" style="width: 125px; margin-right: 5px;"
-                     class="control-label">Show Read Articles</label>
-              <input type="checkbox" name="showRead" ng-model="model.settings.showRead" />
-          </form>
+          </div>
         </div>
+      </nav>
 
-        <feed-list class="feeds" feeds="feeds" settings="model.settings">Feeds</feed-list>
-
-        <footer>
-          <div class="credits">
-            dogfeed version 0.2.0<br />
-            <a target="_blank" href="https://github.com/silverbucket/dogfeed/issues/">feedback and bug reports</a>
-          </div>
-        </footer>
-
+      <div class="feed-controls">
+        <form name="quickSettings" class="form-horizontal" novalidate>
+            <label for="showRead" style="width: 125px; margin-right: 5px;"
+                   class="control-label">Show Read Articles</label>
+            <input type="checkbox" name="showRead" ng-model="model.settings.showRead" />
+        </form>
       </div>
+
+      <feed-list class="feeds" feeds="feeds" settings="model.settings">Feeds</feed-list>
+
+      <footer>
+        <div class="credits">
+          dogfeed version 0.2.0<br />
+          <a target="_blank" href="https://github.com/silverbucket/dogfeed/issues/">feedback and bug reports</a>
+        </div>
+      </footer>
     </div>
 
     <!-- main content -->
@@ -161,7 +157,7 @@
       </section>
     </script>
 
-    <!-- add feed modal window -->
+    <!-- add feed form -->
     <script type="text/ng-template" id="add-feed.html">
       <div class="add-feed" ng-controller="addFeedCtrl">
           <h4>Add Feed</h4>
@@ -222,6 +218,9 @@
     <!-- endbuild -->
     <!-- build:js res/js/snap.min.js -->
     <script src="vendor/snap.min.js?v=1.9.2"></script>
+    <!-- endbuild -->
+    <!-- build:js res/js/matchMedia.js -->
+    <script src="vendor/matchMedia.js?v=0.0.1"></script>
     <!-- endbuild -->
     <!-- build:js res/js/remotestorage.min.js -->
     <script src="vendor/remotestorage/remotestorage.min.js?v=0.8.2"></script>
