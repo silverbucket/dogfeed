@@ -2,11 +2,11 @@
   <about></about>
 </div>
 
-<div class="article-text" ng-show="feeds.articles.length > 0 && currentIsEmpty(settings)">
+<div class="articles" ng-show="feeds.articles.length > 0 && currentIsEmpty(settings)">
   <p>no articles</p>
 </div>
 
-<div class="article-text" ng-show="feeds.articles.length > 0 && !currentIsEmpty(settings)">
+<div class="articles" ng-show="feeds.articles.length > 0 && !currentIsEmpty(settings)">
   <div ng-repeat="a in (filteredItems = (feeds.articles | orderBy: 'object.date':true))"
        ng-controller="feedCtrl"
        ng-class="{read: a.object.read, article: true}"
@@ -17,8 +17,10 @@
         <a target="_blank" href="{{ a.object.link }}">
           <h2>{{ a.object.title }}</h2></a>
       </div>
-      <p>feed: <i>{{ feeds.info[a.actor.address].name }}</i></p>
-      <p rel="{{ a.object.date }}">date: <i>{{ a.object.date | fromNow}}</i></p>
+      <div class="article-info">
+        <p>feed: <i>{{ feeds.info[a.actor.address].name }}</i></p>
+        <p rel="{{ a.object.date }}">date: <i>{{ a.object.date | fromNow}}</i></p>
+      </div>
       <div class="article-body" data-ng-bind-html-unsafe="a.object.brief_html"></div>
     </div>
   </div>
