@@ -45,7 +45,12 @@ body {
   width: 220px;
   background-color: rgb(240, 240, 240);
 }
-
+.slider-left nav {
+  display: inline-block;
+}
+.slider-content {
+  margin-top: 60px;
+}
 #open-left {
   background: url("/res/img/open.png") center center no-repeat;
   display: none;
@@ -75,7 +80,9 @@ body {
   padding-left: 5px;
   padding-right: 5px;
 }
-
+nav {
+  position: fixed;
+}
 .navbar {
   min-width: 240px;
   margin: 0;
@@ -84,14 +91,36 @@ body {
   border-left: none;
   border-right: none;
   border-radius: 0;
+  z-index: 5;
 }
-
 .navbar-toggle {
   margin-right: 45px;
 }
-
+.nav-tabs {
+  padding: 0;
+  display: inline-block;
+  border: none;
+}
+.nav-tabs li {
+  display: inline-block;
+  margin: 5px 0 0 18px;
+  padding: 0;
+}
 .navbar-header {
   margin-left: 0;
+}
+.navbar-header > h2 {
+  padding-top: 15px;
+  text-transform: uppercase;
+  font-size: 16px;
+  color: #333333;
+}
+.navbar-nav > li > a {
+  padding-top: 15px;
+  padding-bottom: 0;
+}
+.navbar-brand {
+  padding: 15px 15px 0 15px;
 }
 
 
@@ -153,7 +182,7 @@ body {
 .message-container {
   min-height: 20px;
   height: 20px;
-  margin: 0 0 5px 0;
+  margin: 50px 0 5px 0;
   display: block;
   padding: 0 !important;
 }
@@ -177,30 +206,6 @@ body {
   pointer-events: none !important;
 }
 
-.nav-tabs {
-  padding: 0;
-  display: inline-block;
-  border: none;
-}
-.nav-tabs li {
-  display: inline-block;
-  margin: 5px 0 0 18px;
-  padding: 0;
-}
-
-.navbar-header > h2 {
-  padding-top: 15px;
-  text-transform: uppercase;
-  font-size: 16px;
-  color: #333333;
-}
-.navbar-nav > li > a {
-  padding-top: 15px;
-  padding-bottom: 0;
-}
-.navbar-brand {
-  padding: 15px 15px 0 15px;
-}
 .button-show-more {
   width: 100%;
 }
@@ -353,7 +358,7 @@ body {
   background-color: #efefef;
   color: #888888;
   font-weight: 900;
-  margin-top: 22px;
+  margin-top: -10px;
   /*-moz-border-radius: 5px;
   border-radius: 5px;*/
 }
@@ -397,12 +402,13 @@ h3 {
   font-style: normal;
 }
 .read {
-  color: #aaaaaa;
   border-color: white;
   box-shadow: none;
+  opacity: .4;
 }
-.read h2 {
-  color: #aaaaaa;
+.read a {
+  pointer-events: none;
+  cursor: default;
 }
 
 
@@ -446,6 +452,14 @@ h3 {
   .message-container {
     min-height: 40px;
     height: 40px;
+    margin-top: 0px !important;
+  }
+
+  nav {
+    position: static !important;
+  }
+  .slider-left nav {
+    display: none !important;
   }
 
   .ng-view {
