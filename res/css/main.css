@@ -189,6 +189,7 @@ nav {
 
 .ng-view {
   margin-top: 20px;
+  margin-bottom: 100px;
 }
 
 .alert, .danger, .info, .success {
