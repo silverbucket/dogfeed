@@ -154,7 +154,12 @@ body {
   min-height: 20px;
   height: 20px;
   margin: 0 0 5px 0;
+  display: block;
   padding: 0 !important;
+}
+
+.ng-view {
+  margin-top: 20px;
 }
 
 .alert, .danger, .info, .success {
@@ -183,6 +188,19 @@ body {
   padding: 0;
 }
 
+.navbar-header > h2 {
+  padding-top: 15px;
+  text-transform: uppercase;
+  font-size: 16px;
+  color: #333333;
+}
+.navbar-nav > li > a {
+  padding-top: 15px;
+  padding-bottom: 0;
+}
+.navbar-brand {
+  padding: 15px 15px 0 15px;
+}
 .button-show-more {
   width: 100%;
 }
@@ -295,18 +313,32 @@ body {
   margin: 0 0 0 1%;
 }
 .article {
-  padding: 0 0 3% 2%;
-  margin: 0 0 1% 0;
+  max-width: 100%;
+  padding: 10px 0 10px 0;
+  margin: 0 auto 60px auto;
   border-bottom: 2px solid #efefef;
   /*box-shadow: -1px -1px 10px #AAAAAA;*/
-  background-color: #FFFFFF;
+  /*background-color: #FFFFFF;*/
+  background-color: rgb(248, 248, 248);
+}
+.article-content {
+  max-width: 92%;
+  margin: 10px auto 3% auto;
 }
 .article-title {
   border-bottom: 1px solid black;
-  border-top: 1px solid black;
+  /*border-top: 1px solid black;*/
   width: 100%;
-  padding-top: 15px;
-  margin-top: 15px;
+  padding-top: 0;
+  margin-top: 0;
+}
+.article-info {
+  font-size: 13px;
+  margin-bottom: 15px;
+  font-family: "times";
+}
+.article-info p {
+  margin: 0;
 }
 .article img {
   position: relative;
@@ -330,17 +362,9 @@ body {
   color: #444444;
   cursor: pointer;
 }
-.article-text {
-  font-weight: 900;
-  font-size: 26px;
-  color: #AAAAAA;
-  margin-top: 10%;
-  text-align: center;
-}
 
 .about {
   padding: 0 3% 0 6%;
-  margin-top: -10px;
 }
 .about-text {
   color: #555555;
@@ -357,6 +381,7 @@ h2 {
   display: inline-block;
   color: black;
   font-size: 20px;
+  margin-top: 0;
 }
 
 a:hover {
@@ -411,11 +436,20 @@ h3 {
 
 
 
-/** MOBILE **/
+/** not MOBILE **/
 @media (max-width: 1024px) {
 
   #open-left {
     display: inline-block;
+  }
+
+  .message-container {
+    min-height: 40px;
+    height: 40px;
+  }
+
+  .ng-view {
+    margin-top: -10px !important;
   }
 
   .content {
@@ -449,5 +483,5 @@ h3 {
     display: none;
   }
 
-/* end of MOBILE */
+/* end of not MOBILE */
 }
