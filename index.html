@@ -31,22 +31,24 @@
         </div>
       </nav>
 
-      <div class="feed-controls">
-        <form name="quickSettings" class="form-horizontal" novalidate>
-            <label for="showRead" style="width: 125px; margin-right: 5px;"
-                   class="control-label">Show Read Articles</label>
-            <input type="checkbox" name="showRead" ng-model="model.settings.showRead" />
-        </form>
-      </div>
-
-      <feed-list class="feeds" feeds="feeds" settings="model.settings">Feeds</feed-list>
-
-      <footer>
-        <div class="credits">
-          dogfeed version 0.2.0<br />
-          <a target="_blank" href="https://github.com/silverbucket/dogfeed/issues/">feedback and bug reports</a>
+      <div class="slider-content">
+        <div class="feed-controls">
+          <form name="quickSettings" class="form-horizontal" novalidate>
+              <label for="showRead" style="width: 125px; margin-right: 5px;"
+                     class="control-label">Show Read Articles</label>
+              <input type="checkbox" name="showRead" ng-model="model.settings.showRead" />
+          </form>
         </div>
-      </footer>
+
+        <feed-list class="feeds" feeds="feeds" settings="model.settings">Feeds</feed-list>
+
+        <footer>
+          <div class="credits">
+            dogfeed version 0.2.0<br />
+            <a target="_blank" href="https://github.com/silverbucket/dogfeed/issues/">feedback and bug reports</a>
+          </div>
+        </footer>
+      </div>
     </div>
 
     <!-- main content -->
