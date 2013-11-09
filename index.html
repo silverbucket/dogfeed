@@ -25,11 +25,8 @@
       <nav>
         <div class="navbar navbar-default">
           <div class="container">
-
             <div class="navbar-header">
-              <h2>Feeds</h2>
             </div>
-
           </div>
         </div>
       </nav>
@@ -59,12 +56,10 @@
       <nav>
         <div class="navbar navbar-default" ng-controller="titlebarCtrl">
           <div class="container">
-
             <div class="navbar-header">
               <a href="#" id="open-left" ng-click="showFeedList()"></a>
               <img class="navbar-brand" src="res/img/dogfeed-logo.svg" width="115" alt="Dogfeed" />
             </div>
-
             <div>
               <ul class="nav navbar-nav">
                 <li>
@@ -79,7 +74,6 @@
                 </li>
               </ul>
             </div>
-
           </div>
         </div>
       </nav>
@@ -88,7 +82,9 @@
         <div message></div>
       </div>
 
-      <ng-view></ng-view>
+      <div class="ng-view">
+        <ng-view></ng-view>
+      </div>
 
     </div>
 
@@ -148,7 +144,7 @@
       <section class="page">
         <div class="container">
           <div class="row" ng-controller="feedCtrl">
-            <div class="col-md-9 article-text" ng-show="(feeds.articles.length == 0) && (feeds.infoArray.length > 0)"><p>loading articles...</p><img src="res/img/loading.gif" /></div>
+            <div class="col-md-9" ng-show="(feeds.articles.length == 0) && (feeds.infoArray.length > 0)"><p>loading articles...</p><img src="res/img/loading.gif" /></div>
 
             <articles class="col-md-8 articles" feeds="feeds" settings="model.settings">
             </articles>
