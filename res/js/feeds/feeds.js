@@ -382,13 +382,11 @@ controller('feedCtrl',
 ['$scope', 'Feeds', '$rootScope', '$timeout', '$routeParams',
 function ($scope, Feeds, $rootScope, $timeout, $routeParams) {
   console.log('--- feedCtrl');
-  $scope.model = {
-    settings: {
-      showRead: true,  // show read articles or disappear them
-      articlesPerPage: 10,  // number of articles to show per page
-      displayCap: 5,  // current limit of articles to show (increments by articlesPerPage)
-      displayed: {}  // index of displayed articles
-    }
+  $scope.settings = {
+    showRead: true,  // show read articles or disappear them
+    articlesPerPage: 10,  // number of articles to show per page
+    displayCap: 5,  // current limit of articles to show (increments by articlesPerPage)
+    displayed: {}  // index of displayed articles
   };
 
   $scope.saving = false;
@@ -508,7 +506,8 @@ function (isSelected) {
     restrict: 'E',
     scope: {
       'feeds': '=',
-      'settings': '='
+      'settings': '=',
+      'test': '='
     },
     templateUrl: 'res/js/feeds/feed-list.html.tpl',
     controller: FeedListCtrl,

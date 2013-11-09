@@ -1,3 +1,5 @@
+<div><input type="text" ng-model="settings.showRead"></div>
+
 <div ng-show="feeds.articles.length == 0 && !currentIsEmpty(settings)">
   <about></about>
 </div>
