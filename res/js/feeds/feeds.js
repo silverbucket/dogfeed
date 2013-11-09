@@ -244,17 +244,21 @@ function ($q, SH, CH, RS, $rootScope) {
       }]
     };
     console.log("FETCH: ", msg);
+    var defer = $q.defer();
     $rootScope.$broadcast('message', {type: 'info', message: 'attempting to fetch feed '+url});
     SH.submit.call(msg).then(function (o) {
       $rootScope.$broadcast('message', {type: 'success', message: 'feed added '+url});
       data.info[url]['loaded'] = true;
+      defer.resolve();
     }, function (e) {
       console.log('failed fetch');
       $rootScope.$broadcast('message', {
         message: 'failed fetching feed: '+e,
         type: 'error'
       });
+      defer.reject(e);
     });
+    return defer.promise;
   };
 
 
@@ -326,14 +330,18 @@ function ($q, SH, CH, RS, $rootScope) {
  * controller: addFeedCtrl
  */
 controller('addFeedCtrl',
-['$scope', 'Feeds',
-function ($scope, Feeds) {
+['$scope', 'Feeds', '$location',
+function ($scope, Feeds, $location) {
   $scope.adding = false;
 
   $scope.add = function (url) {
     $scope.adding = true;
-    Feeds.func.fetchFeed(url);
-    $scope.adding = false;
+    Feeds.func.fetchFeed(url).then(function () {
+      $scope.adding = false;
+      $location.path('/feed/'+url);
+    }, function (e) {
+      $scope.adding = false;
+    });
   };
 
 }]).
@@ -575,16 +583,13 @@ function (isSelected, Feeds) {
 
       if (isRead) {
         if (settings.showRead) {
-        console.log('D');
           settings.displayed[articleUrl] = true;
           return true;
         } else {
-        console.log('E');
           return false;
         }
       } else {
         settings.displayed[articleUrl] = true;
-        console.log('F ', settings.displayed);
         return true;
       }
     };
