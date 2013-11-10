@@ -566,32 +566,26 @@ function (isSelected, Feeds) {
 
     $scope.isShowable = function (feedUrl, isRead, articleUrl) {
       if (!$scope.isSelected(feedUrl, true)) {
-console.log('NOT SHOWABLE 1: '+feedUrl);
         return false;
       }
 
       if (isRead) {
         if (Feeds.data.settings.showRead) {
           Feeds.data.settings.displayed[articleUrl] = true;
-console.log('IS SHOWABLE 2: '+feedUrl);
           return true;
         } else {
-console.log('NOT SHOWABLE 3: '+feedUrl);
           return false;
         }
       } else {
         Feeds.data.settings.displayed[articleUrl] = true;
-console.log('IS SHOWABLE 3: '+feedUrl);
         return true;
       }
 
       if (Feeds.data.settings.displayed[articleUrl]) {
-console.log('IS SHOWABLE 1: '+feedUrl);
         return true;
       }
 
       if (Object.keys(Feeds.data.settings.displayed).length >= Feeds.data.settings.displayCap) {
-console.log('NOT SHOWABLE 2: '+feedUrl);
         return false;
       }
     };
