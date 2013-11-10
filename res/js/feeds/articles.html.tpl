@@ -10,7 +10,7 @@
   <div ng-repeat="a in (filteredItems = (feeds.articles | orderBy: 'object.date':true))"
        ng-controller="feedCtrl"
        ng-class="{read: a.object.read, article: true}"
-       ng-show="isShowable(a.actor.address, a.object.read, feeds.settings, a.object.link)">
+       ng-show="isShowable(a.object.link, a.object.read, a.object.link)">
     <div class="mark-unread" ng-show="a.object.read" ng-click="markRead(a.object.link, false)">Mark Unread</div>
     <div class="article-content" ng-click="markRead(a.object.link, true)">
       <div class="article-title">
