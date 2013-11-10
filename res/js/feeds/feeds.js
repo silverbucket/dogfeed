@@ -465,8 +465,8 @@ value('isSelected', function ($scope, url, inclusive) {
 /**
  * directive: feedList
  */
-directive('feedList', ['isSelected',
-function (isSelected) {
+directive('feedList', ['isSelected', 'Feeds',
+function (isSelected, Feeds) {
   function FeedListCtrl ($scope) {
 
     $scope.isSelected = function (url, inclusive) {
@@ -477,20 +477,20 @@ function (isSelected) {
       console.log('SWITCH FEED: '+url, $scope.feeds);
       if (error) { return false; }
       if (!url) {
-        $scope.feeds.current.name = '';
-        $scope.feeds.current.indexes.length = 0;
+        Feeds.data.current.name = '';
+        Feeds.data.current.indexes.length = 0;
       } else {
-        $scope.feeds.current.name = $scope.feeds.info[url].name;
-        $scope.feeds.current.indexes = [url];
+        Feeds.data.current.name = Feeds.data.info[url].name;
+        Feeds.data.current.indexes = [url];
       }
     };
 
     $scope.showFeedSettings = function (url) {
       console.log('showFeedSettings: '+url);
       if (!url) { return; }
-      $scope.feeds.edit.url = url;
-      $scope.feeds.edit.name = $scope.feeds.info[url].name;
-      $scope.feeds.edit.origName = $scope.feeds.info[url].name;
+      Feeds.data.edit.url = url;
+      Feeds.data.edit.name = Feeds.data.info[url].name;
+      Feeds.data.edit.origName = Feeds.data.info[url].name;
       $("#modalFeedSettings").modal({
         show: true,
         keyboard: true,
@@ -524,8 +524,7 @@ function (isSelected, Feeds) {
     };
 
     // returns true if current selection is empty (has no unread articles)
-    $scope.currentIsEmpty = function (settings) {
-      //console.log('CALLED: ', settings);
+    $scope.currentIsEmpty = function () {
       if (!$scope.feeds.current.name) {
         return false;
       }
@@ -535,7 +534,7 @@ function (isSelected, Feeds) {
             ($scope.feeds.info[$scope.feeds.current.indexes[i]].unread > 0)) {
           return false;
         }
-        if (settings.showRead) {
+        if (Feeds.data.settings.showRead) {
           return false;
         }
       }
@@ -564,24 +563,24 @@ function (isSelected, Feeds) {
       }
     };
 
-    $scope.isShowable = function (feedUrl, isRead, articleUrl) {
-      if (!$scope.isSelected(feedUrl, true)) {
+    $scope.isShowable = function (article) {
+      if (!$scope.isSelected(article.object.link, true)) {
         return false;
       }
 
-      if (isRead) {
+      if (article.object.read) {
         if (Feeds.data.settings.showRead) {
-          Feeds.data.settings.displayed[articleUrl] = true;
+          Feeds.data.settings.displayed[article.object.link] = true;
           return true;
         } else {
           return false;
         }
       } else {
-        Feeds.data.settings.displayed[articleUrl] = true;
+        Feeds.data.settings.displayed[article.object.link] = true;
         return true;
       }
 
-      if (Feeds.data.settings.displayed[articleUrl]) {
+      if (Feeds.data.settings.displayed[article.object.link]) {
         return true;
       }
 

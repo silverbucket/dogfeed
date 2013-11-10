@@ -1,16 +1,16 @@
-<div ng-show="feeds.articles.length == 0 && !currentIsEmpty(settings)">
+<div ng-show="feeds.articles.length == 0 && !currentIsEmpty()">
   <about></about>
 </div>
 
-<div class="articles" ng-show="feeds.articles.length > 0 && currentIsEmpty(settings)">
+<div class="articles" ng-show="feeds.articles.length > 0 && currentIsEmpty()">
   <p>no articles</p>
 </div>
 
-<div class="articles" ng-show="feeds.articles.length > 0 && !currentIsEmpty(settings)">
+<div class="articles" ng-show="feeds.articles.length > 0 && !currentIsEmpty()">
   <div ng-repeat="a in (filteredItems = (feeds.articles | orderBy: 'object.date':true))"
        ng-controller="feedCtrl"
        ng-class="{read: a.object.read, article: true}"
-       ng-show="isShowable(a.object.link, a.object.read, a.object.link)">
+       ng-show="isShowable(a)">
     <div class="mark-unread" ng-show="a.object.read" ng-click="markRead(a.object.link, false)">Mark Unread</div>
     <div class="article-content" ng-click="markRead(a.object.link, true)">
       <div class="article-title">
