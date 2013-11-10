@@ -199,7 +199,7 @@
                 required: false
               },
               date: {
-                type: 'number',
+                type: 'string',
                 description: 'date of article',
                 required: false
               },
