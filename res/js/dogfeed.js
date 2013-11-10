@@ -1,4 +1,10 @@
-angular.module('dogfeed', ['ngFeeds', 'ngSockethubClient', 'ngRemoteStorage', 'ngMessages']).
+angular.module('dogfeed', [
+    'ngFeeds',
+    'ngSockethubClient',
+    'ngSockethubRemoteStorage',
+    'ngRemoteStorage',
+    'ngMessages'
+]).
 
 /**
  * routes
@@ -75,61 +81,17 @@ function (cfg) {
 /**
  * get sockethub settings and try to connect
  */
-run(['SockethubSettings', 'SH', 'RS', '$rootScope',  '$timeout',
-function (settings, SH, RS, $rootScope, $timeout) {
-
-  var default_cfg = {
-    host: 'localhost',
-    port: 10550,
+run(['SockethubBootstrap',
+function (SockethubBootstrap) {
+  SockethubBootstrap.run({
+    // default connection settings, if none found in remoteStorage
+    host: 'silverbucket.net',
+    port: '443',
     path: '/sockethub',
-    tls: false,
+    tls: true,
     secret: '1234567890'
-  };
-
-  function sockethubConnect(cfg) {
-    console.log('USING SH CONFIG: ', cfg);
-    // connect to sockethub and register
-    if (settings.save('conn', cfg)) {
-      $rootScope.$broadcast('message', {
-            message: 'attempting to connect to sockethub',
-            type: 'info',
-            timeout: false
-      });
-      SH.connect({register: true}).then(function () {
-        console.log('promise resolved, sockethub conntected');
-        $rootScope.$broadcast('message', {
-              message: 'connected to sockethub',
-              type: 'success',
-              timeout: true
-        });
-      }, function (err) {
-        console.log('error connecting to sockethub: ', err);
-        $rootScope.$broadcast('SockethubConnectFailed', {message: err});
-      });
-    } else {
-      $rootScope.$broadcast('message', {
-            message: 'failed saving sockethub credentials',
-            type: 'success',
-            timeout: true
-      });
-    }
-  }
-
-  if (!SH.isConnected()) {
-    RS.call('sockethub', 'getConfig', ['dogfeed'], 3000).then(function (c) {
-      console.log('GOT SH CONFIG: ', c);
-      if ((typeof c !== 'object') || (typeof c.host !== 'string')) {
-        //cfg = settings.conn;
-        c = default_cfg;
-      }
-      sockethubConnect(c);
-    }, function (err) {
-      console.log("RS.call error: ",err);
-      sockethubConnect(default_cfg);
-    });
-  }
+  });
 }]).
-
 
 /**
  * remoteStorage
@@ -145,6 +107,15 @@ function (settings, SH, $rootScope, RS, $timeout) {
   }
 }]).
 
+/**
+ * listeners/emitters
+ */
+run(['$rootScope', '$location',
+function ($rootScope, $location) {
+  $rootScope.$on('sockethubSettingsSaved', function() {
+    $location.path('/');
+  });
+}]).
 
 /**
  * filter: urlEncode
