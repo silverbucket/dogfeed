@@ -1,5 +1,4 @@
 <h4 ng-transclude></h4>
-<div><input type="text" ng-model="settings.showRead"></div>
 <ul class="nav nav-list nav-pills nav-stacked">
   <li ng-click="switchFeed()" ng-class="{active: isSelected(), 'all-feeds': true}">
       <span class="glyphicon glyphicon-globe"></span> <span>All Items</span>
