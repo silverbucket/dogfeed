@@ -51,7 +51,22 @@ function ($q, SH, CH, RS, $rootScope) {
     info: {},
     infoArray: [],
     groups: {},
-    groupArray: []
+    groupArray: [],
+    settings: {
+      showRead: true,  // show read articles or disappear them
+      articlesPerPage: 10,  // number of articles to show per page
+      displayCap: 5,  // current limit of articles to show (increments by articlesPerPage)
+      displayed: {}  // index of displayed articles
+    },
+    current: {
+      name: '',
+      indexes: []
+    },
+    edit: {
+      name: '',
+      url: '',
+      origName: ''
+    }
   };
   var func = {};
 
@@ -382,25 +397,7 @@ controller('feedCtrl',
 ['$scope', 'Feeds', '$rootScope', '$timeout', '$routeParams',
 function ($scope, Feeds, $rootScope, $timeout, $routeParams) {
   console.log('--- feedCtrl');
-  $scope.settings = {
-    showRead: true,  // show read articles or disappear them
-    articlesPerPage: 10,  // number of articles to show per page
-    displayCap: 5,  // current limit of articles to show (increments by articlesPerPage)
-    displayed: {}  // index of displayed articles
-  };
-
   $scope.saving = false;
-
-  $rootScope.feeds.current = {
-    name: '',
-    indexes: []
-  };
-
-  $rootScope.feeds.edit = {
-    name: '',
-    url: '',
-    origName: ''
-  };
 
   if ($routeParams.feed) {
     // if we have a url as a param, we try to fetch it
@@ -408,7 +405,7 @@ function ($scope, Feeds, $rootScope, $timeout, $routeParams) {
       message: 'attempting to fetch feed from '+$routeParams.feed,
       type: 'info'
     });
-    $rootScope.selectedFeed = $routeParams.feed;
+    $Feeds.data.selectedFeed = $routeParams.feed;
     Feeds.func.fetchFeed($routeParams.feed);
   }
 
@@ -572,23 +569,23 @@ function (isSelected, Feeds) {
         return false;
       }
 
-      if (settings.displayed[articleUrl]) {
+      if (Feeds.data.settings.displayed[articleUrl]) {
         return true;
       }
 
-      if (Object.keys(settings.displayed).length >= settings.displayCap) {
+      if (Object.keys(Feeds.data.settings.displayed).length >= Feeds.data.settings.displayCap) {
         return false;
       }
 
       if (isRead) {
-        if (settings.showRead) {
-          settings.displayed[articleUrl] = true;
+        if (Feeds.data.settings.showRead) {
+          Feeds.data.settings.displayed[articleUrl] = true;
           return true;
         } else {
           return false;
         }
       } else {
-        settings.displayed[articleUrl] = true;
+        Feeds.data.settings.displayed[articleUrl] = true;
         return true;
       }
     };
