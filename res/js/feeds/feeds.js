@@ -536,8 +536,8 @@ function (isSelected, Feeds) {
       }
       for (var i = 0, num = $scope.feeds.current.indexes.length; i < num; i = i + 1) {
         //console.log('checking '+$scope.model.feeds.current.indexes[i], $scope.model.feeds.info[$scope.model.feeds.current.indexes[i]]);
-        if (($scope.feeds.info[$scope.feeds.current.indexes[i]]) &&
-            ($scope.feeds.info[$scope.feeds.current.indexes[i]].unread > 0)) {
+        if ((Feeds.data.info[Feeds.data.current.indexes[i]]) &&
+            (Feeds.data.info[Feeds.data.current.indexes[i]].unread > 0)) {
           return false;
         }
         if (Feeds.data.settings.showRead) {
@@ -547,26 +547,20 @@ function (isSelected, Feeds) {
       return true;
     };
 
-    $scope.markRead = function (url, val) {
-      //console.log('markRead Called! val:'+val);
-      for (var i = 0, num = $scope.feeds.articles.length; i < num; i = i + 1) {
-        //console.log('A.link: ' + $scope.feeds.articles[i].object.link + ' url: '+url);
-        if ($scope.feeds.articles[i].object.link === url) {
-          //console.log('R:'+$scope.feeds.articles[i].object.read+' v:'+val);
-          if ((!$scope.feeds.articles[i].object.read) && (val)) {
-            //console.log('subtracting 1 from : '+ $scope.feeds.info[$scope.feeds.articles[i].actor.address].unread);
-            $scope.feeds.info[$scope.feeds.articles[i].actor.address].unread =
-                $scope.feeds.info[$scope.feeds.articles[i].actor.address].unread - 1;
-          } else if (($scope.feeds.articles[i].object.read) && (!val)) {
-            //console.log('adding 1 to : '+ $scope.feeds.info[$scope.feeds.articles[i].actor.address].unread);
-            $scope.feeds.info[$scope.feeds.articles[i].actor.address].unread =
-                $scope.feeds.info[$scope.feeds.articles[i].actor.address].unread + 1;
-          }
-          $scope.feeds.articles[i].object.read = val;
-          Feeds.func.updateArticle($scope.feeds.articles[i]);
-          return;
-        }
+    $scope.markRead = function (a) {
+      //console.log('markRead Called!');
+      if (!a.object.read) {
+        //console.log('subtracting 1 from : '+ Feeds.data.info[a.actor.address].unread);
+        Feeds.data.info[a.actor.address].unread =
+            Feeds.data.info[a.actor.address].unread - 1;
+        a.object.read = true;
+      } else if (a.object.read) {
+        //console.log('adding 1 to : '+ Feeds.data.info[a.actor.address].unread);
+        Feeds.data.info[a.actor.address].unread =
+            Feeds.data.info[a.actor.address].unread + 1;
+        a.object.read = false;
       }
+      Feeds.func.updateArticle(a);
     };
 
     $scope.isShowable = function (article) {
