@@ -56,8 +56,12 @@ body {
   display: none;
   width: 44px;
   height: 44px;
+  padding-right: 5px;
   margin-top: 2px;
   float: left;
+}
+#open-left:hover {
+  cursor: pointer;
 }
 
 .scrollable{
@@ -117,12 +121,12 @@ nav {
 }
 .navbar-nav > li > a {
   padding-top: 15px;
-  padding-bottom: 0;
+  padding-bottom: 10px;
 }
 .navbar-brand {
-  padding: 15px 15px 0 15px;
+  padding: 0;
+  margin: 15px 0 0 8px !important;
 }
-
 
 /**
  * forms
@@ -369,13 +373,13 @@ nav {
   cursor: pointer;
 }
 
-.about {
+.text {
   padding: 0 3% 0 6%;
 }
-.about-text {
+.text-content {
   color: #555555;
 }
-.about-header {
+.text-header {
   color: #AAAAAA;
   font-weight: 900;
 }
