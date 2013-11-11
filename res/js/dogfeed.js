@@ -196,6 +196,46 @@ function ($scope, $rootScope, settings, RS) {
   });
 }]).
 
+controller('mainCtrl', ['$scope', 'RS', 'SH', '$timeout',
+function ($scope, RS, SH, $timeout) {
+  $scope.isConnected = function () {
+    if ((RS.isConnected()) && (SH.isConnected())) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
+  $scope.isConnecting = function () {
+    if ((RS.isConnecting()) || (SH.isConnecting())) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+  $scope.rsIsConnecting = RS.isConnecting;
+  $scope.shIsConnecting = SH.isConnecting;
+
+  var delayed = false;
+  $scope.delayed = function () {
+    return delayed;
+  };
+
+  $timeout(function () {
+    // give the app a second or two to load before we determine if the user
+    // is logged in or not.
+    delayed = true;
+  }, 3000);
+}]).
+
+directive('loading', [
+function () {
+  return {
+    restrict: 'E',
+    templateUrl: 'loading.html'
+  };
+}]).
+
 directive('welcome', [
 function () {
   return {
