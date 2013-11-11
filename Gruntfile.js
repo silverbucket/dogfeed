@@ -51,6 +51,8 @@ module.exports = function(grunt) {
           {expand: false, src: ['vendor/bootstrap/fonts/glyphicons-halflings-regular.woff'], dest: 'build/res/fonts/glyphicons-halflings-regular.woff', filter: 'isFile'}, // includes files in path and its subdirs
           {expand: false, src: ['vendor/jquery.min.js'], dest: 'build/res/js/jquery.min.js', filter: 'isFile'}, // includes files in path and its subdirs
           {expand: false, src: ['vendor/angular.min.js'], dest: 'build/res/js/angular.min.js', filter: 'isFile'}, // includes files in path and its subdirs
+          {expand: false, src: ['vendor/snap.min.js'], dest: 'build/res/js/snap.min.js', filter: 'isFile'}, // includes files in path and its subdirs
+          {expand: false, src: ['vendor/matchMedia.js'], dest: 'build/res/js/matchMedia.js', filter: 'isFile'}, // includes files in path and its subdirs
           {expand: false, src: ['vendor/remotestorage/remotestorage.min.js'], dest: 'build/res/js/remotestorage.min.js', filter: 'isFile'}, // includes files in path and its subdirs
           {expand: false, src: ['vendor/bootstrap/js/bootstrap.min.js'], dest: 'build/res/js/bootstrap.min.js', filter: 'isFile'}, // includes files in path and its subdirs
           {expand: false, src: ['vendor/bootstrap/js/bootstrap-theme.min.js'], dest: 'build/res/js/bootstrap-theme.min.js', filter: 'isFile'}, // includes files in path and its subdirs
@@ -83,7 +85,6 @@ module.exports = function(grunt) {
         ext: '.min.css'
       }
     },
-
     useminPrepare: {
       html: ['build/index.html', 'build/rscallback.html']
     },
