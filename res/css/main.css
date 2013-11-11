@@ -184,15 +184,15 @@ nav {
 }
 
 .message-container {
-  min-height: 20px;
-  height: 20px;
+  min-height: 30px;
+  height: 30px;
   margin: 50px 0 5px 0;
-  display: block;
+  display: inline-block;
   padding: 0 !important;
+  width: 100%;
 }
 
 .ng-view {
-  margin-top: 20px;
   margin-bottom: 100px;
 }
 
@@ -320,7 +320,7 @@ nav {
 }
 .articles {
   /*width: 100%;*/
-  margin: 0 0 0 1%;
+  margin: -18px 0 0 1%;
 }
 .article {
   max-width: 100%;
@@ -363,7 +363,7 @@ nav {
   background-color: #efefef;
   color: #888888;
   font-weight: 900;
-  margin-top: -10px;
+  margin: -10px 10px 0;
   /*-moz-border-radius: 5px;
   border-radius: 5px;*/
 }
@@ -455,8 +455,8 @@ h3 {
   }
 
   .message-container {
-    min-height: 40px;
-    height: 40px;
+    min-height: 50px;
+    height: 50px;
     margin-top: 0px !important;
   }
 
@@ -465,10 +465,6 @@ h3 {
   }
   .slider-left nav {
     display: none !important;
-  }
-
-  .ng-view {
-    margin-top: -10px !important;
   }
 
   .content {
