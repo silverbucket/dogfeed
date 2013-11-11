@@ -120,12 +120,11 @@ nav {
   color: #333333;
 }
 .navbar-nav > li > a {
-  padding-top: 15px;
-  padding-bottom: 10px;
+  padding: 15px 13px 10px 13px;
 }
 .navbar-brand {
   padding: 0;
-  margin: 15px 0 0 8px !important;
+  margin: 15px 5px 0 8px !important;
 }
 
 /**
@@ -325,7 +324,7 @@ nav {
 .article {
   max-width: 100%;
   padding: 10px 0 10px 0;
-  margin: 0 auto 60px auto;
+  margin: 0 auto 40px auto;
   border-bottom: 2px solid #efefef;
   /*box-shadow: -1px -1px 10px #AAAAAA;*/
   /*background-color: #FFFFFF;*/
@@ -364,13 +363,15 @@ nav {
   color: #888888;
   font-weight: 900;
   margin: -10px 10px 0;
+  z-index: 3;
   /*-moz-border-radius: 5px;
   border-radius: 5px;*/
 }
 .mark-unread:hover {
   background-color: #ffffff;
-  color: #444444;
+  color: #222222;
   cursor: pointer;
+  opacity: 1;
 }
 
 .text {
@@ -410,6 +411,7 @@ h3 {
   border-color: white;
   box-shadow: none;
   opacity: .4;
+  z-index: 2;
 }
 .read a {
   pointer-events: none;
