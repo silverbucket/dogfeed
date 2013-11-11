@@ -478,8 +478,8 @@ function (Feeds) {
 /**
  * directive: feedList
  */
-directive('feedList', ['isSelected', 'Feeds', '$location',
-function (isSelected, Feeds, $location) {
+directive('feedList', ['isSelected', 'Feeds', '$location', '$rootScope',
+function (isSelected, Feeds, $location, $rootScope) {
   function FeedListCtrl ($scope) {
 
     $scope.isSelected = isSelected;
@@ -489,13 +489,10 @@ function (isSelected, Feeds, $location) {
       if (error) { return false; }
       if (!url) {
         $location.path('/feeds/');
-        //Feeds.data.current.name = '';
-        //Feeds.data.current.indexes.length = 0;
       } else {
         $location.path('/feeds/'+encodeURIComponent(url));
-        //Feeds.data.current.name = Feeds.data.info[url].name;
-        //Feeds.data.current.indexes = [url];
       }
+      $rootScope.snapper.close();
     };
 
     $scope.showFeedSettings = function (url) {
