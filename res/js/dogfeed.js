@@ -14,13 +14,19 @@ function ($routeProvider, $locationProvider) {
   //$locationProvider.html5Mode(true);
   $routeProvider.
     when('/', {
-      templateUrl: "articles.html"
+      templateUrl: "main.html"
     }).
     when('/settings/sockethub', {
       templateUrl: "sockethub-settings.html"
     }).
     when('/feeds/add', {
       templateUrl: 'add-feed.html'
+    }).
+    when('/feeds/:feed', {
+      templateUrl: 'main.html'
+    }).
+    when('/about', {
+      templateUrl: 'about.html'
     }).
     otherwise({
       redirectTo: "/"
@@ -103,7 +109,7 @@ function (settings, SH, $rootScope, RS, $timeout) {
       if (!RS.isConnected()) {
         $rootScope.$broadcast('message', {message: 'remotestorage-connect', timeout: false});
       }
-    }, 6000);
+    }, 3000);
   }
 }]).
 
@@ -188,6 +194,14 @@ function ($scope, $rootScope, settings, RS) {
       });
     }
   });
+}]).
+
+directive('welcome', [
+function () {
+  return {
+    restrict: 'E',
+    templateUrl: 'welcome.html'
+  };
 }]).
 
 directive('about', [
