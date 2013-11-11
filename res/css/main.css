@@ -185,13 +185,14 @@ nav {
 .message-container {
   min-height: 30px;
   height: 30px;
-  margin: 50px 0 5px 0;
+  margin: 50px 0 15px 0;
   display: inline-block;
   padding: 0 !important;
   width: 100%;
 }
 
 .ng-view {
+  margin-top: 0;
   margin-bottom: 100px;
 }
 
@@ -461,6 +462,9 @@ h3 {
     min-height: 50px;
     height: 50px;
     margin-top: 0px !important;
+  }
+  .ng-view {
+    margin-top: -10px;
   }
 
   nav {

@@ -161,7 +161,6 @@
 
     <script type="text/ng-template" id="main.html">
       <section class="page">
-        <div class="container">
           <div class="row" ng-controller="feedCtrl">
             <div ng-show="feeds.articles.length == 0 && !currentIsEmpty()">
               <welcome></welcome>
@@ -170,7 +169,6 @@
             <articles class="col-md-8" feeds="feeds" settings="settings">
             </articles>
           </div>
-        </div>
       </section>
     </script>
 
