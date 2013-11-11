@@ -12,76 +12,81 @@
   </head>
 
   <body>
-    <div id="remotestorage-connect" ng-controller="remoteStorageCtrl"></div>
 
-    <nav>
-      <div class="navbar navbar-default" ng-controller="titlebarCtrl">
-        <div class="container">
-          <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-              <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="#">
-              <img src="res/img/dogfeed-logo.svg" width="115" alt="Dogfeed" />
-            </a>
-          </div>
-          <div class="collapse navbar-collapse">
-            <ul class="nav navbar-nav">
-              <li>
-                <a href="" ng-click="addFeed()">
-                  <span class="glyphicon glyphicon-plus" alt="Add Feed"></span> Add Feed
-                </a>
-              </li>
-              <li>
-                <a href="" ng-click="sockethubSettings()">
-                  <span class="glyphicon glyphicon-cog"></span> Settings
-                </a>
-              </li>
-            </ul>
-            <div class="version">
-              <p>version 0.2.0<br />
-                <a target="_blank" href="https://github.com/silverbucket/dogfeed/issues/">
-                  feedback and bug reports
-                </a>
-              </p>
+    <!-- feeds list slider -->
+    <div class="slider-left scrollable">
+      <nav>
+        <div class="navbar navbar-default">
+          <div class="container">
+            <div class="navbar-header">
             </div>
           </div>
         </div>
+      </nav>
+
+      <div class="slider-content">
+        <div class="feed-list-container" ng-controller="feedCtrl">
+          <div class="feed-controls">
+            <form name="quickSettings" class="form-horizontal" novalidate>
+                <label for="showRead" style="width: 125px; margin-right: 5px;"
+                       class="control-label">Show Read Articles</label>
+                <input type="checkbox" name="showRead" ng-model="feeds.settings.showRead" />
+            </form>
+          </div>
+
+          <feed-list class="feeds" test="test" feeds="feeds" settings="settings">Feeds</feed-list>
+        </div>
+
+        <footer>
+          <div class="credits">
+            dogfeed version 0.2.0<br />
+            <a target="_blank" href="https://github.com/silverbucket/dogfeed/issues/">feedback and bug reports</a>
+          </div>
+        </footer>
       </div>
-    </nav>
-
-    <div class="message-container">
-      <div message></div>
     </div>
-    <ng-view></ng-view>
-    <div sockethub-settings></div>
 
+    <!-- main content -->
+    <div id="content" class="content scrollable">
+      <div id="remotestorage-connect" ng-controller="remoteStorageCtrl"></div>
 
-    <!-- feeds -->
-    <script type="text/ng-template" id="feeds.html">
-      <section id="talk" class="page">
-        <div class="container">
-          <div class="row" ng-controller="feedCtrl">
-
-            <div class="col-md-3">
-              <div class="feed-controls">
-                <form name="quickSettings" class="form-horizontal" novalidate>
-                    <label for="showRead" style="width: 125px; margin-right: 5px;"
-                           class="control-label">Show Read Articles</label>
-                    <input type="checkbox" name="showRead" ng-model="model.settings.showRead" />
-                </form>
-              </div>
-              <feed-list class="feeds" feeds="feeds" settings="model.settings">Feeds</feed-list>
+      <nav>
+        <div class="navbar navbar-default" ng-controller="titlebarCtrl">
+          <div class="container">
+            <div class="navbar-header">
+              <a href="#" id="open-left" ng-click="showFeedList()"></a>
+              <img class="navbar-brand" src="res/img/dogfeed-logo.svg" width="115" alt="Dogfeed" />
             </div>
-
-            <div class="col-md-9 article-text" ng-show="(feeds.articles.length == 0) && (feeds.infoArray.length > 0)"><p>loading articles...</p><img src="res/img/loading.gif" /></div>
-
-            <articles class="col-md-8 articles" feeds="feeds" settings="model.settings">
-            </articles>
+            <div>
+              <ul class="nav navbar-nav">
+                <li>
+                  <a href="/#/feeds/add">
+                    <span class="glyphicon glyphicon-plus" alt="Add Feed"></span>
+                  </a>
+                </li>
+                <li>
+                  <a href="/#/settings/sockethub">
+                    <span class="glyphicon glyphicon-cog"></span>
+                  </a>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
-      </section>
-    </script>
+      </nav>
+
+      <div class="message-container">
+        <div message></div>
+      </div>
+
+      <div class="ng-view">
+        <ng-view></ng-view>
+      </div>
+
+    </div>
+
+
+
 
 <!--
 <a href="#/">[TEST 1]</a>
@@ -90,28 +95,74 @@
 <a href="#/?feed=http://guardian.comd/rss">[TEST 3]</a>
 <a href="#/?feed=https://unhosted.org/adventures/feed.rss">[TEST 4]</a>
 -->
+    <script type="text/ng-template" id="about.html">
+      <div class="about">
+        <h2 class="about-header">Welcome to Dogfeed!</h2>
+        <div class="about-text">
+          <p>It seems that this is the first time you use Dogfeed. Dogfeed is an
+          <a href="http://unhosted.org" target="_blank">Unhosted</a>
+          newsreader that allows you to access your news feeds from anywhere you
+          want on anything that has a decent web browser - on your phone, desktop,
+          tablet or Smart TV.</p>
 
-    <!-- add feed modal window -->
-    <div id="modalAddFeed" class="modal fade" ng-controller="addFeedCtrl">
-      <div class="modal-dialog">
-        <div class="modal-content">
+          <p>Dogfeed is
+          <a href="http://github.com/silverbucket/dogfeed" target="_blank">open source</a>,
+          so you can improve it, translate it, or use parts of it to build your own
+          applications. It leverages client-side javascript for all the
+          application logic, and
+          <a href="http://sockethub.org" target="_blank">Sockethub</a> for server
+          independant, server-side functionality, while storing all your data to
+          your private
+          <a href="http://remotestorage.io" target="_blank">remoteStorage</a>
+          instance.</p>
 
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h4 class="modal-title">Add Feed</h4>
-          </div>
-          <div class="modal-body">
-            <form name="addFeed" role="form" novalidate>
-              <input type="url" class="required form-control" name="url" placeholder="Enter URL..." ng-model="url" autofocus="autofocus" required />
-          </div>
-          <div class="modal-footer">
-              <button class="btn btn-primary" ng-click="add(url)" ng-disabled="addFeed.$invalid || adding">
-              <span class="icon-plus" alt="Add Feed"></span> Add Feed</button>
-            </form>
-          </div>
+          <p>If you have used news reader software before, just add your favorite
+          news feeds and Dogfeed away. If you are new to this, read the
+          _Quickstart Manual_, watch a _demonstration video_ or just try - its
+          pretty easy and really there is not a lot that can break.</p>
+
+          <p>(If this is not the first time you are using Dogfeed, _go to
+          Troubeshooting_)</p>
+
+          <p>Dogfeed is developed and maintained by
+          <a href="https://silverbucket.net" target="_blank">Nick
+          Jennings</a> and was made
+          possible with a grant from the
+          <a href="http://nlnet.net" target="_blank">NLnet foundation</a>.</p>
         </div>
       </div>
-    </div>
+    </script>
+
+    <script type="text/ng-template" id="sockethub-settings.html">
+      <div sockethub-settings></div>
+    </script>
+
+    <script type="text/ng-template" id="articles.html">
+      <section class="page">
+        <div class="container">
+          <div class="row" ng-controller="feedCtrl">
+            <div class="col-md-9" ng-show="(feeds.articles.length == 0) && (feeds.infoArray.length > 0)"><p>loading articles...</p><img src="res/img/loading.gif" /></div>
+
+            <articles class="col-md-8 articles" feeds="feeds" settings="settings">
+            </articles>
+          </div>
+        </div>
+      </section>
+    </script>
+
+    <!-- add feed form -->
+    <script type="text/ng-template" id="add-feed.html">
+      <div class="add-feed" ng-controller="addFeedCtrl">
+          <h4>Add Feed</h4>
+          <form class="inline-form" name="addFeed" role="form" novalidate>
+            <div class="form-group">
+              <input type="url" class="required form-control" name="url" placeholder="Enter URL..." ng-model="url" autofocus="autofocus" required />
+            </div>
+            <button class="btn btn-primary" ng-click="add(url)" ng-disabled="addFeed.$invalid || adding">
+            <span class="icon-plus" alt="Add Feed"></span> Add Feed</button>
+          </form>
+      </div>
+    </script>
 
     <!-- feed settings modal window -->
     <div id="modalFeedSettings" ng-controller="feedSettingsCtrl" class="modal fade">
@@ -152,6 +203,8 @@
     <script src="res/js/jquery.min.js"></script>
     <script src="res/js/angular.min.js"></script>
     <script src="res/js/bootstrap.min.js"></script>
+    <script src="res/js/snap.min.js"></script>
+    <script src="res/js/matchMedia.js"></script>
     <script src="res/js/remotestorage.min.js"></script>
     <script src="res/js/sockethub-client.min.js"></script>
     <script src="res/js/remotestorage-modules.min.js"></script>
