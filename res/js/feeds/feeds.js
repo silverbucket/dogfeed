@@ -450,22 +450,17 @@ function (Feeds) {
   return function (url, inclusive) {
     if (Feeds.data.current.indexes.length === 0) {
       if ((inclusive) || (!url)) {
-  console.log('yes selected 1 ' + url);
         return true;
       } else {
-  console.log('not selected 1 ' + url);
         return false;
       }
     } else {
       for (var i = 0, num = Feeds.data.current.indexes.length; i < num; i = i + 1) {
-  console.log('checking ' + Feeds.data.current.indexes[i]);
         if (Feeds.data.current.indexes[i] === url) {
-  console.log('yes selected 2 ' + url);
           return true;
         }
       }
     }
-  console.log('not selected 2 ' + url);
     return false;
   };
 }]).
