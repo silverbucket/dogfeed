@@ -547,13 +547,16 @@ function (isSelected, Feeds) {
       return true;
     };
 
-    $scope.markRead = function (a) {
-      //console.log('markRead Called!');
+    $scope.markRead = function (a, idx) {
+      console.log('markRead Called!',idx);
       if (!a.object.read) {
         //console.log('subtracting 1 from : '+ Feeds.data.info[a.actor.address].unread);
         Feeds.data.info[a.actor.address].unread =
             Feeds.data.info[a.actor.address].unread - 1;
         a.object.read = true;
+        if (typeof idx === 'number') {
+          $('#article'+idx).collapse('hide');
+        }
       } else if (a.object.read) {
         //console.log('adding 1 to : '+ Feeds.data.info[a.actor.address].unread);
         Feeds.data.info[a.actor.address].unread =
