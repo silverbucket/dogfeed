@@ -445,22 +445,30 @@ function ($scope, Feeds, $rootScope, $timeout, $routeParams) {
 //
 ///////////////////////////////////////////////////////////////////////////
 
-value('isSelected', function ($scope, url, inclusive) {
-  if ($scope.feeds.current.indexes.length === 0) {
-    if ((inclusive) || (!url)) {
-      return true;
-    } else {
-      return false;
-    }
-  } else {
-    for (var i = 0, num = $scope.feeds.current.indexes.length; i < num; i = i + 1) {
-      if ($scope.feeds.current.indexes[i] === url) {
+factory('isSelected', ['Feeds',
+function (Feeds) {
+  return function (url, inclusive) {
+    if (Feeds.data.current.indexes.length === 0) {
+      if ((inclusive) || (!url)) {
+  console.log('yes selected 1 ' + url);
         return true;
+      } else {
+  console.log('not selected 1 ' + url);
+        return false;
+      }
+    } else {
+      for (var i = 0, num = Feeds.data.current.indexes.length; i < num; i = i + 1) {
+  console.log('checking ' + Feeds.data.current.indexes[i]);
+        if (Feeds.data.current.indexes[i] === url) {
+  console.log('yes selected 2 ' + url);
+          return true;
+        }
       }
     }
-  }
-  return false;
-}).
+  console.log('not selected 2 ' + url);
+    return false;
+  };
+}]).
 
 /**
  * directive: feedList
@@ -469,9 +477,9 @@ directive('feedList', ['isSelected', 'Feeds',
 function (isSelected, Feeds) {
   function FeedListCtrl ($scope) {
 
-    $scope.isSelected = function (url, inclusive) {
-      return isSelected.apply(this, [$scope, url, inclusive]);
-    };
+    // $scope.isSelected = function (url, inclusive) {
+    //   return isSelected.apply(this, [$scope, url, inclusive]);
+    // };
 
     $scope.switchFeed = function (url, groupId, error) {
       console.log('SWITCH FEED: '+url, $scope.feeds);
@@ -519,9 +527,9 @@ directive('articles', ['isSelected', 'Feeds',
 function (isSelected, Feeds) {
   function ArticlesCtrl($scope) {
 
-    $scope.isSelected = function (url, inclusive) {
-      return isSelected.apply(this, [$scope, url, inclusive]);
-    };
+    // $scope.isSelected = function (url, inclusive) {
+    //   return isSelected.apply(this, [$scope, url, inclusive]);
+    // };
 
     // returns true if current selection is empty (has no unread articles)
     $scope.currentIsEmpty = function () {
@@ -564,7 +572,7 @@ function (isSelected, Feeds) {
     };
 
     $scope.isShowable = function (article) {
-      if (!$scope.isSelected(article.object.link, true)) {
+      if (!isSelected(article.actor.address, true)) {
         return false;
       }
 
