@@ -129,7 +129,7 @@ function ($rootScope, $location) {
 filter('urlEncode', [
 function() {
   return function (text, length, end) {
-    return encodeURIComponent(escape(text));
+    return encodeURIComponent(text);
   };
 }]).
 
