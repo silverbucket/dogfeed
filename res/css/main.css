@@ -154,7 +154,7 @@ nav {
   margin: 0 auto 0 auto;
 }
 
-.sockethub-settings {
+.sockethub-settings, .edit-feed {
   display: block;
   width: 80%;
   max-width: 800px;
@@ -396,6 +396,25 @@ h2 {
   font-size: 20px;
   margin-top: 0;
 }
+.articles-feed-info {
+  margin: 0 0 20px 40px;
+}
+span.feed-name {
+  color: #222222;
+  font-weight: 900;
+}
+a.feed-edit {
+  padding: 0 2px 0 2px;
+  background-color: #efefef;
+  color: #888888;
+  font-weight: 900;
+}
+a.feed-edit:hover {
+  background-color: #ffffff;
+  color: #222222;
+  cursor: pointer;
+}
+
 
 a:hover {
   text-decoration: underline;

@@ -183,11 +183,13 @@ function ($q, SH, CH, RS, $rootScope) {
    */
   func.updateFeed = function (obj) {
     var defer = $q.defer();
+    console.log('updateFeed called', obj);
     RS.call('feeds', 'add', [obj]).then(function (m) {
-      //console.log('feed updated: ', obj);
+      console.log('feed updated: ', obj);
       data.info[obj.url] = obj;
       defer.resolve(m);
     }, function (err) {
+      console.log('ERRO',err);
       defer.reject(err);
     });
     return defer.promise;
@@ -365,28 +367,40 @@ function ($scope, Feeds, $location) {
  * controller: feedSettingsCtrl
  */
 controller('feedSettingsCtrl',
-['$scope', 'Feeds',
-function ($scope, Feeds) {
+['$scope', 'Feeds', '$routeParams', '$location',
+function ($scope, Feeds, $routeParams, $location) {
   $scope.saving = false;
+  $scope.feeds = Feeds.data;
+  var feedUrl;
+  if ($routeParams.feed) {
+    feedUrl = $routeParams.feed;
+    Feeds.data.edit.url = feedUrl;
+    Feeds.data.edit.name = Feeds.data.info[feedUrl].name;
+    Feeds.data.edit.origName = Feeds.data.info[feedUrl].name;
+  } else {
+    $location.path('/feeds/');
+  }
 
   $scope.saveFeedSettings = function (feed) {
     $scope.saving = true;
+    console.log('saveFeed', feed);
     Feeds.func.updateFeed(feed).then(function () {
-      $("#modalFeedSettings").modal('hide');
-      $rootScope.$broadcast('message', {type: 'success', message: 'updated feed ' + url});
+      console.log('done');
+      $rootScope.$broadcast('message', {type: 'success', message: 'updated feed ' + feedUrl});
       $scope.saving = false;
+      $location.path('/feeds/'+feedUrl);
     }, function (err) {
       console.log('rss feed update failed!: ', err);
       $rootScope.$broadcast('message', {type: 'error', message: err.message});
-      $("#modalFeedSettings").modal('hide');
       $scope.saving = false;
+      $location.path('/feeds/'+feedUrl);
     });
   };
 
   $scope.cancelFeedSettings = function () {
-    $("#modalFeedSettings").modal('hide');
-    $scope.model.feeds.info[$scope.feeds.edit].name = $scope.model.feeds._editName;
+    Feeds.data.info[feedUrl].name = Feeds.data.edit.origName;
     $scope.saving = false;
+    $location.path('/feeds/'+feedUrl);
   };
 }]).
 
@@ -406,6 +420,7 @@ function ($scope, Feeds, $rootScope, $timeout, $routeParams) {
 
     //Feeds.data.selectedFeed = feed;
     Feeds.data.current.name = Feeds.data.info[feed].name;
+    Feeds.data.current.id = feed;
     Feeds.data.current.indexes = [feed];
     if (!Feeds.data.info[feed]) {
       $rootScope.$broadcast('message', {
@@ -497,15 +512,11 @@ function (isSelected, Feeds, $location, $rootScope) {
 
     $scope.showFeedSettings = function (url) {
       console.log('showFeedSettings: '+url);
-      if (!url) { return; }
-      Feeds.data.edit.url = url;
-      Feeds.data.edit.name = Feeds.data.info[url].name;
-      Feeds.data.edit.origName = Feeds.data.info[url].name;
-      $("#modalFeedSettings").modal({
-        show: true,
-        keyboard: true,
-        backdrop: true
-      });
+      if (!url) {
+        return;
+      } else {
+        $location.path('/feeds/edit/'+encodeURIComponent(url));
+      }
     };
   }
 

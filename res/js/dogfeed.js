@@ -22,6 +22,9 @@ function ($routeProvider, $locationProvider) {
     when('/feeds/add', {
       templateUrl: 'add-feed.html'
     }).
+    when('/feeds/edit/:feed', {
+      templateUrl: 'edit-feed.html'
+    }).
     when('/feeds/:feed', {
       templateUrl: 'main.html'
     }).
@@ -31,6 +34,16 @@ function ($routeProvider, $locationProvider) {
     otherwise({
       redirectTo: "/"
     });
+}]).
+
+run(['$rootScope', '$timeout',
+function ($rootScope, $timeout) {
+  $rootScope.delayed = false;
+  $timeout(function () {
+    // give the app a second or two to load before we determine if the user
+    // is logged in or not.
+    $rootScope.delayed = true;
+  }, 3000);
 }]).
 
 /**
@@ -128,7 +141,8 @@ function ($rootScope, $location) {
  */
 filter('urlEncode', [
 function() {
-  return function (text, length, end) {
+  return function (text) {
+    console.log('URLENCODE '+text+ ' ' +encodeURIComponent(text));
     return encodeURIComponent(text);
   };
 }]).
@@ -196,8 +210,8 @@ function ($scope, $rootScope, settings, RS) {
   });
 }]).
 
-controller('mainCtrl', ['$scope', 'RS', 'SH', '$timeout',
-function ($scope, RS, SH, $timeout) {
+controller('mainCtrl', ['$scope', 'RS', 'SH', '$timeout', '$rootScope',
+function ($scope, RS, SH, $timeout, $rootScope) {
   $scope.isConnected = function () {
     if ((RS.isConnected()) && (SH.isConnected())) {
       return true;
@@ -213,19 +227,11 @@ function ($scope, RS, SH, $timeout) {
       return false;
     }
   };
-  $scope.rsIsConnecting = RS.isConnecting;
-  $scope.shIsConnecting = SH.isConnecting;
 
-  var delayed = false;
   $scope.delayed = function () {
-    return delayed;
+    return $rootScope.delayed;
   };
 
-  $timeout(function () {
-    // give the app a second or two to load before we determine if the user
-    // is logged in or not.
-    delayed = true;
-  }, 3000);
 }]).
 
 directive('loading', [

@@ -1,3 +1,7 @@
+<div class="articles-feed-info" ng-show="feeds.current.name">
+  <span class="feed-name">{{ feeds.current.name }}</span>
+  <a class="feed-edit" href="/#/feeds/{{ feeds.current.id | urlEncode }}">edit</a>
+</div>
 
 <div class="articles-empty" ng-show="feeds.articles.length > 0 && currentIsEmpty()">
   <p>no articles</p>
