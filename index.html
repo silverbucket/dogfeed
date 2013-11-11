@@ -61,8 +61,10 @@
         <div class="navbar navbar-default" ng-controller="titlebarCtrl">
           <div class="container">
             <div class="navbar-header">
-              <a href="#" id="open-left" ng-click="showFeedList()"></a>
-              <img class="navbar-brand" src="res/img/dogfeed-logo.svg" width="115" alt="Dogfeed" />
+              <div id="open-left" ng-click="showFeedList()"></div>
+              <a href="/#/feeds">
+                <img class="navbar-brand" src="res/img/dogfeed-logo.svg" height="25" alt="Dogfeed"/>
+              </a>
             </div>
             <div>
               <ul class="nav navbar-nav">
@@ -74,6 +76,11 @@
                 <li>
                   <a href="/#/settings/sockethub">
                     <span class="glyphicon glyphicon-cog"></span>
+                  </a>
+                </li>
+                <li>
+                  <a href="/#/about">
+                    <span class="glyphicon glyphicon-info-sign"></span>
                   </a>
                 </li>
               </ul>
@@ -103,9 +110,9 @@
 <a href="#/?feed=https://unhosted.org/adventures/feed.rss">[TEST 4]</a>
 -->
     <script type="text/ng-template" id="about.html">
-      <div class="about">
-        <h2 class="about-header">Welcome to Dogfeed!</h2>
-        <div class="about-text">
+      <div class="text">
+        <h2 class="text-header">Welcome to Dogfeed!</h2>
+        <div class="text-content">
           <p>It seems that this is the first time you use Dogfeed. Dogfeed is an
           <a href="http://unhosted.org" target="_blank">Unhosted</a>
           newsreader that allows you to access your news feeds from anywhere you
@@ -140,15 +147,25 @@
       </div>
     </script>
 
+    <script type="text/ng-template" id="welcome.html">
+      <div class="text">
+        <h2 class="text-header">Dogfeed is loading...</h2>
+        <div class="text-content">
+        </div>
+      </div>
+    </script>
+
     <script type="text/ng-template" id="sockethub-settings.html">
       <div sockethub-settings></div>
     </script>
 
-    <script type="text/ng-template" id="articles.html">
+    <script type="text/ng-template" id="main.html">
       <section class="page">
         <div class="container">
           <div class="row" ng-controller="feedCtrl">
-            <div class="col-md-9" ng-show="(feeds.articles.length == 0) && (feeds.infoArray.length > 0)"><p>loading articles...</p><img src="res/img/loading.gif" /></div>
+            <div ng-show="feeds.articles.length == 0 && !currentIsEmpty()">
+              <welcome></welcome>
+            </div>
 
             <articles class="col-md-8 articles" feeds="feeds" settings="settings">
             </articles>
