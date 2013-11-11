@@ -1,6 +1,3 @@
-<div ng-show="feeds.articles.length == 0 && !currentIsEmpty()">
-  <about></about>
-</div>
 
 <div class="articles" ng-show="feeds.articles.length > 0 && currentIsEmpty()">
   <p>no articles</p>
