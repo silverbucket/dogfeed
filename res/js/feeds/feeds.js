@@ -396,17 +396,27 @@ function ($scope, Feeds) {
 controller('feedCtrl',
 ['$scope', 'Feeds', '$rootScope', '$timeout', '$routeParams',
 function ($scope, Feeds, $rootScope, $timeout, $routeParams) {
-  console.log('--- feedCtrl');
+  console.log('--- feedCtrl ' + $routeParams.feed);
   $scope.saving = false;
 
   if ($routeParams.feed) {
+    var feed = decodeURIComponent($routeParams.feed);
+    console.log("FEED PARAM: "+feed);
     // if we have a url as a param, we try to fetch it
-    $rootScope.$broadcast('message', {
-      message: 'attempting to fetch feed from '+$routeParams.feed,
-      type: 'info'
-    });
-    $Feeds.data.selectedFeed = $routeParams.feed;
-    Feeds.func.fetchFeed($routeParams.feed);
+
+    //Feeds.data.selectedFeed = feed;
+    Feeds.data.current.name = Feeds.data.info[feed].name;
+    Feeds.data.current.indexes = [feed];
+    if (!Feeds.data.info[feed]) {
+      $rootScope.$broadcast('message', {
+        message: 'attempting to fetch feed from '+feed,
+        type: 'info'
+      });
+      Feeds.func.fetchFeed(feed);
+    }
+  } else {
+    Feeds.data.current.name = '';
+    Feeds.data.current.indexes.length = 0;
   }
 
   $scope.deleteFeed = function (url) {
@@ -468,23 +478,23 @@ function (Feeds) {
 /**
  * directive: feedList
  */
-directive('feedList', ['isSelected', 'Feeds',
-function (isSelected, Feeds) {
+directive('feedList', ['isSelected', 'Feeds', '$location',
+function (isSelected, Feeds, $location) {
   function FeedListCtrl ($scope) {
 
-    // $scope.isSelected = function (url, inclusive) {
-    //   return isSelected.apply(this, [$scope, url, inclusive]);
-    // };
+    $scope.isSelected = isSelected;
 
     $scope.switchFeed = function (url, groupId, error) {
-      console.log('SWITCH FEED: '+url, $scope.feeds);
+      //console.log('SWITCH FEED: '+encodeURIComponent(url));
       if (error) { return false; }
       if (!url) {
-        Feeds.data.current.name = '';
-        Feeds.data.current.indexes.length = 0;
+        $location.path('/feeds/');
+        //Feeds.data.current.name = '';
+        //Feeds.data.current.indexes.length = 0;
       } else {
-        Feeds.data.current.name = Feeds.data.info[url].name;
-        Feeds.data.current.indexes = [url];
+        $location.path('/feeds/'+encodeURIComponent(url));
+        //Feeds.data.current.name = Feeds.data.info[url].name;
+        //Feeds.data.current.indexes = [url];
       }
     };
 
@@ -521,10 +531,6 @@ function (isSelected, Feeds) {
 directive('articles', ['isSelected', 'Feeds',
 function (isSelected, Feeds) {
   function ArticlesCtrl($scope) {
-
-    // $scope.isSelected = function (url, inclusive) {
-    //   return isSelected.apply(this, [$scope, url, inclusive]);
-    // };
 
     // returns true if current selection is empty (has no unread articles)
     $scope.currentIsEmpty = function () {
