@@ -23,7 +23,7 @@ function ($routeProvider, $locationProvider) {
       templateUrl: 'add-feed.html'
     }).
     when('/feeds/edit/:feed', {
-      templateUrl: 'edit-feed.html'
+      templateUrl: 'res/js/feeds/feed-edit.html.tpl'
     }).
     when('/feeds/:feed', {
       templateUrl: 'main.html'
@@ -134,17 +134,6 @@ function ($rootScope, $location) {
   $rootScope.$on('sockethubSettingsSaved', function() {
     $location.path('/');
   });
-}]).
-
-/**
- * filter: urlEncode
- */
-filter('urlEncode', [
-function() {
-  return function (text) {
-    console.log('URLENCODE '+text+ ' ' +encodeURIComponent(text));
-    return encodeURIComponent(text);
-  };
 }]).
 
 /**

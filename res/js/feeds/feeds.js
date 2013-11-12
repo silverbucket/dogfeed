@@ -373,7 +373,8 @@ function ($scope, Feeds, $routeParams, $location) {
   $scope.feeds = Feeds.data;
   var feedUrl;
   if ($routeParams.feed) {
-    feedUrl = $routeParams.feed;
+    feedUrl = decodeURIComponent($routeParams.feed);
+    console.log('feedSettingsCtrl feedUrl: '+feedUrl, Feeds.data.info);
     Feeds.data.edit.url = feedUrl;
     Feeds.data.edit.name = Feeds.data.info[feedUrl].name;
     Feeds.data.edit.origName = Feeds.data.info[feedUrl].name;
@@ -393,15 +394,31 @@ function ($scope, Feeds, $routeParams, $location) {
       console.log('rss feed update failed!: ', err);
       $rootScope.$broadcast('message', {type: 'error', message: err.message});
       $scope.saving = false;
-      $location.path('/feeds/'+feedUrl);
+      $location.path('/feeds/'+$routeParams.feed);
     });
   };
 
   $scope.cancelFeedSettings = function () {
+    console.log('CANCEL: '+feedUrl, $scope.feeds.edit);
     Feeds.data.info[feedUrl].name = Feeds.data.edit.origName;
     $scope.saving = false;
-    $location.path('/feeds/'+feedUrl);
+    $location.path('/feeds/'+$routeParams.feed);
   };
+
+  $scope.deleteFeed = function (feed) {
+    $scope.saving = true;
+    Feeds.func.removeFeed(feed.url).then(function () {
+      $rootScope.$broadcast('message', {type: 'success', message: 'deleted feed '+feed.url});
+      $scope.saving = false;
+      $location.path('/feeds/');
+    }, function (err) {
+      console.log('error removing rss feed!: ', err);
+      $rootScope.$broadcast('message', {type: 'error', message: err.message});
+      $scope.saving = false;
+      $location.path('/feeds/');
+    });
+  };
+
 }]).
 
 /**
@@ -410,7 +427,7 @@ function ($scope, Feeds, $routeParams, $location) {
 controller('feedCtrl',
 ['$scope', 'Feeds', '$rootScope', '$timeout', '$routeParams',
 function ($scope, Feeds, $rootScope, $timeout, $routeParams) {
-  console.log('--- feedCtrl ' + $routeParams.feed);
+  //console.log('--- feedCtrl ' + $routeParams.feed);
   $scope.saving = false;
 
   if ($routeParams.feed) {
@@ -433,23 +450,6 @@ function ($scope, Feeds, $rootScope, $timeout, $routeParams) {
     Feeds.data.current.name = '';
     Feeds.data.current.indexes.length = 0;
   }
-
-  $scope.deleteFeed = function (url) {
-    $scope.saving = true;
-    Feeds.func.removeFeed(url).then(function () {
-      $("#modalFeedSettings").modal('hide');
-      $rootScope.$broadcast('message', {type: 'success', message: 'deleted feed '+url});
-      $scope.saving = false;
-      if ($scope.isSelected(url)) {
-        $scope.switchFeed(url);
-      }
-    }, function (err) {
-      console.log('error removing rss feed!: ', err);
-      $rootScope.$broadcast('message', {type: 'error', message: err.message});
-      $("#modalFeedSettings").modal('hide');
-      $scope.saving = false;
-    });
-  };
 
   $rootScope.$on('SockethubConnectFailed', function (event, e) {
     console.log('Sockethub connect failed! ', e);
@@ -509,15 +509,6 @@ function (isSelected, Feeds, $location, $rootScope) {
       }
       $rootScope.snapper.close();
     };
-
-    $scope.showFeedSettings = function (url) {
-      console.log('showFeedSettings: '+url);
-      if (!url) {
-        return;
-      } else {
-        $location.path('/feeds/edit/'+encodeURIComponent(url));
-      }
-    };
   }
 
   return {
@@ -536,9 +527,18 @@ function (isSelected, Feeds, $location, $rootScope) {
 /**
  * directive: articles
  */
-directive('articles', ['isSelected', 'Feeds',
-function (isSelected, Feeds) {
+directive('articles', ['isSelected', 'Feeds', '$location',
+function (isSelected, Feeds, $location) {
   function ArticlesCtrl($scope) {
+
+    $scope.showFeedSettings = function (url) {
+      console.log('showFeedSettings: '+url);
+      if (!url) {
+        return;
+      } else {
+        $location.path('/feeds/edit/'+encodeURIComponent(url));
+      }
+    };
 
     // returns true if current selection is empty (has no unread articles)
     $scope.currentIsEmpty = function () {

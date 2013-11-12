@@ -403,14 +403,14 @@ span.feed-name {
   color: #222222;
   font-weight: 900;
 }
-a.feed-edit {
+span.feed-edit {
   float:right;
   padding: 0 2px 0 2px;
   background-color: #efefef;
   color: #888888;
   font-weight: 900;
 }
-a.feed-edit:hover {
+span.feed-edit:hover {
   background-color: #ffffff;
   color: #222222;
   cursor: pointer;

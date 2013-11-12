@@ -193,28 +193,7 @@
 
     <!-- feed settings -->
     <script type="text/ng-template" id="edit-feed.html">
-      <div ng-controller="feedSettingsCtrl" class="edit-feed">
-        <h4 class="modal-title">Feed settings</h4>
-        <form name="feedSettings" role="form" novalidate>
-          <div class="form-group">
-            <label for="url">URL</label>
-            <span ng-bind="feeds.edit.url"></span>
-          </div>
-          <div class="form-group">
-            <label for="displayname">Display Name</label>
-            <div class="controls">
-              <input type="text" class="required form-control" name="username" placeholder="Enter display name..." ng-model="feeds.edit.name">
-            </div>
-          </div>
-          <div class="form-group">
-            <button type="default" ng-click="saveFeedSettings(feeds.edit)" class="btn btn-primary" ng-disabled="saving">Save</button>
-              &nbsp;
-            <button ng-click="cancelFeedSettings()" class="btn btn-action" ng-disabled="saving">Cancel</button>
-              &nbsp;
-            <button style="float: left;" ng-click="deleteFeed(feeds.edit)" ng-disabled="saving" class="btn btn-danger">Delete</button>
-          </div>
-        </form>
-      </div>
+      <div feed-edit></div>
     </script>
 
     <!-- build:js res/js/jquery.min.js -->
