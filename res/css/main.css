@@ -18,6 +18,9 @@ body {
 #remotestorage-widget {
   top: 5px !important;
 }
+.btn-cancel {
+  border: 1px solid #cccccc !important;
+}
 
 .content {
   z-index: 2;

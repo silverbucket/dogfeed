@@ -21,7 +21,7 @@
             <button type="default" ng-click="saveFeedSettings(feeds.edit)" class="btn btn-primary" ng-disabled="saving">Save</button>
           </div>
           <div class="col-sm-3">
-            <button ng-click="cancelFeedSettings()" class="btn btn-action" ng-disabled="saving">Cancel</button>
+            <button ng-click="cancelFeedSettings()" class="btn btn-action btn-cancel" ng-disabled="saving">Cancel</button>
           </div>
           <div class="col-sm-2">
             <button style="float: left;" ng-click="deleteFeed(feeds.edit)" ng-disabled="saving" class="btn btn-danger">Delete</button>
