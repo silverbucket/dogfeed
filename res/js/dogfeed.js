@@ -3,7 +3,8 @@ angular.module('dogfeed', [
     'ngSockethubClient',
     'ngSockethubRemoteStorage',
     'ngRemoteStorage',
-    'ngMessages'
+    'ngMessages',
+    'ngRoute'
 ]).
 
 /**
