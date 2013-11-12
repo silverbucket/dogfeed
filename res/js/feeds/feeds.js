@@ -455,6 +455,7 @@ function ($scope, Feeds, $rootScope, $timeout, $routeParams) {
       Feeds.func.fetchFeed(feed);
     }
   } else {
+    console.log(' NO FEED PARAM');
     Feeds.data.current.name = '';
     Feeds.data.current.indexes.length = 0;
   }
