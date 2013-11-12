@@ -51,7 +51,6 @@ function ($rootScope, $timeout) {
  */
 run(['$rootScope',
 function ($rootScope) {
-
   $rootScope.snapper = new Snap({
     element: document.getElementById('content'),
     disable: 'right',
