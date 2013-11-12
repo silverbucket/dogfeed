@@ -20,7 +20,7 @@ function ($routeProvider, $locationProvider) {
       templateUrl: "sockethub-settings.html"
     }).
     when('/feeds/add', {
-      templateUrl: 'add-feed.html'
+      templateUrl: 'res/js/feeds/feed-add.html.tpl'
     }).
     when('/feeds/edit/:feed', {
       templateUrl: 'res/js/feeds/feed-edit.html.tpl'
