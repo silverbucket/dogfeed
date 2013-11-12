@@ -96,9 +96,6 @@
 
     <script type="text/ng-template" id="main.html">
       <section class="page" ng-controller="mainCtrl">
-          <div style="margin-left: 30px;">
-          [{{isConnected()}}] [{{isConnecting()}}] [{{delayed()}}]
-          </div>
           <div class="row">
             <div ng-show="isConnecting() || !delayed()">
               <loading></loading>
