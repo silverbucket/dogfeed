@@ -30,10 +30,6 @@ module.exports = function(grunt) {
       css: {
         src: ['res/**/*.css'],
         dest: 'build/app.css.tmp'
-      },
-      flatuiCSS: {
-        src: ['vendor/flat-ui/*.css'],
-        dest: 'build/flat-ui.css.tmp'
       }
     },
     copy: {
@@ -51,6 +47,7 @@ module.exports = function(grunt) {
           {expand: false, src: ['vendor/bootstrap/fonts/glyphicons-halflings-regular.woff'], dest: 'build/vendor/bootstrap/fonts/glyphicons-halflings-regular.woff', filter: 'isFile'}, // includes files in path and its subdirs
           {expand: false, src: ['vendor/jquery.min.js'], dest: 'build/vendor/jquery.min.js', filter: 'isFile'}, // includes files in path and its subdirs
           {expand: false, src: ['vendor/angular.min.js'], dest: 'build/vendor/angular.min.js', filter: 'isFile'}, // includes files in path and its subdirs
+          {expand: false, src: ['vendor/angular-route.min.js'], dest: 'build/vendor/angular-route.min.js', filter: 'isFile'}, // includes files in path and its subdirs
           {expand: false, src: ['vendor/snap.min.js'], dest: 'build/vendor/snap.min.js', filter: 'isFile'}, // includes files in path and its subdirs
           {expand: false, src: ['vendor/matchMedia.js'], dest: 'build/vendor/matchMedia.js', filter: 'isFile'}, // includes files in path and its subdirs
           {expand: false, src: ['vendor/remotestorage/remotestorage.min.js'], dest: 'build/vendor/remotestorage.min.js', filter: 'isFile'}, // includes files in path and its subdirs
