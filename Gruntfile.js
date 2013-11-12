@@ -45,17 +45,17 @@ module.exports = function(grunt) {
           {expand: true, src: ['*.jpg'], dest: 'build/'}, // includes files in path and its subdirs
           {expand: true, src: ['res/img/*'], dest: 'build/', filter: 'isFile'}, // includes files in path and its subdirs
           {expand: true, src: ['res/js/feeds/*.html.tpl'], dest: 'build/', filter: 'isFile'}, // includes files in path and its subdirs
-          {expand: false, src: ['vendor/bootstrap/fonts/glyphicons-halflings-regular.eot'], dest: 'build/res/fonts/glyphicons-halflings-regular.eot', filter: 'isFile'}, // includes files in path and its subdirs
-          {expand: false, src: ['vendor/bootstrap/fonts/glyphicons-halflings-regular.svg'], dest: 'build/res/fonts/glyphicons-halflings-regular.svg', filter: 'isFile'}, // includes files in path and its subdirs
-          {expand: false, src: ['vendor/bootstrap/fonts/glyphicons-halflings-regular.ttf'], dest: 'build/res/fonts/glyphicons-halflings-regular.ttf', filter: 'isFile'}, // includes files in path and its subdirs
-          {expand: false, src: ['vendor/bootstrap/fonts/glyphicons-halflings-regular.woff'], dest: 'build/res/fonts/glyphicons-halflings-regular.woff', filter: 'isFile'}, // includes files in path and its subdirs
-          {expand: false, src: ['vendor/jquery.min.js'], dest: 'build/res/js/jquery.min.js', filter: 'isFile'}, // includes files in path and its subdirs
-          {expand: false, src: ['vendor/angular.min.js'], dest: 'build/res/js/angular.min.js', filter: 'isFile'}, // includes files in path and its subdirs
-          {expand: false, src: ['vendor/snap.min.js'], dest: 'build/res/js/snap.min.js', filter: 'isFile'}, // includes files in path and its subdirs
-          {expand: false, src: ['vendor/matchMedia.js'], dest: 'build/res/js/matchMedia.js', filter: 'isFile'}, // includes files in path and its subdirs
-          {expand: false, src: ['vendor/remotestorage/remotestorage.min.js'], dest: 'build/res/js/remotestorage.min.js', filter: 'isFile'}, // includes files in path and its subdirs
-          {expand: false, src: ['vendor/bootstrap/js/bootstrap.min.js'], dest: 'build/res/js/bootstrap.min.js', filter: 'isFile'}, // includes files in path and its subdirs
-          {expand: false, src: ['vendor/bootstrap/css/bootstrap.min.css'], dest: 'build/res/css/bootstrap.min.css', filter: 'isFile'}, // includes files in path and its subdirs
+          {expand: false, src: ['vendor/bootstrap/fonts/glyphicons-halflings-regular.eot'], dest: 'build/vendor/bootstrap/fonts/glyphicons-halflings-regular.eot', filter: 'isFile'}, // includes files in path and its subdirs
+          {expand: false, src: ['vendor/bootstrap/fonts/glyphicons-halflings-regular.svg'], dest: 'build/vendor/bootstrap/fonts/glyphicons-halflings-regular.svg', filter: 'isFile'}, // includes files in path and its subdirs
+          {expand: false, src: ['vendor/bootstrap/fonts/glyphicons-halflings-regular.ttf'], dest: 'build/vendor/bootstrap/fonts/glyphicons-halflings-regular.ttf', filter: 'isFile'}, // includes files in path and its subdirs
+          {expand: false, src: ['vendor/bootstrap/fonts/glyphicons-halflings-regular.woff'], dest: 'build/vendor/bootstrap/fonts/glyphicons-halflings-regular.woff', filter: 'isFile'}, // includes files in path and its subdirs
+          {expand: false, src: ['vendor/jquery.min.js'], dest: 'build/vendor/jquery.min.js', filter: 'isFile'}, // includes files in path and its subdirs
+          {expand: false, src: ['vendor/angular.min.js'], dest: 'build/vendor/angular.min.js', filter: 'isFile'}, // includes files in path and its subdirs
+          {expand: false, src: ['vendor/snap.min.js'], dest: 'build/vendor/snap.min.js', filter: 'isFile'}, // includes files in path and its subdirs
+          {expand: false, src: ['vendor/matchMedia.js'], dest: 'build/vendor/matchMedia.js', filter: 'isFile'}, // includes files in path and its subdirs
+          {expand: false, src: ['vendor/remotestorage/remotestorage.min.js'], dest: 'build/vendor/remotestorage.min.js', filter: 'isFile'}, // includes files in path and its subdirs
+          {expand: false, src: ['vendor/bootstrap/js/bootstrap.min.js'], dest: 'build/vendor/bootstrap/js/bootstrap.min.js', filter: 'isFile'}, // includes files in path and its subdirs
+          {expand: false, src: ['vendor/bootstrap/css/bootstrap.min.css'], dest: 'build/vendor/bootstrap/css/bootstrap.min.css', filter: 'isFile'}, // includes files in path and its subdirs
           {expand: false, src: ['<%= concat.app.dest %>'], dest: 'build/res/js/app.min.js', filter: 'isFile'} // includes files in path and its subdirs
 
         ]

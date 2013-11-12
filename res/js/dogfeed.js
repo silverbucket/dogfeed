@@ -65,11 +65,11 @@ function ($rootScope) {
 
   $(window).on('resize', function () {
     if ($rootScope.isMobile) {
-      console.log("ENABLE SNAPPER ");
+      //console.log("ENABLE SNAPPER ");
       $rootScope.snapperDisabled = false;
       $rootScope.snapper.enable();
     } else {
-      console.log("DISABLE SNAPPER ");
+      //console.log("DISABLE SNAPPER ");
       $rootScope.snapperDisabled = true;
       $rootScope.snapper.close();
       $rootScope.snapper.disable();
