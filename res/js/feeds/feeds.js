@@ -526,7 +526,7 @@ function (isSelected, Feeds, $location, $rootScope) {
       'settings': '=',
       'test': '='
     },
-    templateUrl: 'res/js/feeds/feed-list.html.tpl',
+    templateUrl: '/res/js/feeds/feed-list.html.tpl',
     controller: FeedListCtrl,
     transclude: true
   };
@@ -619,7 +619,7 @@ function (isSelected, Feeds, $location) {
       'settings': '='
     },
     controller: ArticlesCtrl,
-    templateUrl: 'res/js/feeds/articles.html.tpl',
+    templateUrl: '/res/js/feeds/articles.html.tpl',
     link: function (scope, element, attrs) {
       var divs = document.getElementsByClassName('article');
       for (var i = 0, num = divs.length; i < num; i = i + 1) {
