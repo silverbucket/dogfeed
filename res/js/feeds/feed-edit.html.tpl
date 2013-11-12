@@ -17,14 +17,9 @@
       </div>
       <div class="control-group">
         <div class="col-sm-10">
-          <div class="col-sm-5">
-            <button type="default" ng-click="saveFeedSettings(feeds.edit)" class="btn btn-primary" ng-disabled="saving">Save</button>
-          </div>
-          <div class="col-sm-3">
-            <button ng-click="cancelFeedSettings()" class="btn btn-action btn-cancel" ng-disabled="saving">Cancel</button>
-          </div>
-          <div class="col-sm-2">
-            <button style="float: left;" ng-click="deleteFeed(feeds.edit)" ng-disabled="saving" class="btn btn-danger">Delete</button>
+          <button type="default" ng-click="saveFeedSettings(feeds.edit)" class="btn btn-primary" ng-disabled="saving">Save</button>
+          <button ng-click="cancelFeedSettings()" class="btn btn-action btn-cancel" ng-disabled="saving">Cancel</button>
+          <button style="float: left;" ng-click="deleteFeed(feeds.edit)" ng-disabled="saving" class="btn btn-danger">Delete</button>
           </div>
         </div>
       </div>
