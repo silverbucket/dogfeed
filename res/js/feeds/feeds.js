@@ -182,17 +182,32 @@ function ($q, SH, CH, RS, $rootScope) {
    *   obj - feed object (remotestorage format)
    */
   func.updateFeed = function (obj) {
-    var defer = $q.defer();
     console.log('updateFeed called', obj);
-    RS.call('feeds', 'add', [obj]).then(function (m) {
-      console.log('feed updated: ', obj);
-      data.info[obj.url] = obj;
-      defer.resolve(m);
-    }, function (err) {
-      console.log('ERRO',err);
-      defer.reject(err);
-    });
-    return defer.promise;
+    var updated = false;
+    for (var i = 0, len = data.infoArray.length; i < len; i = i + 1) {
+      console.log("infoArray "+i+': '+ data.infoArray[i].url + ' === '+ obj.url);
+      if ((data.infoArray[i]) && (data.infoArray[i].url === obj.url)) {
+        console.log("MATCH");
+        data.infoArray[i].name = obj.name;
+        data.info[obj.url].name = obj.name;
+        updated = true;
+        break;
+      } else {
+        console.log(" NO MATCH");
+      }
+    }
+    console.log(" UPDATED "+updated);
+    if (!updated) {
+      addFeed(obj);
+    } else {
+      RS.call('feeds', 'add', [data.info[obj.url]]).then(function (m) {
+        console.log('feed updated: ', data.info[obj.url]);
+        $rootScope.$broadcast('message', {type: 'success', message: 'updated feed ' + obj.url});
+      }, function (err) {
+        console.log('ERROR',err);
+        $rootScope.$broadcast('message', {type: 'error', message: err.message});
+      });
+    }
   };
 
   /**
@@ -367,8 +382,8 @@ function ($scope, Feeds, $location) {
  * controller: feedSettingsCtrl
  */
 controller('feedSettingsCtrl',
-['$scope', 'Feeds', '$routeParams', '$location',
-function ($scope, Feeds, $routeParams, $location) {
+['$scope', 'Feeds', '$rootScope', '$routeParams', '$location',
+function ($scope, Feeds, $rootScope, $routeParams, $location) {
   $scope.saving = false;
   $scope.feeds = Feeds.data;
   var feedUrl;
@@ -385,17 +400,10 @@ function ($scope, Feeds, $routeParams, $location) {
   $scope.saveFeedSettings = function (feed) {
     $scope.saving = true;
     console.log('saveFeed', feed);
-    Feeds.func.updateFeed(feed).then(function () {
-      console.log('done');
-      $rootScope.$broadcast('message', {type: 'success', message: 'updated feed ' + feedUrl});
-      $scope.saving = false;
-      $location.path('/feeds/'+feedUrl);
-    }, function (err) {
-      console.log('rss feed update failed!: ', err);
-      $rootScope.$broadcast('message', {type: 'error', message: err.message});
-      $scope.saving = false;
-      $location.path('/feeds/'+$routeParams.feed);
-    });
+    delete feed.origName;
+    Feeds.func.updateFeed(feed);
+    $scope.saving = false;
+    $location.path('/feeds/'+feedUrl);
   };
 
   $scope.cancelFeedSettings = function () {
