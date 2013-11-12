@@ -54,8 +54,10 @@
         <div class="navbar navbar-default" ng-controller="titlebarCtrl">
           <div class="container">
             <div class="navbar-header">
-              <a href="#" id="open-left" ng-click="showFeedList()"></a>
-              <img class="navbar-brand" src="res/img/dogfeed-logo.svg" width="115" alt="Dogfeed" />
+              <div id="open-left" ng-click="showFeedList()"></div>
+              <a href="/#/feeds">
+                <img class="navbar-brand" src="res/img/dogfeed-logo.svg" height="25" alt="Dogfeed"/>
+              </a>
             </div>
             <div>
               <ul class="nav navbar-nav">
@@ -67,6 +69,11 @@
                 <li>
                   <a href="/#/settings/sockethub">
                     <span class="glyphicon glyphicon-cog"></span>
+                  </a>
+                </li>
+                <li>
+                  <a href="/#/about">
+                    <span class="glyphicon glyphicon-info-sign"></span>
                   </a>
                 </li>
               </ul>
@@ -82,24 +89,55 @@
       <div class="ng-view">
         <ng-view></ng-view>
       </div>
-
     </div>
 
+    <script type="text/ng-template" id="main.html">
+      <section class="page" ng-controller="mainCtrl">
+          <div class="row">
+            <div ng-show="isConnecting() || !delayed()">
+              <loading></loading>
+            </div>
+            <div ng-show="!isConnected() && !isConnecting() && delayed()">
+              <welcome></welcome>
+            </div>
+            <div ng-show="isConnected() && !isConnecting()">
+              <div ng-controller="feedCtrl">
+                <articles class="col-md-8" feeds="feeds" settings="settings">
+                </articles>
+              </div>
+            </div>
+          </div>
+      </section>
+    </script>
+
+    <script type="text/ng-template" id="loading.html">
+      <div class="text">
+        <h2 class="text-header">Dogfeed is loading...</h2>
+        <div class="text-content">
+        </div>
+      </div>
+    </script>
+
+    <script type="text/ng-template" id="welcome.html">
+      <div class="text">
+        <h2 class="text-header">Welcome to Dogfeed!</h2>
+        <div class="text-content">
+          <p>It seems that this is your first time using Dogfeed. Dogfeed is an unhosted RSS/Atom feed reader built on Sockethub and remoteStorage</p>
+          <p>Connect your storage using the remoteStorage widget in the upper right corner, or <a href="http://remotestorage.io/get" target="_blank">visit the remoteStorage website</a> to register for an account or learn how to set up your own storage server.</p>
+        </div>
+      </div>
+    </script>
+
+    <script type="text/ng-template" id="sockethub-settings.html">
+      <div sockethub-settings></div>
+    </script>
 
 
-
-<!--
-<a href="#/">[TEST 1]</a>
-<a href="#/?feed=http://blog.silverbucket.net/rss">[TEST 2]</a>
-<a href="#/?feed=http://guardian.com/rss">[TEST 2]</a>
-<a href="#/?feed=http://guardian.comd/rss">[TEST 3]</a>
-<a href="#/?feed=https://unhosted.org/adventures/feed.rss">[TEST 4]</a>
--->
     <script type="text/ng-template" id="about.html">
-      <div class="about">
-        <h2 class="about-header">Welcome to Dogfeed!</h2>
-        <div class="about-text">
-          <p>It seems that this is the first time you use Dogfeed. Dogfeed is an
+      <div class="text">
+        <h2 class="text-header">About Dogfeed</h2>
+        <div class="text-content">
+          <p>Dogfeed is an
           <a href="http://unhosted.org" target="_blank">Unhosted</a>
           newsreader that allows you to access your news feeds from anywhere you
           want on anything that has a decent web browser - on your phone, desktop,
@@ -133,72 +171,6 @@
       </div>
     </script>
 
-    <script type="text/ng-template" id="sockethub-settings.html">
-      <div sockethub-settings></div>
-    </script>
-
-    <script type="text/ng-template" id="articles.html">
-      <section class="page">
-        <div class="container">
-          <div class="row" ng-controller="feedCtrl">
-            <div class="col-md-9" ng-show="(feeds.articles.length == 0) && (feeds.infoArray.length > 0)"><p>loading articles...</p><img src="res/img/loading.gif" /></div>
-
-            <articles class="col-md-8 articles" feeds="feeds" settings="settings">
-            </articles>
-          </div>
-        </div>
-      </section>
-    </script>
-
-    <!-- add feed form -->
-    <script type="text/ng-template" id="add-feed.html">
-      <div class="add-feed" ng-controller="addFeedCtrl">
-          <h4>Add Feed</h4>
-          <form class="inline-form" name="addFeed" role="form" novalidate>
-            <div class="form-group">
-              <input type="url" class="required form-control" name="url" placeholder="Enter URL..." ng-model="url" autofocus="autofocus" required />
-            </div>
-            <button class="btn btn-primary" ng-click="add(url)" ng-disabled="addFeed.$invalid || adding">
-            <span class="icon-plus" alt="Add Feed"></span> Add Feed</button>
-          </form>
-      </div>
-    </script>
-
-    <!-- feed settings modal window -->
-    <div id="modalFeedSettings" ng-controller="feedSettingsCtrl" class="modal fade">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h4 class="modal-title">Feed settings</h4>
-          </div>
-          <div class="modal-body">
-            <form name="feedSettings" role="form" novalidate>
-              <div class="form-group">
-                <label for="url">URL</label>
-                <span ng-bind="feeds.edit"></span>
-              </div>
-              <div class="form-group">
-                <label for="displayname">Display Name</label>
-                <div class="controls">
-                  <input type="text" class="required form-control" name="username" placeholder="Enter display name..." ng-model="feeds.info[feeds.edit].name">
-                </div>
-              </div>
-              <p></p>
-          </div>
-          <div class="modal-footer">
-              <div class="form-group">
-                <button type="default" ng-click="saveFeedSettings(feeds.edit)" class="btn btn-primary" ng-disabled="saving">Save</button>
-                  &nbsp;
-                <button ng-click="cancelFeedSettings()" class="btn btn-action" ng-disabled="saving">Cancel</button>
-                  &nbsp;
-                <button style="float: left;" ng-click="deleteFeed(feeds.edit)" ng-disabled="saving" class="btn btn-danger">Delete</button>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
 
     <script src="res/js/jquery.min.js"></script>
     <script src="res/js/angular.min.js"></script>
