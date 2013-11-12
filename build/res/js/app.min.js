@@ -201,6 +201,7 @@ function ($scope, $rootScope, settings, RS) {
 
 controller('mainCtrl', ['$scope', 'RS', 'SH', '$timeout', '$rootScope', '$routeParams',
 function ($scope, RS, SH, $timeout, $rootScope, $routeParams) {
+console.log("mainCtrl ROUTE PARAMS: ", $routeParams);
   $scope.isConnected = function () {
     if ((RS.isConnected()) && (SH.isConnected())) {
       return true;
