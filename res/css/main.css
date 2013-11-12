@@ -30,8 +30,6 @@ body {
   bottom: 0;
   left: 220px;
   display: block;
-  overflow-x: hidden;
-  overflow-y: scroll;
   background-color: rgb(240, 240, 240);
 }
 
@@ -89,6 +87,7 @@ body {
 }
 nav {
   position: fixed;
+  overflow-y: auto;
 }
 .navbar {
   min-width: 240px;
@@ -504,8 +503,6 @@ h3 {
     bottom: 0;
     left: 0;
     z-index: 2;
-    overflow-y: auto;
-    overflow-x: hidden;
     -webkit-overflow-scrolling: touch;
             transform: translate3d(0, 0, 0);
     -webkit-transform: translate3d(0, 0, 0);
