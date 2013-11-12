@@ -115,8 +115,8 @@ function (SockethubBootstrap) {
 /**
  * remoteStorage
  */
-run(['SockethubSettings', 'SH', '$rootScope', 'RS', '$timeout',
-function (settings, SH, $rootScope, RS, $timeout) {
+run(['$rootScope', 'RS', '$timeout',
+function ($rootScope, RS, $timeout) {
   if (!RS.isConnected()) {
     $timeout(function () {
       if (!RS.isConnected()) {
