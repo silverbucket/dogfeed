@@ -69,8 +69,8 @@ module.exports = function(grunt) {
       dist: {
         files: {
           //'build/res/js/app.min.js': ['<%= concat.app.dest %>'],
-          'build/res/js/sockethub-client.min.js': ['<%= concat.sockethub.dest %>'],
-          'build/res/js/remotestorage-modules.min.js': ['<%= concat.modules.dest %>']
+          'build/vendor/sockethub-client.min.js': ['<%= concat.sockethub.dest %>'],
+          'build/vendor/remotestorage-modules.min.js': ['<%= concat.modules.dest %>']
         }
       }
     },
