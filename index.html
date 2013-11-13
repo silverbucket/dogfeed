@@ -96,13 +96,13 @@
     <script type="text/ng-template" id="main.html">
       <section class="page" ng-controller="mainCtrl">
           <div class="row">
-            <div ng-show="isConnecting() || !delayed()">
+            <div ng-show="isConnecting() || !delayed() || waitingForArticles()">
               <loading></loading>
             </div>
-            <div ng-show="!isConnected() && !isConnecting() && delayed()">
+            <div ng-show="!isConnected() && !isConnecting() && delayed() && !waitingForArticles()">
               <welcome></welcome>
             </div>
-            <div ng-show="isConnected() && !isConnecting()">
+            <div ng-show="isConnected() && !isConnecting() && !waitingForArticles()">
               <div ng-controller="feedCtrl">
                 <articles feeds="feeds" settings="settings">
                 </articles>

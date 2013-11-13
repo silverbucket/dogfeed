@@ -199,8 +199,8 @@ function ($scope, $rootScope, settings, RS) {
   });
 }]).
 
-controller('mainCtrl', ['$scope', 'RS', 'SH', '$timeout', '$rootScope', '$routeParams',
-function ($scope, RS, SH, $timeout, $rootScope, $routeParams) {
+controller('mainCtrl', ['$scope', 'RS', 'SH', '$timeout', '$rootScope', '$routeParams', 'Feeds',
+function ($scope, RS, SH, $timeout, $rootScope, $routeParams, Feeds) {
 console.log("mainCtrl ROUTE PARAMS: ", $routeParams);
   $scope.isConnected = function () {
 //console.log('isConnected: ['+RS.isConnected()+'] ['+SH.isConnected()+']');
@@ -226,6 +226,15 @@ console.log("mainCtrl ROUTE PARAMS: ", $routeParams);
 
   $scope.delayed = function () {
     return $rootScope.delayed;
+  };
+
+  $scope.waitingForArticles = function () {
+    if ((Feeds.data.articles.length <= 1) &&
+        (Feeds.data.infoArray > 0)) {
+      return true;
+    } else {
+      return false;
+    }
   };
 
 }]).

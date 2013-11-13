@@ -137,27 +137,22 @@ nav {
 .form-element {
   margin: 5px;
 }
-
 .form-button {
   margin-top: 10px;
 }
-
 .form-horizontal .control-label {
   width: 100px;
 }
-
 .form-horizontal .controls {
   text-align: left;
   margin: 0 20px 0 120px;
 }
-
 .add-feed {
   display: block;
   width: 80%;
   max-width: 800px;
   margin: 0 auto 0 auto;
 }
-
 .sockethub-settings, .edit-feed {
   display: block;
   width: 80%;
@@ -168,6 +163,10 @@ nav {
   width: 200px;
   margin: 0 auto 0 auto;
 }
+.btn-spacing {
+  margin-right: 20px;
+}
+
 
 /**
  * messages
@@ -220,7 +219,7 @@ nav {
 }
 
 .button-show-more {
-  width: 100%;
+  width: 80%;
 }
 
 
@@ -229,7 +228,6 @@ nav {
 /**
  * FEED LIST
  */
-
 .feed-controls {
   min-width: 190px;
   background-color: #eeeeee;
@@ -238,22 +236,18 @@ nav {
   margin: 0 0 0 20px;
   padding: 0 20px 5px 15px;
 }
-
 .feeds {
   margin: 0 0 30px 0;
   display: block;
   overflow: hidden;
   min-width: 220px;
 }
-
 .feeds a {
   text-decoration: none;
 }
-
 .all-feeds {
   margin: 0 0 10px 20px;
 }
-
 .feed-entry {
   display: inline-block;
   /*pointer-events: all;*/
@@ -333,7 +327,7 @@ nav {
 .article {
   max-width: 100%;
   padding: 10px 0 10px 0;
-  margin: 0 auto 25px auto;
+  margin: 0 auto 15px auto;
   border-bottom: 2px solid #efefef;
   /*box-shadow: -1px -1px 10px #AAAAAA;*/
   /*background-color: #FFFFFF;*/
@@ -377,24 +371,6 @@ nav {
 .article p {
   font-style: normal;
 }
-.mark-unread {
-  float: right;
-  padding: 0 2px 0 2px;
-  background-color: #efefef;
-  color: #888888;
-  font-weight: 900;
-  margin: -10px 30px 0;
-  z-index: 3;
-  /*-moz-border-radius: 5px;
-  border-radius: 5px;*/
-}
-.mark-unread:hover {
-  background-color: #ffffff;
-  color: #222222;
-  cursor: pointer;
-  opacity: 1;
-}
-
 .text {
   padding: 0 3% 0 6%;
 }
@@ -405,7 +381,6 @@ nav {
   color: #AAAAAA;
   font-weight: 900;
 }
-
 h1 {
   font-size: 22px;
 }
@@ -419,7 +394,7 @@ h4 {
   padding-left: 20px;
 }
 .articles-feed-info {
-  margin: -20px 34px 40px 30px;
+  margin: -20px 4% 30px 6%;
 }
 span.feed-name {
   color: #222222;
@@ -449,11 +424,33 @@ h3 {
   font-size: 18px;
   font-style: normal;
 }
+.mark-unread {
+  float: right;
+  padding: 0 17px 0 2px;
+  background-color: #efefef;
+  color: #888888;
+  font-weight: 900;
+  margin: -10px 30px 0;
+  z-index: 4;
+  pointer-events: auto;
+  /*-moz-border-radius: 5px;
+  border-radius: 5px;*/
+}
+.mark-unread:hover {
+  background-color: #ffffff;
+  color: #222222;
+  cursor: pointer;
+  pointer-events: auto;
+  z-index: 4;
+  opacity: 1;
+}
 .read {
   border-color: white;
   box-shadow: none;
   opacity: .4;
   z-index: 2;
+  pointer-events: none;
+  cursor: default;
 }
 .read a {
   pointer-events: none;
@@ -461,12 +458,16 @@ h3 {
 }
 
 
+
+
 /**
  * footer
  */
  footer {
   text-align: center;
-  margin: 0 auto 0 auto;
+  position: fixed;
+  bottom: 5px;
+  left: 30px;
  }
 .credits {
   line-height: 90%;
@@ -546,9 +547,6 @@ h3 {
     margin-top: 60px;
   }
 
-  footer {
-    display: none;
-  }
 
 /* end of not MOBILE */
 }
