@@ -12,7 +12,8 @@
        ng-controller="feedCtrl"
        ng-class="{read: a.object.read, article: true}"
        ng-show="isShowable(a)">
-    <div class="mark-unread" ng-show="a.object.read" ng-click="markRead(a, $index)">Mark Unread</div>
+    <div class="mark-unread" ng-show="a.object.read" ng-click="toggleRead(a, $index)">Mark Unread</div>
+    <div class="mark-read" ng-show="!a.object.read" ng-click="toggleRead(a, $index)">Mark Read</div>
     <div class="article-content panel panel-default">
       <div class="article-title panel-heading" data-toggle="collapse" data-parent="#accordion" data-target="#article{{ $index }}">
         <h2 class="panel-title">{{ a.object.title }}</h2>
