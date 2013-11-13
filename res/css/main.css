@@ -220,6 +220,7 @@ nav {
 
 .button-show-more {
   width: 80%;
+  margin: 80px 0 0 50px;
 }
 
 
@@ -322,7 +323,7 @@ nav {
 }
 .articles {
   /*width: 100%;*/
-  margin: -18px 0 0 1%;
+  margin: -13px 0 0 1%;
 }
 .article {
   max-width: 100%;
@@ -338,10 +339,8 @@ nav {
   margin: 10px auto 3% auto;
 }
 .article-title {
-  border-bottom: 1px solid black;
-  /*border-top: 1px solid black;*/
-  width: 100%;
   padding-top: 10px;
+  border: 1px solid #cccccc;
   margin-top: 0;
 }
 .article-title:hover {
@@ -424,19 +423,19 @@ h3 {
   font-size: 18px;
   font-style: normal;
 }
-.mark-unread {
+.mark-read, .mark-unread {
   float: right;
-  padding: 0 17px 0 2px;
+  padding: 1px 5px 1px 5px;
   background-color: #efefef;
   color: #888888;
   font-weight: 900;
-  margin: -10px 30px 0;
+  margin: -13px 40px 0;
   z-index: 4;
   pointer-events: auto;
   /*-moz-border-radius: 5px;
   border-radius: 5px;*/
 }
-.mark-unread:hover {
+.mark-read, .mark-unread:hover {
   background-color: #ffffff;
   color: #222222;
   cursor: pointer;

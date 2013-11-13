@@ -561,14 +561,15 @@ function (isSelected, Feeds, $location) {
       return true;
     };
 
-    $scope.markRead = function (a, idx) {
+    $scope.toggleRead = function (a, idx) {
       //console.log('markRead Called!',idx);
       if (!a.object.read) {
         //console.log('subtracting 1 from : '+ Feeds.data.info[a.actor.address].unread);
         Feeds.data.info[a.actor.address].unread =
             Feeds.data.info[a.actor.address].unread - 1;
         a.object.read = true;
-        if (typeof idx === 'number') {
+        if ((typeof idx === 'number') &&
+            ($('#article'+idx).hasClass('in'))) {
           $('#article'+idx).collapse('hide');
         }
       } else if (a.object.read) {
@@ -577,6 +578,7 @@ function (isSelected, Feeds, $location) {
             Feeds.data.info[a.actor.address].unread + 1;
         a.object.read = false;
       }
+
       Feeds.func.updateArticle(a);
     };
 
