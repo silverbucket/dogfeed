@@ -14,9 +14,9 @@
        ng-show="isShowable(a)">
     <div class="mark-unread" ng-show="a.object.read" ng-click="markRead(a, $index)">Mark Unread</div>
     <div class="article-content panel panel-default">
-      <div class="article-title panel-heading">
-        <a data-toggle="collapse" data-parent="#accordion" href="#article{{ $index }}">
-          <h2 class="panel-title">{{ a.object.title }}</h2></a>
+      <div class="article-title panel-heading" data-toggle="collapse" data-parent="#accordion" data-target="#article{{ $index }}">
+          <h2 class="panel-title">{{ a.object.title }}</h2>
+          <span class="article-toggle glyphicon glyphicon-chevron-down"></span>
       </div>
       <div class="article-info">
         <p>feed: <i>{{ feeds.info[a.actor.address].name }}</i></p>
@@ -24,7 +24,7 @@
         <p rel="{{ a.object.date }}">date: <i>{{ a.object.date | fromNow}}</i></p>
       </div>
       <div id="article{{ $index }}" class="panel-collapse collapse">
-        <div class="article-body panel-body" ng-click="markRead(a, $index)" data-ng-bind-html-unsafe="a.object.brief_html"></div>
+        <div class="article-body panel-body" ng-click="markRead(a, $index)" data-ng-bind-html="a.object.brief_html"></div>
       </div>
     </div>
   </div>

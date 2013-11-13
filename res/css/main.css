@@ -349,6 +349,17 @@ nav {
   padding-top: 10px;
   margin-top: 0;
 }
+.article-title:hover {
+  cursor: pointer;
+  text-decoration: underline;
+}
+.panel-title {
+  width: 90%;
+}
+.article-toggle {
+  float: right;
+  margin-top: 4px;
+}
 .article-info {
   font-size: 13px;
   margin-bottom: 15px;
@@ -425,8 +436,6 @@ span.feed-edit:hover {
   color: #222222;
   cursor: pointer;
 }
-
-
 a:hover {
   text-decoration: underline;
   cursor: pointer;
