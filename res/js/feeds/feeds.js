@@ -1,4 +1,4 @@
-angular.module('ngFeeds', ['ngRemoteStorage', 'ngSockethubClient']).
+angular.module('ngFeeds', ['ngRemoteStorage', 'ngSockethubClient', 'ngSanitize']).
 
 
 /**
@@ -90,7 +90,6 @@ function ($q, SH, CH, RS, $rootScope) {
     return defer.promise;
   };
 
-
   /****
    * ARTICLE MANAGEMENT
    *********************/
@@ -120,7 +119,6 @@ function ($q, SH, CH, RS, $rootScope) {
     });
     return defer.promise;
   };
-
 
   /****
    * FEED MANAGEMENT
@@ -156,13 +154,14 @@ function ($q, SH, CH, RS, $rootScope) {
    *
    * Parameters:
    *
-   *   m - article object recevied from sockethub
+   *   url - url of feed
+   *   name - optional name of feed
    *
    */
-  function addFeed (m) {
+  function addFeed (url, name) {
     var obj = {
-      url: m.actor.address,
-      name: m.actor.name,
+      url: url,
+      name: name,
       cache_articles: 20,
       last_fetched: new Date().getTime(),
       unread: 0
@@ -198,7 +197,7 @@ function ($q, SH, CH, RS, $rootScope) {
     }
     //console.log(" UPDATED "+updated);
     if (!updated) {
-      addFeed(obj);
+      addFeed(obj.url, obj.name);
     } else {
       RS.call('feeds', 'add', [data.info[obj.url]]).then(function (m) {
         console.log('feed updated: ', data.info[obj.url]);
@@ -246,7 +245,6 @@ function ($q, SH, CH, RS, $rootScope) {
     return defer.promise;
   };
 
-
   /****
    * FEED FETCHING
    ****************/
@@ -264,7 +262,6 @@ function ($q, SH, CH, RS, $rootScope) {
       return;
     }
     feedsTried[url] = true;
-
     var msg = {
       verb: 'fetch',
       platform: 'rss',
@@ -275,7 +272,7 @@ function ($q, SH, CH, RS, $rootScope) {
         address: url
       }]
     };
-    console.log("FETCH: ", msg);
+    //console.log("FETCH: ", msg);
     var defer = $q.defer();
     $rootScope.$broadcast('message', {type: 'info', message: 'attempting to fetch feed '+url});
     SH.submit.call(msg).then(function (o) {
@@ -293,7 +290,6 @@ function ($q, SH, CH, RS, $rootScope) {
     return defer.promise;
   };
 
-
   //
   //
   // detect when new articles are received from Sockethub
@@ -309,14 +305,13 @@ function ($q, SH, CH, RS, $rootScope) {
       return;
     }
 
-
     // check if the feed entry for this article exists yet, if not add it.
     // also check to update name.
     if (!data.info[key]) {
-      //console.log('#### - adding to data.info: ',m);
-      addFeed(m);
+      console.log('#### - adding to data.info: ',m);
+      addFeed(m.actor.address, m.actor.name);
     } else if ((!data.info[key].name) || (data.info[key].name === data.info[key].url)) {
-      //console.log('#### - updating name: ',m);
+      console.log('#### - updating name: ',m);
       data.info[key]['name'] = m.actor.name;
     }
 
@@ -455,7 +450,6 @@ function ($scope, Feeds, $rootScope, $timeout, $routeParams) {
       Feeds.func.fetchFeed(feed);
     }
   } else {
-    console.log(' NO FEED PARAM');
     Feeds.data.current.name = '';
     Feeds.data.current.indexes.length = 0;
   }
