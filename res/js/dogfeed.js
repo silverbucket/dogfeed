@@ -203,20 +203,23 @@ controller('mainCtrl', ['$scope', 'RS', 'SH', '$timeout', '$rootScope', '$routeP
 function ($scope, RS, SH, $timeout, $rootScope, $routeParams, Feeds) {
 console.log("mainCtrl ROUTE PARAMS: ", $routeParams);
   $scope.isConnected = function () {
-//console.log('isConnected: ['+RS.isConnected()+'] ['+SH.isConnected()+']');
+console.log('isConnected: ['+RS.isConnected()+'] ['+SH.isConnected()+'] ['+$routeParams.feed+']');
     if ((RS.isConnected()) && (SH.isConnected())) {
+console.log('return true 1');
       return true;
     } else {
-      if (($routeParams.feed) && (SH.isConnected())) {
+      if ((($routeParams.feed) || (Feeds.data.articles.length > 0)) && (SH.isConnected())) {
+console.log('return true 2');
         return true;
       } else {
+console.log('return false');
         return false;
       }
     }
   };
 
   $scope.isConnecting = function () {
-//console.log('isConnecting: ['+RS.isConnected()+'] ['+SH.isConnected()+']');
+console.log('isConnecting: ['+RS.isConnected()+'] ['+SH.isConnected()+']');
     if ((RS.isConnecting()) || (SH.isConnecting())) {
       return true;
     } else {
