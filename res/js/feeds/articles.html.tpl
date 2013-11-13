@@ -15,8 +15,9 @@
     <div class="mark-unread" ng-show="a.object.read" ng-click="markRead(a, $index)">Mark Unread</div>
     <div class="article-content panel panel-default">
       <div class="article-title panel-heading" data-toggle="collapse" data-parent="#accordion" data-target="#article{{ $index }}">
-          <h2 class="panel-title">{{ a.object.title }}</h2>
-          <span class="article-toggle glyphicon glyphicon-chevron-down"></span>
+        <h2 class="panel-title">{{ a.object.title }}</h2>
+        <span class="article-toggle glyphicon"
+              ng-class="{'glyphicon-chevron-down': (!a.object.read)}"></span>
       </div>
       <div class="article-info">
         <p>feed: <i>{{ feeds.info[a.actor.address].name }}</i></p>
