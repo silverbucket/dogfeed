@@ -100,7 +100,7 @@
             </div>
             <div ng-show="isConnected() && !isConnecting()">
               <div ng-controller="feedCtrl">
-                <articles class="col-md-8" feeds="feeds" settings="settings">
+                <articles feeds="feeds" settings="settings">
                 </articles>
               </div>
             </div>
@@ -173,6 +173,7 @@
     <script src="/vendor/jquery.min.js"></script>
     <script src="/vendor/angular.min.js"></script>
     <script src="/vendor/angular-route.min.js"></script>
+    <script src="/vendor/angular-sanitize.min.js"></script>
     <script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
     <script src="/vendor/snap.min.js"></script>
     <script src="/vendor/matchMedia.js"></script>
