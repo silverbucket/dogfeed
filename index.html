@@ -96,7 +96,7 @@
     <script type="text/ng-template" id="main.html">
       <section class="page" ng-controller="mainCtrl">
           <div class="row">
-            <div ng-show="isConnecting() || !delayed() || waitingForArticles()">
+            <div ng-show="isConnecting() || waitingForArticles()">
               <loading></loading>
             </div>
             <div ng-show="!isConnected() && !isConnecting() && delayed() && !waitingForArticles()">
@@ -157,9 +157,8 @@
           instance.</p>
 
           <p>If you have used news reader software before, just add your favorite
-          news feeds and Dogfeed away. If you are new to this, read the
-          _Quickstart Manual_, watch a _demonstration video_ or just try - its
-          pretty easy and really there is not a lot that can break.</p>
+          news feeds and Dogfeed away. If you are new to this, you can get a feed link
+          from your favorite news site and add it by clicking the <span class="glyphicon glyicon-plus" alt="+"></span> icon in the title bar.</p>
 
           <p>(If this is not the first time you are using Dogfeed, _go to
           Troubeshooting_)</p>
@@ -168,7 +167,7 @@
           <a href="https://silverbucket.net" target="_blank">Nick
           Jennings</a> and was made
           possible with a grant from the
-          <a href="http://nlnet.net" target="_blank">NLnet foundation</a>.</p>
+          <a href="http://nlnet.nl" target="_blank">NLnet foundation</a>.</p>
         </div>
       </div>
     </script>
