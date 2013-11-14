@@ -9,22 +9,22 @@
   </head>
   <body>
     <div id="remotestorage-connect"></div>
-    <!-- build:js res/js/remotestorage.min.js -->
-    <script type="text/javascript" src="vendor/remotestorage/remotestorage.min.js?v=0.8.1"></script>
+    <!-- build:js /vendor/remotestorage.min.js -->
+    <script type="text/javascript" src="vendor/remotestorage/remotestorage.min.js?v=0.8.3"></script>
     <!-- endbuild -->
-    <!-- build:js res/js/remotestorage-modules.min.js -->
-    <script type="text/javascript" src="vendor/remotestorage/remotestorage-sockethub.js?v=0.0.1"></script>
-    <script type="text/javascript" src="vendor/remotestorage/remotestorage-rss.js?v=0.0.1"></script>
-    <script type="text/javascript" src="vendor/remotestorage/remotestorage-articles.js?v=0.0.1"></script>
+    <!-- build:js /vendor/remotestorage-modules.min.js -->
+    <script type="text/javascript" src="vendor/remotestorage/remotestorage-sockethub.js?v=0.2.0"></script>
+    <script type="text/javascript" src="vendor/remotestorage/remotestorage-feeds.js?v=0.2.0"></script>
+    <script type="text/javascript" src="vendor/remotestorage/remotestorage-articles.js?v=0.2.0"></script>
     <!-- endbuild -->
     <script>
 (function initRemoteStorage() {
-  //remoteStorage.claimAccess({ sockethub:'rw', rss:'rw', articles:'rw' });
+  //remoteStorage.claimAccess({ sockethub:'rw', feeds:'rw', articles:'rw' });
   remoteStorage.access.claim('sockethub', 'rw');
-  remoteStorage.access.claim('rss', 'rw');
+  remoteStorage.access.claim('feeds', 'rw');
   remoteStorage.access.claim('articles', 'rw');
   remoteStorage.caching.disable('/sockethub/');
-  remoteStorage.caching.disable('/rss/');
+  remoteStorage.caching.disable('/feeds/');
   remoteStorage.caching.disable('/articles/');
   remoteStorage.displayWidget('remotestorage-connect', {
     redirectUri: window.location.origin + '/rscallback.html'
