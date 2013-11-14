@@ -9,16 +9,16 @@
   </head>
   <body>
     <div id="remotestorage-connect"></div>
-    <script src="res/js/remotestorage.min.js"></script>
-    <script src="res/js/remotestorage-modules.min.js"></script>
+    <script src="/vendor/remotestorage.min.js"></script>
+    <script src="/vendor/remotestorage-modules.min.js"></script>
     <script>
 (function initRemoteStorage() {
-  //remoteStorage.claimAccess({ sockethub:'rw', rss:'rw', articles:'rw' });
+  //remoteStorage.claimAccess({ sockethub:'rw', feeds:'rw', articles:'rw' });
   remoteStorage.access.claim('sockethub', 'rw');
-  remoteStorage.access.claim('rss', 'rw');
+  remoteStorage.access.claim('feeds', 'rw');
   remoteStorage.access.claim('articles', 'rw');
   remoteStorage.caching.disable('/sockethub/');
-  remoteStorage.caching.disable('/rss/');
+  remoteStorage.caching.disable('/feeds/');
   remoteStorage.caching.disable('/articles/');
   remoteStorage.displayWidget('remotestorage-connect', {
     redirectUri: window.location.origin + '/rscallback.html'
