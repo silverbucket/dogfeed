@@ -24,7 +24,7 @@ body {
   border: 1px solid #cccccc !important;
 }
 
-.content {
+.right-content {
   z-index: 2;
   position: absolute;
   top: 0;
@@ -516,7 +516,7 @@ h3 {
     display: none !important;
   }
 
-  .content {
+  .right-content {
     position: absolute;
     top: 0;
     right: 0;
