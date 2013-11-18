@@ -68,6 +68,11 @@ body {
 #open-left:hover {
   cursor: pointer;
 }
+.main-content {
+  margin-top: 110px;
+  margin-bottom: 100px;
+  width: 98%;
+}
 
 .scrollable{
   -webkit-transition-property: top, bottom;
@@ -176,15 +181,12 @@ nav {
   margin: 0 5% 0 5%;
   padding: 8px 0 8px 10px;
 }
-
 .alert p {
   margin: 0 0 0 1%;
 }
-
 .alert strong {
  margin-right: 5px;
 }
-
 .message-container {
   position: fixed;
   min-height: 30px;
@@ -198,16 +200,9 @@ nav {
   z-index: 4;
   margin-left: -20px;
 }
-
-.main-content {
-  margin-top: 110px;
-  margin-bottom: 100px;
-}
-
 .alert, .danger, .info, .success {
   padding: 0 0 0 10px;
 }
-
 .error {
   background-color: #ffd3d3;
   /*pointer-events: none; /*!important;*/
@@ -218,7 +213,6 @@ nav {
 .loading, .loading a {
   pointer-events: none !important;
 }
-
 .button-show-more {
   width: 80%;
   margin: 80px 0 0 50px;
