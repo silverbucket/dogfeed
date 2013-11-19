@@ -15,7 +15,7 @@ It is designed to be fully [Unhosted](http://unhosted.org), relying on Sockethub
 
 ## Use
 
-Dogfeed is available for use on [5apps.com](https://dogfeed.5apps.com)
+Dogfeed is available for use at [dogfeed.5apps.com](https://dogfeed.5apps.com)
 
 By default it is configured to use the default Sockethub instance hosted at [silverbucket.net](https://silverbucket.net), however in the settings you are able to change this to use any Sockethub instance you prefer, including your own.
 
@@ -29,7 +29,7 @@ Dogfeed is currently released as a stable web-application, though there are stil
 
 ## license
 
-Sockethub is licensed under the [AGPLv3](https://github.com/sockethub/sockethub/blob/master/LICENSE)
+Dogfeed is licensed under the [AGPLv3](https://github.com/silverbucket/dogfeed/blob/master/LICENSE)
 
 
 ## Credits
