@@ -2,7 +2,6 @@
 
 A lightweight RSS reader, built with [Sockethub](http://sockethub.org) and [remoteStorage](http://remotestorage.io).
 
-[![Code Climate](https://codeclimate.com/github/silverbucket/dogfeed.png)](https://codeclimate.com/github/silverbucket/dogfeed)
 [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/silverbucket/dogfeed/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
 
 
