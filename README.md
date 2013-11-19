@@ -27,7 +27,7 @@ By default it is configured to use the default Sockethub instance hosted at [sil
 Dogfeed is currently released as a stable web-application, though there are still known bugs and ongoing work being done to improve the overall experience, and add useful features.
 
 
-## license
+## License
 
 Dogfeed is licensed under the [AGPLv3](https://github.com/silverbucket/dogfeed/blob/master/LICENSE)
 
