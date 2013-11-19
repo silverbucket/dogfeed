@@ -7,3 +7,7 @@ status
 under development, alpha
 
 
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/silverbucket/dogfeed/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
