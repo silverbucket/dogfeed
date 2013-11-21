@@ -237,6 +237,14 @@ function ($scope, RS, SH, $timeout, $rootScope, $routeParams, Feeds) {
     }
   };
 
+  $scope.haveArticles = function () {
+    if (Feeds.data.articles.length > 0) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
 }]).
 
 directive('loading', [

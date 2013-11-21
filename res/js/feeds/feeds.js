@@ -195,6 +195,7 @@ function ($q, SH, CH, RS, $rootScope) {
         //console.log(" NO MATCH");
       }
     }
+
     //console.log(" UPDATED "+updated);
     if (!updated) {
       addFeed(obj.url, obj.name);

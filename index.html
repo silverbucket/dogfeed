@@ -99,10 +99,10 @@
             <div ng-show="isConnecting() || !delayed() || waitingForArticles()">
               <loading></loading>
             </div>
-            <div ng-show="!isConnecting() && delayed() && !waitingForArticles()">
+            <div ng-show="!isConnecting() && delayed() && !waitingForArticles() && !haveArticles()">
               <welcome></welcome>
             </div>
-            <div ng-show="!isConnecting() && !waitingForArticles()">
+            <div ng-show="!isConnecting() && !waitingForArticles() && haveArticles()">
               <div ng-controller="feedCtrl">
                 <articles feeds="feeds" settings="settings">
                 </articles>
@@ -133,7 +133,6 @@
     <script type="text/ng-template" id="sockethub-settings.html">
       <div sockethub-settings></div>
     </script>
-
 
     <script type="text/ng-template" id="about.html">
       <div class="text">
@@ -168,7 +167,6 @@
         </div>
       </div>
     </script>
-
 
     <!-- build:js /vendor/jquery.min.js -->
     <script src="/vendor/jquery.min.js?v=2.0.3"></script>
