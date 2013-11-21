@@ -71,7 +71,7 @@ body {
 .main-content {
   margin-top: 110px;
   margin-bottom: 100px;
-  width: 98%;
+  padding: 0 1% 0 1%;
 }
 
 .scrollable{
@@ -96,6 +96,8 @@ body {
 }
 nav {
   position: fixed;
+  opacity: 1;
+  z-index: 1000;
 }
 .navbar {
   min-width: 240px;
@@ -105,7 +107,6 @@ nav {
   border-left: none;
   border-right: none;
   border-radius: 0;
-  z-index: 5;
 }
 .navbar-toggle {
   margin-right: 45px;
@@ -330,8 +331,8 @@ nav {
   /*background-color: rgb(248, 248, 248);*/
 }
 .article-content {
-  max-width: 92%;
-  margin: 10px auto 3% auto;
+  width: 98%;
+  margin: 0 auto 0 auto;
 }
 .article-title {
   padding-top: 10px;
