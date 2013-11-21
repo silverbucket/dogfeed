@@ -36,7 +36,7 @@
             </form>
           </div>
 
-          <feed-list class="feeds" test="test" feeds="feeds" settings="settings">Feeds</feed-list>
+          <feed-list class="feeds" test="test" feeds="feeds" settings="settings"></feed-list>
         </div>
 
         <footer>
@@ -96,13 +96,13 @@
     <script type="text/ng-template" id="main.html">
       <section class="page" ng-controller="mainCtrl">
           <div class="row">
-            <div ng-show="isConnecting() || waitingForArticles()">
+            <div ng-show="isConnecting() || !delayed() || waitingForArticles()">
               <loading></loading>
             </div>
-            <div ng-show="!isConnected() && !isConnecting() && delayed() && !waitingForArticles()">
+            <div ng-show="!isConnecting() && delayed() && !waitingForArticles()">
               <welcome></welcome>
             </div>
-            <div ng-show="isConnected() && !isConnecting() && !waitingForArticles()">
+            <div ng-show="!isConnecting() && !waitingForArticles()">
               <div ng-controller="feedCtrl">
                 <articles feeds="feeds" settings="settings">
                 </articles>
