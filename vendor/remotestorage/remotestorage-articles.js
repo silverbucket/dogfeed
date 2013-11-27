@@ -203,6 +203,11 @@
                 description: 'date of article',
                 required: false
               },
+              dateNum: {
+                type: 'number',
+                description: 'converted date to number',
+                required: true
+              },
               html: {
                 type: 'string',
                 description: 'html content of the article',

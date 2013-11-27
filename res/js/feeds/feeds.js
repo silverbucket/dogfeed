@@ -55,7 +55,7 @@ function ($q, SH, CH, RS, $rootScope) {
     settings: {
       showRead: true,  // show read articles or disappear them
       articlesPerPage: 10,  // number of articles to show per page
-      displayCap: 5,  // current limit of articles to show (increments by articlesPerPage)
+      displayCap: 10,  // current limit of articles to show (increments by articlesPerPage)
       displayed: {}  // index of displayed articles
     },
     current: {
@@ -100,6 +100,7 @@ function ($q, SH, CH, RS, $rootScope) {
       link: obj.object.link,
       title: obj.object.title,
       date: obj.object.date,
+      dateNum: Date.parse(obj.object.date) || 0,
       html: obj.object.html,
       text: obj.object.text,
       brief_html: obj.object.brief_html,
@@ -251,7 +252,8 @@ function ($q, SH, CH, RS, $rootScope) {
    ****************/
   var feedsTried = {};
   // issue orders to fetch feeds from sockethub
-  func.fetchFeed = function fetch(url) {
+  func.fetchFeed = function fetch(url, date) {
+    console.log('fetchFeed called: '+url+' date: '+date);
     var match = false;
     for (var i = 0, len = data.infoArray.length; i < len; i = i + 1) {
       if ((data.infoArray[i]) && (data.infoArray[i].url === url)) {
@@ -271,17 +273,25 @@ function ($q, SH, CH, RS, $rootScope) {
       },
       target: [{
         address: url
-      }]
+      }],
+      object: {
+        limit: data.settings.articlesPerPage,
+        date: date || 0,
+        from: 'before'
+      }
     };
+
     //console.log("FETCH: ", msg);
     var defer = $q.defer();
     $rootScope.$broadcast('message', {type: 'info', message: 'attempting to fetch feed '+url});
     SH.submit.call(msg).then(function (o) {
       $rootScope.$broadcast('message', {type: 'success', message: 'feed added '+url});
-      data.info[url]['loaded'] = true;
+      data.info[url].loaded = true;
       defer.resolve();
     }, function (e) {
       console.log('failed fetch');
+      data.info[url].loaded = true;
+      data.info[url].error = e;
       $rootScope.$broadcast('message', {
         message: 'failed fetching feed: '+e,
         type: 'error'
@@ -321,6 +331,14 @@ function ($q, SH, CH, RS, $rootScope) {
       data.info[key].unread = (typeof data.info[key].unread === "number") ? data.info[key].unread + 1 : 1;
     }
 
+    if (!m.object.dateNum) {
+      m.object.dateNum = Date.parse(m.object.date) || 0;
+    }
+
+    if (data.info[key].oldestFetched > m.object.dateNum) {
+      data.info[key].oldestFetched = m.object.dateNum;
+    }
+
     // add article to article list
     data.articles.push(m);
 
@@ -334,6 +352,10 @@ function ($q, SH, CH, RS, $rootScope) {
       if (m.object.read) {
         // this article is read, subtract from total
         data.info[key].unread = (typeof data.info[key].unread === "number") ? data.info[key].unread - 1 : 0;
+      }
+
+      if (!m.object.dateNum) {
+        m.object.dateNum = Date.parse(m.object.date) || 0;
       }
     }, function (e) {
       console.log("ARTICLE FETCH ERROR: ", e);
@@ -436,7 +458,7 @@ function ($scope, Feeds, $rootScope, $timeout, $routeParams) {
 
   if ($routeParams.feed) {
     var feed = decodeURIComponent($routeParams.feed);
-    console.log("FEED PARAM: "+feed);
+    //console.log("FEED PARAM: "+feed);
     // if we have a url as a param, we try to fetch it
 
     //Feeds.data.selectedFeed = feed;
@@ -535,6 +557,8 @@ directive('articles', ['isSelected', 'Feeds', '$location',
 function (isSelected, Feeds, $location) {
   function ArticlesCtrl($scope) {
 
+    $scope.ArticlesDisplayed = {};
+
     $scope.showFeedSettings = function (url) {
       console.log('showFeedSettings: '+url);
       if (!url) {
@@ -583,30 +607,73 @@ function (isSelected, Feeds, $location) {
       Feeds.func.updateArticle(a);
     };
 
+    $scope.showMore = function () {
+      console.log('SHOW MORE', Feeds.data.current.indexes);
+      for (var i = 0, num = Feeds.data.current.indexes.length; i < num; i = i + 1) {
+        Feeds.func.fetchFeed(Feeds.data.current.indexes[i],
+                             Feeds.data.info[Feeds.data.current.indexes[i]].oldestFetched);
+      }
+    };
+
     $scope.isShowable = function (article) {
       if (!isSelected(article.actor.address, true)) {
         return false;
       }
 
+      // if (Feeds.data.settings.displayed[article.object.link]) {
+      //   return true;
+      // }
+
+      if (Object.keys($scope.ArticlesDisplayed).length >= Feeds.data.settings.displayCap) {
+        if ($scope.ArticlesDisplayed[article.object.link]) {
+          return true;
+        } else {
+          return false;
+        }
+        /*// we're at current displayCap, so we have to make sure we're showing the
+        // most recent articles.
+        if (Feeds.data.settings.displayed[article.object.link]) {
+          // article is currently being displayed
+          if (Feeds.data.settings.displayed.oldest <= article.object.dateNum) {
+            // date is still newer than oldest date in list
+            return true;
+          } else  {
+            // date is no longer newer than oldest date in list, so it falls off
+            // the bottom
+            return false;
+          }
+        } else {
+          // article is not currently being displayed
+          if (Feeds.data.settings.displayed.oldest < article.object.dateNum) {
+            // this article is newer than the oldest one in the list, so we
+            // should add it
+            return true;
+          } else {
+            return false;
+          }
+        }*/
+      }
+
       if (article.object.read) {
         if (Feeds.data.settings.showRead) {
-          Feeds.data.settings.displayed[article.object.link] = true;
+          $scope.ArticlesDisplayed[article.object.link] = true;
+          // keep the oldest value (dateNum of oldest article in list) up to date
+          $scope.ArticlesDisplayed.oldest =
+              ($scope.ArticlesDisplayed.oldest > article.object.dateNum) ?
+              article.object.dateNum : $scope.ArticlesDisplayed.oldest;
           return true;
         } else {
           return false;
         }
       } else {
-        Feeds.data.settings.displayed[article.object.link] = true;
+        $scope.ArticlesDisplayed[article.object.link] = true;
+        // keep the oldest value (dateNum of oldest article in list) up to date
+        $scope.ArticlesDisplayed.oldest =
+              ($scope.ArticlesDisplayed.oldest > article.object.dateNum) ?
+              article.object.dateNum : $scope.ArticlesDisplayed.oldest;
         return true;
       }
 
-      if (Feeds.data.settings.displayed[article.object.link]) {
-        return true;
-      }
-
-      if (Object.keys(Feeds.data.settings.displayed).length >= Feeds.data.settings.displayCap) {
-        return false;
-      }
     };
   }
 
