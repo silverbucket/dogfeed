@@ -250,21 +250,10 @@ function ($q, SH, CH, RS, $rootScope) {
   /****
    * FEED FETCHING
    ****************/
-  var feedsTried = {};
   // issue orders to fetch feeds from sockethub
   func.fetchFeed = function fetch(url, date) {
     console.log('fetchFeed called: '+url+' date: '+date);
-    var match = false;
-    for (var i = 0, len = data.infoArray.length; i < len; i = i + 1) {
-      if ((data.infoArray[i]) && (data.infoArray[i].url === url)) {
-        match = true;
-        break;
-      }
-    }
-    if ((match) || (feedsTried[url])) {
-      return;
-    }
-    feedsTried[url] = true;
+
     var msg = {
       verb: 'fetch',
       platform: 'rss',
