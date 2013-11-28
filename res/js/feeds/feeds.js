@@ -557,7 +557,9 @@ directive('articles', ['isSelected', 'Feeds', '$location',
 function (isSelected, Feeds, $location) {
   function ArticlesCtrl($scope) {
 
-    $scope.ArticlesDisplayed = {};
+    $scope.ArticlesDisplayed = {
+      oldest: 0
+    };
 
     $scope.showFeedSettings = function (url) {
       console.log('showFeedSettings: '+url);
@@ -608,10 +610,9 @@ function (isSelected, Feeds, $location) {
     };
 
     $scope.showMore = function () {
-      console.log('SHOW MORE', Feeds.data.current.indexes);
       for (var i = 0, num = Feeds.data.current.indexes.length; i < num; i = i + 1) {
         Feeds.func.fetchFeed(Feeds.data.current.indexes[i],
-                             Feeds.data.info[Feeds.data.current.indexes[i]].oldestFetched);
+                             $scope.ArticlesDisplayed.oldest);
       }
     };
 
@@ -630,28 +631,6 @@ function (isSelected, Feeds, $location) {
         } else {
           return false;
         }
-        /*// we're at current displayCap, so we have to make sure we're showing the
-        // most recent articles.
-        if (Feeds.data.settings.displayed[article.object.link]) {
-          // article is currently being displayed
-          if (Feeds.data.settings.displayed.oldest <= article.object.dateNum) {
-            // date is still newer than oldest date in list
-            return true;
-          } else  {
-            // date is no longer newer than oldest date in list, so it falls off
-            // the bottom
-            return false;
-          }
-        } else {
-          // article is not currently being displayed
-          if (Feeds.data.settings.displayed.oldest < article.object.dateNum) {
-            // this article is newer than the oldest one in the list, so we
-            // should add it
-            return true;
-          } else {
-            return false;
-          }
-        }*/
       }
 
       if (article.object.read) {
@@ -660,6 +639,7 @@ function (isSelected, Feeds, $location) {
           // keep the oldest value (dateNum of oldest article in list) up to date
           $scope.ArticlesDisplayed.oldest =
               ($scope.ArticlesDisplayed.oldest > article.object.dateNum) ?
+              article.object.dateNum : ($scope.ArticlesDisplayed.oldest === 0) ?
               article.object.dateNum : $scope.ArticlesDisplayed.oldest;
           return true;
         } else {
@@ -670,6 +650,7 @@ function (isSelected, Feeds, $location) {
         // keep the oldest value (dateNum of oldest article in list) up to date
         $scope.ArticlesDisplayed.oldest =
               ($scope.ArticlesDisplayed.oldest > article.object.dateNum) ?
+              article.object.dateNum : ($scope.ArticlesDisplayed.oldest === 0) ?
               article.object.dateNum : $scope.ArticlesDisplayed.oldest;
         return true;
       }
