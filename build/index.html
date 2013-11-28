@@ -32,7 +32,7 @@
             </form>
           </div>
 
-          <feed-list class="feeds" test="test" feeds="feeds" settings="settings">Feeds</feed-list>
+          <feed-list class="feeds" test="test" feeds="feeds" settings="settings"></feed-list>
         </div>
 
         <footer>
@@ -92,13 +92,13 @@
     <script type="text/ng-template" id="main.html">
       <section class="page" ng-controller="mainCtrl">
           <div class="row">
-            <div ng-show="isConnecting() || waitingForArticles()">
+            <div ng-show="isConnecting() || !delayed() || waitingForArticles()">
               <loading></loading>
             </div>
-            <div ng-show="!isConnected() && !isConnecting() && delayed() && !waitingForArticles()">
+            <div ng-show="!isConnecting() && delayed() && !waitingForArticles() && !haveArticles()">
               <welcome></welcome>
             </div>
-            <div ng-show="isConnected() && !isConnecting() && !waitingForArticles()">
+            <div ng-show="!isConnecting() && !waitingForArticles() && haveArticles()">
               <div ng-controller="feedCtrl">
                 <articles feeds="feeds" settings="settings">
                 </articles>
@@ -129,7 +129,6 @@
     <script type="text/ng-template" id="sockethub-settings.html">
       <div sockethub-settings></div>
     </script>
-
 
     <script type="text/ng-template" id="about.html">
       <div class="text">
@@ -164,7 +163,6 @@
         </div>
       </div>
     </script>
-
 
     <script src="/vendor/jquery.min.js"></script>
     <script src="/vendor/angular.min.js"></script>

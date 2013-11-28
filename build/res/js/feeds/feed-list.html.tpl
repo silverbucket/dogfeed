@@ -1,4 +1,4 @@
-<h4 ng-transclude></h4>
+<h4>Feeds</h4>
 <ul class="nav nav-list nav-pills nav-stacked">
   <li ng-click="switchFeed()" ng-class="{active: isSelected(), 'all-feeds': true}">
       <span class="glyphicon glyphicon-globe"></span> <span>All Items</span>

@@ -26,11 +26,11 @@
         <p rel="{{ a.object.date }}">date: <i>{{ a.object.date | fromNow}}</i></p>
       </div>
       <div id="article{{ $index }}" class="panel-collapse collapse">
-        <div class="article-body panel-body" ng-click="markRead(a, $index)" data-ng-bind-html="a.object.brief_html"></div>
+        <div class="article-body panel-body" ng-click="toggleRead(a, $index)" data-ng-bind-html="a.object.brief_html"></div>
       </div>
     </div>
   </div>
   <div ng-show="feeds.articles.length > 0">
-    <div class="btn btn-default button-show-more">Show More</div>
+    <div class="btn btn-default button-show-more" ng-click="showMore()">Show More</div>
   </div>
 </div>
