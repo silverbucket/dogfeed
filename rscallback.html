@@ -23,9 +23,9 @@
   remoteStorage.access.claim('sockethub', 'rw');
   remoteStorage.access.claim('feeds', 'rw');
   remoteStorage.access.claim('articles', 'rw');
-  remoteStorage.caching.disable('/sockethub/');
-  remoteStorage.caching.disable('/feeds/');
-  remoteStorage.caching.disable('/articles/');
+  // remoteStorage.caching.disable('/sockethub/');
+  // remoteStorage.caching.disable('/feeds/');
+  // remoteStorage.caching.disable('/articles/');
   remoteStorage.displayWidget('remotestorage-connect', {
     redirectUri: window.location.origin + '/rscallback.html'
   });
