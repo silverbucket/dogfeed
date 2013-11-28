@@ -272,9 +272,17 @@ function ($q, SH, CH, RS, $rootScope) {
 
     //console.log("FETCH: ", msg);
     var defer = $q.defer();
-    $rootScope.$broadcast('message', {type: 'info', message: 'attempting to fetch feed '+url});
+    var name = url;
+    if (typeof data.info[url] !== 'undefined') {
+      name = data.info[url].name;
+      data.info[url].loaded = false;
+    }
+    $rootScope.$broadcast('message', {type: 'info', message: 'fetching articles from '+name});
+
     SH.submit.call(msg).then(function (o) {
-      $rootScope.$broadcast('message', {type: 'success', message: 'feed added '+url});
+      //name = o.actor.name || name;
+      //console.log('***** : ', o);
+      $rootScope.$broadcast('message', {type: 'success', message: ''+name});
       data.info[url].loaded = true;
       defer.resolve();
     }, function (e) {
@@ -599,6 +607,8 @@ function (isSelected, Feeds, $location) {
     };
 
     $scope.showMore = function () {
+      Feeds.data.settings.displayCap = Feeds.data.settings.displayCap +
+                                       Feeds.data.settings.articlesPerPage;
       for (var i = 0, num = Feeds.data.current.indexes.length; i < num; i = i + 1) {
         Feeds.func.fetchFeed(Feeds.data.current.indexes[i],
                              $scope.ArticlesDisplayed.oldest);
@@ -641,6 +651,8 @@ function (isSelected, Feeds, $location) {
               ($scope.ArticlesDisplayed.oldest > article.object.dateNum) ?
               article.object.dateNum : ($scope.ArticlesDisplayed.oldest === 0) ?
               article.object.dateNum : $scope.ArticlesDisplayed.oldest;
+console.log('isShowable TRUE b: '+Object.keys($scope.ArticlesDisplayed).length + ' >= ' +
+            Feeds.data.settings.displayCap+ ' : ' + article.object.link, Feeds.data.articles);
         return true;
       }
 
