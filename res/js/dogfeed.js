@@ -83,9 +83,9 @@ function ($rootScope) {
 run(['RemoteStorageConfig',
 function (RScfg) {
   RScfg.modules = [
-    ['sockethub', 'rw', {'cache': true}],
-    ['feeds', 'rw', {'cache': true}],
-    ['articles', 'rw', {'cache': true}]
+    ['sockethub', 'rw', {'cache': true, 'public': false}],
+    ['feeds', 'rw', {'cache': true, 'public': false}],
+    ['articles', 'rw', {'cache': true, 'public': false}]
   ];
 }]).
 
