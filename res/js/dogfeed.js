@@ -102,7 +102,7 @@ function (cfg) {
  */
 run(['SockethubBootstrap',
 function (SockethubBootstrap) {
-  SockethubBootstrap.run({
+  SockethubBootstrap.run('dogfeed', {
     // default connection settings, if none found in remoteStorage
     host: 'silverbucket.net',
     port: '443',
@@ -190,7 +190,7 @@ function ($scope, $rootScope, settings, RS) {
   $scope.$watch('settings.connected', function (newVal, oldVal) {
     if (settings.connected) {
       settings.conn.port = Number(settings.conn.port);
-      RS.call('sockethub', 'writeConfig', [settings.conn]).then(function () {
+      RS.call('sockethub', 'writeConfig', ['dogfeed', settings.conn]).then(function () {
         console.log("Sockethub config saved to remoteStorage");
       }, function (err) {
         console.log('Failed saving Sockethub config to remoteStorage: ', err);
