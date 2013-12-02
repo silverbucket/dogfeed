@@ -7,8 +7,6 @@
         c: privateClient,
 
         init: function () {
-          //privateClient.release('');
-          //publicClient.release('');
           privateClient.declareType('config', {
             "description" : "sockethub config file",
             "type" : "object",
@@ -43,12 +41,18 @@
           });
         },
 
-        getConfig: function () {
-          return privateClient.getObject('config.json');
+        getConfig: function (name) {
+          name = name || 'default';
+          name = 'config.' + name + '.json';
+          return privateClient.getObject(name);
         },
 
-        writeConfig: function (data) {
-          return privateClient.storeObject('config', 'config.json', data);
+        writeConfig: function (name, data) {
+          if (typeof name !== 'string') {
+            throw new Error("remotestorage.socketub.writeConfig requires the unique name of config to write as first param  (e.g. writeConfig('default', {...}); )");
+          }
+          name = 'config.' + name + '.json';
+          return privateClient.storeObject('config', name, data);
         }
       }
     };
