@@ -625,7 +625,9 @@ function (isSelected, Feeds, $location) {
       // }
 
       if (Object.keys($scope.ArticlesDisplayed).length >= Feeds.data.settings.displayCap) {
-        if ($scope.ArticlesDisplayed[article.object.link]) {
+        if ((article.object.read) && (!Feeds.data.settings.showRead)) {
+          return false;
+        } else if ($scope.ArticlesDisplayed[article.object.link]) {
           return true;
         } else {
           return false;
