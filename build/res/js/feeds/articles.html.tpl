@@ -27,6 +27,12 @@
       </div>
       <div id="article{{ $index }}" class="panel-collapse collapse">
         <div class="article-body panel-body" ng-click="toggleRead(a, $index)" data-ng-bind-html="a.object.brief_html"></div>
+        <div ng-repeat="m in a.object.media"
+             class="article-audio">
+          <audio controls ng-src="{{ m.url }}" type="{{ m.type }}">
+            Your browser does not support the audio element.
+          </audio>
+        </div>
       </div>
     </div>
   </div>
