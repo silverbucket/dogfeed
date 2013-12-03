@@ -286,11 +286,13 @@ function ($q, SH, CH, RS, $rootScope) {
       data.info[url].loaded = true;
       defer.resolve();
     }, function (e) {
-      console.log('failed fetch');
-      data.info[url].loaded = true;
-      data.info[url].error = e;
+      console.log('failed fetch '+url, data.info);
+      if (typeof data.info[url] === 'object') {
+        data.info[url].loaded = true;
+        data.info[url].error = e;
+      }
       $rootScope.$broadcast('message', {
-        message: 'failed fetching feed: '+e,
+        message: 'failed fetching feed: '+url+': '+e,
         type: 'error'
       });
       defer.reject(e);
@@ -626,10 +628,12 @@ function (isSelected, Feeds, $location) {
 
       if (Object.keys($scope.ArticlesDisplayed).length >= Feeds.data.settings.displayCap) {
         if ((article.object.read) && (!Feeds.data.settings.showRead)) {
+          delete $scope.ArticlesDisplayed[article.object.link];
           return false;
         } else if ($scope.ArticlesDisplayed[article.object.link]) {
           return true;
         } else {
+          delete $scope.ArticlesDisplayed[article.object.link];
           return false;
         }
       }
@@ -644,6 +648,7 @@ function (isSelected, Feeds, $location) {
               article.object.dateNum : $scope.ArticlesDisplayed.oldest;
           return true;
         } else {
+          delete $scope.ArticlesDisplayed[article.object.link];
           return false;
         }
       } else {
@@ -655,7 +660,6 @@ function (isSelected, Feeds, $location) {
               article.object.dateNum : $scope.ArticlesDisplayed.oldest;
         return true;
       }
-
     };
   }
 
