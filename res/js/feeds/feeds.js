@@ -265,9 +265,9 @@ function ($q, SH, CH, RS, $rootScope, $sce) {
 
     var msg = {
       verb: 'fetch',
-      platform: 'rss',
+      platform: 'feeds',
       actor: {
-        address: 'rss'
+        address: 'feeds'
       },
       target: [{
         address: url
@@ -312,7 +312,7 @@ function ($q, SH, CH, RS, $rootScope, $sce) {
   //
   //
   // detect when new articles are received from Sockethub
-  SH.on('rss', 'message', function (m) {
+  SH.on('feeds', 'message', function (m) {
     console.log("Feeds received message ",m);
     var key = m.actor.address;
     if (!m.status) {
@@ -448,7 +448,7 @@ function ($scope, Feeds, $rootScope, $routeParams, $location) {
       $scope.saving = false;
       $location.path('/feeds/');
     }, function (err) {
-      console.log('error removing rss feed!: ', err);
+      console.log('error removing feed!: ', err);
       $rootScope.$broadcast('message', {type: 'error', message: err.message});
       $scope.saving = false;
       $location.path('/feeds/');
