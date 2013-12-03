@@ -451,7 +451,10 @@ h3 {
   pointer-events: none;
   cursor: default;
 }
-
+.article-audio {
+  margin-left: 5%;
+  margin-bottom: 2%;
+}
 
 
 

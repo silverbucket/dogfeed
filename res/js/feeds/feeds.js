@@ -42,8 +42,8 @@ function ($routeParams, $rootScope, Feeds) {
 /**
  * Factory: Feeds
  */
-factory('Feeds', ['$q', 'SH', 'configHelper', 'RS', '$rootScope',
-function ($q, SH, CH, RS, $rootScope) {
+factory('Feeds', ['$q', 'SH', 'configHelper', 'RS', '$rootScope', '$sce',
+function ($q, SH, CH, RS, $rootScope, $sce) {
 
   var config = {};
   var data = {
@@ -69,6 +69,15 @@ function ($q, SH, CH, RS, $rootScope) {
     }
   };
   var func = {};
+
+  function trustMedia (o) {
+    // 'trust' media urls
+    if (typeof o.object.media === 'object') {
+      for (var i = 0, len = o.object.media.length; i < len; i = i + 1) {
+        o.object.media[i].url = $sce.trustAsResourceUrl(o.object.media[i].url);
+      }
+    }
+  }
 
   /****
    * CONFIG MANAGEMENT
@@ -337,6 +346,8 @@ function ($q, SH, CH, RS, $rootScope) {
     if (data.info[key].oldestFetched > m.object.dateNum) {
       data.info[key].oldestFetched = m.object.dateNum;
     }
+
+    trustMedia(m);
 
     // add article to article list
     data.articles.push(m);
