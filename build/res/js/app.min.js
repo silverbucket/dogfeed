@@ -117,6 +117,12 @@ function (SockethubBootstrap) {
  */
 run(['$rootScope', 'RS', '$timeout',
 function ($rootScope, RS, $timeout) {
+  // set custom messages
+  var dict = RemoteStorage.I18n.getDictionary();
+  dict.view_connect = "<strong>Login</strong>";
+  RemoteStorage.I18n.setDictionary(dict);
+
+  // check if connected
   if (!RS.isConnected()) {
     $timeout(function () {
       if (!RS.isConnected()) {
