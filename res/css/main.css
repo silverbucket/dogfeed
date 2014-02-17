@@ -16,27 +16,84 @@ body {
   position: fixed !important;
   top: 3px !important;
 }
+
+
+/*
+ * NAV
+ */
 .navbar {
   z-index: 5000;
+  background-color: rgba(255,255,255,255);
+  min-width: 300px;
+  max-height: 50px;
+  min-height: 50px;
 }
+.navbar-brand {
+  color: #222;
+  padding-right: 0;
+}
+.offcanvas-button {
+  height: 50px;
+  padding: 2px 18px 3px 3px;
+  border: none !important;
+}
+.dogfeed-logo {
+  display: inline-block;
+  background: url('/res/img/dogfeed-logo.svg') center left no-repeat;
+  width: 90px;
+  height: 30px;
+  background-size: 90px 30px;
+  float: left;
+  margin-top: -2px;
+}
+
+
+/*
+ * STATUS MSGS
+ */
 .message-container {
   padding: 0 !important;
   display: block;
   position: fixed;
-  top: 50px;
+  top: 49px;
   left: 0;
   right: 0;
   width: 100%;
   text-align: center;
   white-space: nowrap;
   overflow: hidden;
-  z-index: 100;
-  div {
-    z-index: 100 !important;
-    padding: 0 !important;
-  }
+  z-index: 2000;
 }
+.message-container div {
+  z-index: 2000 !important;
+  padding: 0 !important;
+}
+
+
+
+
+
 .container {
   padding: 0px !important;
-  margin: 0 2% 0 2%;
 }
+
+
+.feed-list-sidebar {
+  position: absolute;
+  top: 50px;
+  left: 0;
+  bottom: 0;
+  padding-top: 20px;
+  overflow-y: auto;
+  z-index: 1000;
+}
+.opposite-sidebar {
+  position: absolute;
+  top: 75px;
+  right: 0;
+  bottom: 0;
+  overflow-y: auto;
+  background-color: white;
+  z-index: 2000;
+}
+
