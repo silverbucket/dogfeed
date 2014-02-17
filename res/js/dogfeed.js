@@ -47,35 +47,21 @@ function ($rootScope, $timeout) {
   }, 3000);
 }]).
 
-/**
- * snap.js initialization
- */
-run(['$rootScope',
-function ($rootScope) {
-  $rootScope.snapper = new Snap({
-    element: document.getElementById('content'),
-    disable: 'right',
-    maxPosition: 220
-  });
-
-  $(window).on('resize', function () {
-      $rootScope.isMobile = matchMedia('(max-width:1024px)').matches;
-      $rootScope.isDesktop = !$rootScope.isMobile;
-  });
-
-  $(window).on('resize', function () {
-    if ($rootScope.isMobile) {
-      //console.log("ENABLE SNAPPER ");
-      $rootScope.snapperDisabled = false;
-      $rootScope.snapper.enable();
-    } else {
-      //console.log("DISABLE SNAPPER ");
-      $rootScope.snapperDisabled = true;
-      $rootScope.snapper.close();
-      $rootScope.snapper.disable();
-    }
-  });
+run([function () {
+  // TODO
+  // this should be executed when we know the appropriate dom elements are
+  // loaded.
+  // right now if someone *starts* on the settings page, this will be executed
+  // and wont bind to anything as the contacts view was not registered.
+  setTimeout(function () {
+    $(document).ready(function() {
+      $('[data-toggle=offcanvas]').click(function() {
+        $('.opposite-sidebar').toggleClass('active');
+      });
+    });
+  }, 1000);
 }]).
+
 
 /**
  * remotestorage config
