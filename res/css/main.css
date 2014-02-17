@@ -81,16 +81,18 @@ body {
 }
 
 
+/* LEFT */
 .feed-list-sidebar {
   position: absolute;
-  top: 50px;
+  top: 75px;
   left: 0;
   bottom: 0;
-  padding-top: 20px;
   overflow-y: auto;
+  padding-top: 5px;
   z-index: 1000;
+  background-color: #eee;
 }
-.opposite-sidebar {
+/*.opposite-sidebar {
   position: absolute;
   top: 75px;
   right: 0;
@@ -98,5 +100,36 @@ body {
   overflow-y: auto;
   background-color: white;
   z-index: 2000;
+}*/
+/* RIGHT */
+.opposite-sidebar {
+  position: absolute;
+  top: 74px;
+  right: 0;
+  bottom: 0;
+  padding-top: 6px;
+  overflow-y: auto;
+  background-color: white;
+  z-index: 1000;
 }
 
+
+
+.opposite-sidebar {
+  transition: 800ms;
+}
+.slider-active {
+  transition: 1s;
+  left: 80%;
+}
+
+
+/*@media screen and (max-width: 767px) {
+  .active {
+    transition: 1s;
+    left: 80%;
+  }
+  .feed-list-sidebar {
+    width: 80%;
+  }
+}*/

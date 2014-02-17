@@ -57,11 +57,11 @@ run([function () {
     $(document).ready(function() {
       $('[data-toggle=offcanvas]').click(function() {
         console.log('-----!!!!!!!');
-        $('.opposite-sidebar').toggleClass('active');
+        $('.opposite-sidebar').toggleClass('slider-active');
       });
       $("[name='showRead']").bootstrapSwitch('size', 'small');
     });
-  }, 1000);
+  }, 500);
 }]).
 
 
