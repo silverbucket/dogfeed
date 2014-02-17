@@ -261,7 +261,7 @@ function ($q, SH, CH, RS, $rootScope, $sce) {
    ****************/
   // issue orders to fetch feeds from sockethub
   func.fetchFeed = function fetch(url, date) {
-    console.log('fetchFeed called: '+url+' date: '+date);
+    //console.log('fetchFeed called: '+url+' date: '+date);
 
     var msg = {
       verb: 'fetch',
@@ -313,7 +313,7 @@ function ($q, SH, CH, RS, $rootScope, $sce) {
   //
   // detect when new articles are received from Sockethub
   SH.on('feeds', 'message', function (m) {
-    console.log("Feeds received message ",m);
+    //console.log("Feeds received message ",m);
     var key = m.actor.address;
     if (!m.status) {
       console.log('received error message from sockethub: ', m);
