@@ -1,0 +1,12 @@
+<!-- feeds list sidebar -->
+<div class="feed-list-container" ng-controller="feedCtrl">
+  <div class="feed-controls">
+    <form name="quickSettings" class="form-horizontal" novalidate>
+        <label for="showRead" style="width: 125px; margin-right: 5px;"
+               class="control-label">Show Read Articles</label>
+        <input type="checkbox" name="showRead" ng-model="feeds.settings.showRead" />
+    </form>
+  </div>
+
+  <feed-list class="feeds" test="test" feeds="feeds" settings="settings"></feed-list>
+</div>

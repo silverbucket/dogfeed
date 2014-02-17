@@ -34,9 +34,9 @@
         </div>
         <div class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
-            <li ng-class="class('add')"><a href="#/feeds/add"><span class="glyphicon glyphicon-plus"></span></a></li>
-            <li ng-class="class('settings-sockethub')"><a href="#/settings/sockethub"><span class="glyphicon glyphicon-cog"></span></a></li>
-            <li ng-class="class('about')"><a href="#/about"><span class="glyphicon glyphicon-info-sign"></span></a></li>
+            <li ng-class="class('add')"><a href="/#/feeds/add"><span class="glyphicon glyphicon-plus"></span></a></li>
+            <li ng-class="class('settings-sockethub')"><a href="/#/settings/sockethub"><span class="glyphicon glyphicon-cog"></span></a></li>
+            <li ng-class="class('about')"><a href="/#/about"><span class="glyphicon glyphicon-info-sign"></span></a></li>
           </ul>
         </div>
       </div>
@@ -49,62 +49,6 @@
     <div butterbar>Loading...</div>
 
     <div class="container" ng-view></div>
-
-
-    <!-- feeds list slider -->
-    <div class="slider-left scrollable">
-      <nav>
-        <div class="navbar navbar-default">
-          <div class="container">
-            <div class="navbar-header">
-            </div>
-          </div>
-        </div>
-      </nav>
-
-      <div class="slider-content">
-        <div class="feed-list-container" ng-controller="feedCtrl">
-          <div class="feed-controls">
-            <form name="quickSettings" class="form-horizontal" novalidate>
-                <label for="showRead" style="width: 125px; margin-right: 5px;"
-                       class="control-label">Show Read Articles</label>
-                <input type="checkbox" name="showRead" ng-model="feeds.settings.showRead" />
-            </form>
-          </div>
-
-          <feed-list class="feeds" test="test" feeds="feeds" settings="settings"></feed-list>
-        </div>
-
-        <footer>
-          <div class="credits">
-            dogfeed version 0.2.8<br />
-            <a target="_blank" href="https://github.com/silverbucket/dogfeed/issues/">feedback and bug reports</a>
-          </div>
-        </footer>
-      </div>
-    </div>
-
-    <!-- main content -->
-    <div id="content" class="right-content scrollable">
-
-
-
-    <script type="text/ng-template" id="main.html">
-      <section class="page" ng-controller="mainCtrl">
-        <div ng-show="isConnecting() || !delayed() || waitingForArticles()">
-          <loading></loading>
-        </div>
-        <div ng-show="!isConnecting() && delayed() && !waitingForArticles() && !haveArticles()">
-          <welcome></welcome>
-        </div>
-        <div ng-show="!isConnecting() && !waitingForArticles() && haveArticles()">
-          <div ng-controller="feedCtrl">
-            <articles feeds="feeds" settings="settings">
-            </articles>
-          </div>
-        </div>
-      </section>
-    </script>
 
     <script type="text/ng-template" id="loading.html">
       <div class="text">
@@ -196,6 +140,7 @@
     <script src="/vendor/angular-shared/ngCommandQueue.js?v=0.0.1"></script>
     <script src="/res/js/feeds/feeds.js?v=0.2.8"></script>
     <script src="/res/js/dogfeed.js?v=0.2.8"></script>
+    <script src="/res/js/directives/misc.js?v=0.2.8"></script>
     <!-- endbuild -->
   </body>
 </html>

@@ -1,0 +1,22 @@
+<div class="row row-offcanvas row-offcanvas-left">
+
+  <div feed-list-sidebar></div>
+
+  <div class="col-xs-12 col-sm-9 col-md-9 col-lg-10 opposite-sidebar">
+    <section class="page" ng-controller="mainCtrl">
+      <div ng-show="isConnecting() || !delayed() || waitingForArticles()">
+        <loading></loading>
+      </div>
+      <div ng-show="!isConnecting() && delayed() && !waitingForArticles() && !haveArticles()">
+        <welcome></welcome>
+      </div>
+      <div ng-show="!isConnecting() && !waitingForArticles() && haveArticles()">
+        <div ng-controller="feedCtrl">
+          <articles feeds="feeds" settings="settings">
+          </articles>
+        </div>
+      </div>
+    </section>
+  </div><!--/span-->
+
+</div><!--/row-->

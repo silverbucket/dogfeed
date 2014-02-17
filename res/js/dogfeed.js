@@ -15,7 +15,7 @@ function ($routeProvider, $locationProvider) {
   $locationProvider.html5Mode(true);
   $routeProvider.
     when('/', {
-      templateUrl: "main.html"
+      templateUrl: "/res/views/main.html"
     }).
     when('/settings/sockethub', {
       templateUrl: "sockethub-settings.html"
