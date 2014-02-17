@@ -8,6 +8,7 @@
     <link rel="shortcut icon" href="favicon.ico" />
     <!-- build:css /vendor/bootstrap/css/bootstrap.min.css -->
     <link rel="stylesheet" href="/vendor/bootstrap/css/bootstrap.min.css?v=3.0.2" />
+    <link rel="stylesheet" href="/vendor/bootstrap/css/bootstrap-switch.min.css?v=20140217" />
     <!-- endbuild -->
     <!-- build:css /res/css/app.min.css -->
     <link rel="stylesheet" href="/res/css/main.css?v=0.2.8" />
@@ -21,16 +22,16 @@
 
     <div id="remotestorage-connect" ng-controller="remoteStorageCtrl"></div>
 
-    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation" ng-controller="titlebarCtrl">
+    <nav class="navbar navbar-fixed-top" role="navigation" ng-controller="titlebarCtrl">
       <div class="container">
         <div class="navbar-header">
-           <p class="pull-left visible-xs" style="padding:0;margin:0;">
-             <button type="button" class="btn btn-primary btn-md" data-toggle="offcanvas">Settings</button>
-           </p>
-           <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <p class="pull-left visible-xs">
+              <button type="button" class="btn btn-default btn-md offcanvas-button" data-toggle="offcanvas"><span class="glyphicon glyphicon-align-justify"></span></button>
+            </p>
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
             <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#"><span class="dogfeed-icon"></span> Dogfeed</a>
+          <a class="navbar-brand" href="/#/"><span class="dogfeed-logo"></span></a>
         </div>
         <div class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
@@ -120,6 +121,7 @@
     <!-- endbuild -->
     <!-- build:js /vendor/bootstrap/js/bootstrap.min.js -->
     <script src="/vendor/bootstrap/js/bootstrap.min.js?v=3.0.2"></script>
+    <script src="/vendor/bootstrap/js/bootstrap-switch.min.js?v=20140217"></script>
     <!-- endbuild -->
     <!-- build:js /vendor/remotestorage.min.js -->
     <script src="/vendor/remotestorage/remotestorage.min.js?v=0.9.0"></script>
