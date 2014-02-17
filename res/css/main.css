@@ -57,10 +57,9 @@ body {
   padding: 0 !important;
   display: block;
   position: fixed;
-  top: 49px;
+  top: 45px;
   left: 0;
   right: 0;
-  width: 100%;
   text-align: center;
   white-space: nowrap;
   overflow: hidden;
@@ -69,8 +68,13 @@ body {
 .message-container div {
   z-index: 2000 !important;
   padding: 0 !important;
+  transition: 1s;
 }
-
+.alert {
+  background-color: rgba(255,255,255,0);
+  border: none;
+  transition: 1s;
+}
 
 
 /*
@@ -84,30 +88,25 @@ body {
 /* LEFT */
 .feed-list-sidebar {
   position: absolute;
-  top: 75px;
+  top: 50px;
   left: 0;
   bottom: 0;
   overflow-y: auto;
-  padding-top: 5px;
+  padding-top: 20px;
   z-index: 1000;
-  background-color: #eee;
+  background-color: rgba(250,250,250,255);
+  text-align: center;
 }
-/*.opposite-sidebar {
-  position: absolute;
-  top: 75px;
-  right: 0;
-  bottom: 0;
-  overflow-y: auto;
-  background-color: white;
-  z-index: 2000;
-}*/
+.feeds {
+  text-align: left;
+}
 /* RIGHT */
 .opposite-sidebar {
   position: absolute;
-  top: 74px;
+  top: 50px;
   right: 0;
   bottom: 0;
-  padding-top: 6px;
+  padding-top: 20px;
   overflow-y: auto;
   background-color: white;
   z-index: 1000;
@@ -124,12 +123,9 @@ body {
 }
 
 
-/*@media screen and (max-width: 767px) {
-  .active {
+@media screen and (max-width: 767px) {
+  .slider-active {
     transition: 1s;
     left: 80%;
   }
-  .feed-list-sidebar {
-    width: 80%;
-  }
-}*/
+}

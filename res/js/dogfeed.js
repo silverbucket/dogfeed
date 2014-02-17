@@ -56,7 +56,6 @@ run([function () {
   setTimeout(function () {
     $(document).ready(function() {
       $('[data-toggle=offcanvas]').click(function() {
-        console.log('-----!!!!!!!');
         $('.opposite-sidebar').toggleClass('slider-active');
       });
       $("[name='showRead']").bootstrapSwitch('size', 'small');

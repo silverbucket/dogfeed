@@ -291,7 +291,7 @@ function ($q, SH, CH, RS, $rootScope, $sce) {
     SH.submit.call(msg).then(function (o) {
       //name = o.actor.name || name;
       //console.log('***** : ', o);
-      $rootScope.$broadcast('message', {type: 'success', message: ''+name});
+      $rootScope.$broadcast('message', {type: 'success', title: 'Fetched', message: ''+name});
       data.info[url].loaded = true;
       defer.resolve();
     }, function (e) {
