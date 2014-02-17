@@ -1,6 +1,17 @@
 <div class="row row-offcanvas row-offcanvas-left">
 
-  <div feed-list-sidebar></div>
+  <!-- feeds list sidebar -->
+  <div class="col-xs-6 col-sm-3 col-md-3 col-lg-2 sidebar-offcanvas feed-list-sidebar" id="sidebar" role="navigation" ng-controller="feedCtrl">
+    <div class="feed-controls">
+      <form name="quickSettings" class="form-horizontal" novalidate>
+          <label for="showRead"
+                 class="control-label">Show Read Articles</label>
+          <input type="checkbox" name="showRead" ng-model="feeds.settings.showRead" />
+      </form>
+    </div>
+
+    <feed-list class="feeds" test="test" feeds="feeds" settings="settings"></feed-list>
+  </div>
 
   <div class="col-xs-12 col-sm-9 col-md-9 col-lg-10 opposite-sidebar">
     <section class="page" ng-controller="mainCtrl">
