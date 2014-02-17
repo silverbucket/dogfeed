@@ -56,8 +56,10 @@ run([function () {
   setTimeout(function () {
     $(document).ready(function() {
       $('[data-toggle=offcanvas]').click(function() {
+        console.log('-----!!!!!!!');
         $('.opposite-sidebar').toggleClass('active');
       });
+      $("[name='showRead']").bootstrapSwitch('size', 'small');
     });
   }, 1000);
 }]).
