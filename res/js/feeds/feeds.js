@@ -66,6 +66,9 @@ function ($q, SH, CH, RS, $rootScope, $sce) {
       name: '',
       url: '',
       origName: ''
+    },
+    state: {
+      remoteStorage: false
     }
   };
   var func = {};
@@ -143,18 +146,20 @@ function ($q, SH, CH, RS, $rootScope, $sce) {
         timeout: false
       });
     }, 1000);
-    RS.call('feeds', 'getAll', ['']).then(function (urls) {
-      console.log('Feeds: got feed urls from remoteStorage ', urls);
-      for (var key in urls) {
-        if ((!urls[key]) || ((typeof urls[key].url === 'undefined') &&
-                             (typeof urls[key].address === 'undefined'))) {
-          console.log('ERROR processing url['+key+']: ', urls[key]);
+    RS.call('feeds', 'getAll', ['']).then(function (feeds) {
+      console.log('Feeds: got feed urls from remoteStorage ', feeds);
+      for (var key in feeds) {
+        if ((!feeds[key]) || ((typeof feeds[key].url === 'undefined') &&
+                             (typeof feeds[key].address === 'undefined'))) {
+          console.log('ERROR processing url['+key+']: ', feeds[key]);
         } else {
-          urls[key].url = (urls[key].url) ? urls[key].url : urls[key].address;
-          urls[key].unread = 0;
-          func.fetchFeed(urls[key].url); // asign existing feed info to data struct
+          feeds[key].url = (feeds[key].url) ? feeds[key].url : feeds[key].address;
+          feeds[key].unread = 0;
+          addFeed(feeds[key]);
+          func.fetchFeed(feeds[key].url); // asign existing feed info to data struct
         }
       }
+      data.state.remoteStorage = true;
     }, function (err) {
       console.log('error: unable to get feed list from remoteStorage: ', err);
       $rootScope.$broadcast('message', {
@@ -162,6 +167,7 @@ function ($q, SH, CH, RS, $rootScope, $sce) {
         type: 'error',
         timeout: false
       });
+      data.state.remoteStorage = true;
     });
   })();
 
@@ -183,6 +189,7 @@ function ($q, SH, CH, RS, $rootScope, $sce) {
     obj.last_fetched = (obj.last_fetched) ? obj.last_fetched : new Date().getTime();
     obj.unread = (obj.unread) ? obj.unread : ((data.info[obj.url]) &&
                                               (data.info[obj.url].unread)) ? data.info[obj.url].unread : 0;
+    obj.image = (obj.image.url) ? obj.image.url : '';
     delete obj.objectType;
     delete obj.categories;
     delete obj.address;
@@ -337,7 +344,7 @@ function ($q, SH, CH, RS, $rootScope, $sce) {
     // check if the feed entry for this article exists yet, if not add it.
     // also check to update name.
     if (!data.info[key]) {
-      console.log('#### - adding to data.info: ',m);
+      console.log('#### - adding to data.info: ', m);
       addFeed(m.actor);
     } else if ((!data.info[key].name) || (data.info[key].name === data.info[key].url)) {
       console.log('#### - updating name: ',m);
@@ -553,7 +560,6 @@ function (isSelected, Feeds, $location, $rootScope) {
       } else {
         $location.path('/feeds/'+encodeURIComponent(url));
       }
-      $rootScope.snapper.close();
     };
   }
 
@@ -567,6 +573,39 @@ function (isSelected, Feeds, $location, $rootScope) {
     templateUrl: '/res/js/feeds/feed-list.html.tpl',
     controller: FeedListCtrl,
     transclude: true
+  };
+}]).
+
+/**
+ * directive: feedTiles
+ */
+directive('feedTiles', ['isSelected', 'Feeds', '$location', '$rootScope',
+function (isSelected, Feeds, $location, $rootScope) {
+  function FeedTilesCtrl ($scope) {
+
+    console.log('******** DATA: ', $scope.feeds);
+    $scope.isSelected = isSelected;
+
+    $scope.switchFeed = function (url, groupId, error) {
+      //console.log('SWITCH FEED: '+encodeURIComponent(url));
+      if (error) { return false; }
+      if (!url) {
+        $location.path('/feeds/');
+      } else {
+        $location.path('/feeds/'+encodeURIComponent(url));
+      }
+    };
+  }
+
+  return {
+    restrict: 'E',
+    scope: {
+      'feeds': '=',
+      'settings': '=',
+      'test': '='
+    },
+    templateUrl: '/res/js/feeds/feed-tiles.html.tpl',
+    controller: FeedTilesCtrl
   };
 }]).
 
