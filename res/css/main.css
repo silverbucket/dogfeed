@@ -36,9 +36,13 @@ body {
   padding-left: 20px;
 }
 .offcanvas-button {
-  height: 49px;
-  padding: 2px 18px 3px 3px;
+  height: 47px;
+  padding: 2px 18px 3px 0px;
   border: none !important;
+  z-index: 3000;
+}
+.offcanvas-button .span {
+  margin-left: -20px;
 }
 .dogfeed-logo {
   display: inline-block;
@@ -56,10 +60,14 @@ body {
  */
 .message-container {
   padding: 0 !important;
-  float: left;
+  margin: 0 !important;
+  display: block;
+  /*float: left;
   top: 45px;
   left: 0;
-  right: 0;
+  right: 0;*/
+  height: 20px;
+  min-height: 20px;
   width: 100%;
   text-align: center;
   white-space: nowrap;
@@ -68,7 +76,6 @@ body {
   background-color: rgba(255,255,255,0);
 }
 .message-container div {
-  z-index: 2000 !important;
   padding: 0 !important;
   transition: 1s;
 }
@@ -88,6 +95,7 @@ body {
  */
 .container {
   padding: 0 !important;
+  margin: 0 !important;
 }
 
 
@@ -101,17 +109,23 @@ body {
   z-index: 1000;
   background-color: rgba(250,250,250,255);
   padding: 0 !important;
-  text-align: left;
 }
 .logo-bar {
   display: block;
   max-height: 50px;
   min-height: 50px;
   margin: 0;
-  padding: 0;
+  padding: 15px 0 0 15px;
+}
+.sidebar-container {
+  padding: 10px 0 0 15px;
 }
 .feeds {
   text-align: left;
+}
+.feed-settings {
+  text-align: left;
+  margin-left: 0;
 }
 
 /* RIGHT */
@@ -161,11 +175,11 @@ body {
 }
 
 .opposite-sidebar {
-  transition: 800ms;
+  transition: 1s;
 }
 .slider-active {
   transition: 1s;
-  left: 80%;
+  left: 40%;
 }
 
 
@@ -174,12 +188,18 @@ body {
  */
 .content-container {
   padding: 0 5% 0 5%;
-  margin-top: 30px;
+  margin-top: 0;
+}
+.feed-tile {
+  padding: 0;
+  margin: 0;
+  min-width: 150px;
+  display: block;
 }
 
 @media screen and (max-width: 767px) {
   .slider-active {
     transition: 1s;
-    left: 80%;
+    left: 75%;
   }
 }
