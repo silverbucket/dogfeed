@@ -81,7 +81,7 @@ function (RScfg) {
  */
 run(['MessagesConfig',
 function (cfg) {
-  cfg.timeout = 15000;
+  //cfg.timeout = 15000;
 }]).
 
 /**
