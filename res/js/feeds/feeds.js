@@ -177,14 +177,15 @@ function ($q, SH, CH, RS, $rootScope, $sce) {
    *
    */
   function addFeed (obj) {
+    //console.log('********** ADDING:', obj);
     obj.url = (obj.address) ? obj.address : obj.url;
     obj.cache_articles = (obj.cache_articles) ? obj.cache_articles : 20;
     obj.last_fetched = (obj.last_fetched) ? obj.last_fetched : new Date().getTime();
-    obj.unread = (obj.unread) ? obj.unread : (data.info[obj.url].unread) ? data.info[obj.url].unread : 0;
+    obj.unread = (obj.unread) ? obj.unread : ((data.info[obj.url]) &&
+                                              (data.info[obj.url].unread)) ? data.info[obj.url].unread : 0;
     delete obj.objectType;
     delete obj.categories;
     delete obj.address;
-    console.log('********** ADDING ['+obj.url+']: ', obj);
     data.info[obj.url] = obj;
     data.infoArray.push(obj);
     RS.queue('feeds', 'add', [obj]);
