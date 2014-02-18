@@ -11,7 +11,7 @@ html {
   overflow-y: hidden; /* Prevent scroll on narrow devices */
 }
 body {
-  padding-top: 75px !important;
+  /*padding-top: 75px !important;*/
 }
 #remotestorage-widget {
   position: fixed !important;
@@ -23,11 +23,12 @@ body {
  * NAV
  */
 .navbar {
-  z-index: 5000;
+  z-index: 1000;
   background-color: rgba(255,255,255,255);
   min-width: 300px;
   max-height: 50px;
   min-height: 50px;
+  margin: 0;
 }
 .navbar-brand {
   color: #222;
@@ -35,7 +36,7 @@ body {
   padding-left: 20px;
 }
 .offcanvas-button {
-  height: 50px;
+  height: 49px;
   padding: 2px 18px 3px 3px;
   border: none !important;
 }
@@ -44,7 +45,7 @@ body {
   background: url('/res/img/dogfeed-logo.svg') center left no-repeat;
   width: 90px;
   height: 30px;
-  background-size: 90px 30px;
+  background-size: 85px 25px;
   float: left;
   margin-top: -2px;
 }
@@ -55,11 +56,11 @@ body {
  */
 .message-container {
   padding: 0 !important;
-  display: block;
-  position: fixed;
+  float: left;
   top: 45px;
   left: 0;
   right: 0;
+  width: 100%;
   text-align: center;
   white-space: nowrap;
   overflow: hidden;
@@ -77,7 +78,6 @@ body {
   margin: 0 auto 0 auto;
   padding: 0 5px 0 5px;
   min-width: 300px;
-  width: 50%;
   transition: 1s;
   border-radius: 15px;
 }
@@ -87,38 +87,78 @@ body {
  * CONTENT CONTAINER
  */
 .container {
-  padding: 0px !important;
+  padding: 0 !important;
 }
 
 
 /* LEFT */
 .feed-list-sidebar {
   position: absolute;
-  top: 50px;
+  top: 0;
   left: 0;
   bottom: 0;
   overflow-y: auto;
-  padding-top: 20px;
   z-index: 1000;
   background-color: rgba(250,250,250,255);
-  text-align: center;
+  padding: 0 !important;
+  text-align: left;
+}
+.logo-bar {
+  display: block;
+  max-height: 50px;
+  min-height: 50px;
+  margin: 0;
+  padding: 0;
 }
 .feeds {
   text-align: left;
 }
+
 /* RIGHT */
 .opposite-sidebar {
   position: absolute;
-  top: 50px;
+  top: 0;
   right: 0;
   bottom: 0;
-  padding-top: 20px;
   overflow-y: auto;
   background-color: white;
   z-index: 1000;
+  padding: 0 !important;
 }
-
-
+.loading-header {
+  text-align: center;
+}
+.loading-image {
+  width: 20%;
+  margin: 20% auto auto auto;
+  opacity: 0.5;
+}
+@-webkit-keyframes pulse {
+  from {
+    -webkit-transform: scale(1.0);
+    opacity: 0.5;
+  }
+  50% {
+    -webkit-transform: scale(1.0);
+    opacity: 0.75;
+  }
+  to {
+    -webkit-transform: scale(1.0);
+    opacity: 0.5;
+  }
+}
+.loading-image {
+  -webkit-animation-name: pulse;
+  -webkit-animation-duration: 2s;
+  -webkit-animation-iteration-count: 10;
+}
+.dogfeed-logo-large {
+  display: block;
+  background: url('/res/img/dogfeed-logo.svg') center left no-repeat;
+  width: 200px;
+  height: 70px;
+  background-size: 170px 50px;
+}
 
 .opposite-sidebar {
   transition: 800ms;
@@ -133,7 +173,8 @@ body {
  * CONTENT
  */
 .content-container {
-  padding: 0 5px 0 5px;
+  padding: 0 5% 0 5%;
+  margin-top: 30px;
 }
 
 @media screen and (max-width: 767px) {

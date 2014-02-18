@@ -1,33 +1,15 @@
-<div class="row row-offcanvas row-offcanvas-left">
 
-  <!-- feeds list sidebar -->
-  <div class="col-xs-10 col-sm-4 col-md-3 col-lg-3 sidebar-offcanvas feed-list-sidebar" id="sidebar" role="navigation" ng-controller="feedCtrl">
-    <div class="feed-controls">
-      <form name="quickSettings" class="form-horizontal" novalidate>
-          <label for="showRead"
-                 class="control-label">Show Read Articles</label>
-          <input type="checkbox" name="showRead" ng-model="feeds.settings.showRead" />
-      </form>
-    </div>
-
-    <feed-list class="feeds" test="test" feeds="feeds" settings="settings"></feed-list>
+<section class="page" ng-controller="mainCtrl">
+  <div ng-show="isConnecting() || !delayed() || waitingForArticles()">
+    <loading></loading>
   </div>
-
-  <div class="col-xs-12 col-sm-8 col-md-9 col-lg-9 opposite-sidebar">
-    <section class="page" ng-controller="mainCtrl">
-      <div ng-show="isConnecting() || !delayed() || waitingForArticles()">
-        <loading></loading>
-      </div>
-      <div ng-show="!isConnecting() && delayed() && !waitingForArticles() && !haveArticles()">
-        <welcome></welcome>
-      </div>
-      <div ng-show="!isConnecting() && !waitingForArticles() && haveArticles()">
-        <div ng-controller="feedCtrl">
-          <articles feeds="feeds" settings="settings">
-          </articles>
-        </div>
-      </div>
-    </section>
-  </div><!--/span-->
-
-</div><!--/row-->
+  <div ng-show="!isConnecting() && delayed() && !waitingForArticles() && !haveArticles()">
+    <welcome></welcome>
+  </div>
+  <div ng-show="!isConnecting() && !waitingForArticles() && haveArticles()">
+    <div ng-controller="feedCtrl">
+      <articles feeds="feeds" settings="settings">
+      </articles>
+    </div>
+  </div>
+</section>
