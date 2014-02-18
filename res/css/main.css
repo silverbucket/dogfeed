@@ -58,12 +58,13 @@ body {
   display: block;
   position: fixed;
   top: 45px;
-  left: 0;
-  right: 0;
+  left: 18%;
+  right: 18%;
   text-align: center;
   white-space: nowrap;
   overflow: hidden;
   z-index: 2000;
+  min-width: 300px;
 }
 .message-container div {
   z-index: 2000 !important;
@@ -71,9 +72,10 @@ body {
   transition: 1s;
 }
 .alert {
-  background-color: rgba(255,255,255,0);
+  background-color: rgba(255,255,255,255);
   border: none;
   transition: 1s;
+  border-radius: 15px;
 }
 
 

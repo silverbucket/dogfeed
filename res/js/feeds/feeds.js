@@ -54,7 +54,7 @@ function ($q, SH, CH, RS, $rootScope, $sce) {
     groupArray: [],
     settings: {
       showRead: true,  // show read articles or disappear them
-      articlesPerPage: 10,  // number of articles to show per page
+      articlesPerPage: 5,  // number of articles to show per page
       displayCap: 10,  // current limit of articles to show (increments by articlesPerPage)
       displayed: {}  // index of displayed articles
     },
@@ -135,13 +135,22 @@ function ($q, SH, CH, RS, $rootScope, $sce) {
    ******************/
   // grab whatever feeds exists in remoteStorage right away
   (function getFeedUrls() {
+    setTimeout(function () {
+      $rootScope.$broadcast('message', {
+        message: 'fetching feeds from remoteStorage',
+        title: 'Info',
+        type: 'info',
+        timeout: false
+      });
+    }, 1000);
     RS.call('feeds', 'getAll', ['']).then(function (urls) {
       console.log('Feeds: got feed urls from remoteStorage ', urls);
       for (var key in urls) {
-        if ((!urls[key]) || (typeof urls[key].url === 'undefined')) {
+        if ((!urls[key]) || ((typeof urls[key].url === 'undefined') &&
+                             (typeof urls[key].address === 'undefined'))) {
           console.log('ERROR processing url['+key+']: ', urls[key]);
         } else {
-          var url = urls[key].url;
+          urls[key].url = (urls[key].url) ? urls[key].url : urls[key].address;
           urls[key].unread = 0;
           func.fetchFeed(urls[key].url); // asign existing feed info to data struct
         }
@@ -164,18 +173,18 @@ function ($q, SH, CH, RS, $rootScope, $sce) {
    *
    * Parameters:
    *
-   *   url - url of feed
-   *   name - optional name of feed
+   *   actor portion of feed object from sockethub, or feed object from remotestorage
    *
    */
-  function addFeed (url, name) {
-    var obj = {
-      url: url,
-      name: name,
-      cache_articles: 20,
-      last_fetched: new Date().getTime(),
-      unread: 0
-    };
+  function addFeed (obj) {
+    obj.url = (obj.address) ? obj.address : obj.url;
+    obj.cache_articles = (obj.cache_articles) ? obj.cache_articles : 20;
+    obj.last_fetched = (obj.last_fetched) ? obj.last_fetched : new Date().getTime();
+    obj.unread = (obj.unread) ? obj.unread : (data.info[obj.url].unread) ? data.info[obj.url].unread : 0;
+    delete obj.objectType;
+    delete obj.categories;
+    delete obj.address;
+    console.log('********** ADDING ['+obj.url+']: ', obj);
     data.info[obj.url] = obj;
     data.infoArray.push(obj);
     RS.queue('feeds', 'add', [obj]);
@@ -208,7 +217,7 @@ function ($q, SH, CH, RS, $rootScope, $sce) {
 
     //console.log(" UPDATED "+updated);
     if (!updated) {
-      addFeed(obj.url, obj.name);
+      addFeed(obj);
     } else {
       RS.call('feeds', 'add', [data.info[obj.url]]).then(function (m) {
         console.log('feed updated: ', data.info[obj.url]);
@@ -328,7 +337,7 @@ function ($q, SH, CH, RS, $rootScope, $sce) {
     // also check to update name.
     if (!data.info[key]) {
       console.log('#### - adding to data.info: ',m);
-      addFeed(m.actor.address, m.actor.name);
+      addFeed(m.actor);
     } else if ((!data.info[key].name) || (data.info[key].name === data.info[key].url)) {
       console.log('#### - updating name: ',m);
       data.info[key]['name'] = m.actor.name;

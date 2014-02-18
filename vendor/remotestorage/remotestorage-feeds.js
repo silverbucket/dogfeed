@@ -199,6 +199,31 @@
                 description: 'human readable name of feed',
                 required: false
               },
+              description: {
+                type: 'string',
+                description: 'human readable description of feed',
+                required: false
+              },
+              image: {
+                type: 'string',
+                description: 'url of feed image (logo)',
+                required: false
+              },
+              favicon: {
+                type: 'string',
+                description: 'url of feeds favicon',
+                required: false
+              },
+              language: {
+                type: 'string',
+                description: 'language of feed',
+                required: false
+              },
+              author: {
+                type: 'string',
+                description: 'author of feed',
+                required: false
+              },
               cache_articles: {
                 type: 'number',
                 description: 'number of articles to store',
