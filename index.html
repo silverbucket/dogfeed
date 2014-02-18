@@ -23,33 +23,34 @@
     <div class="row row-offcanvas row-offcanvas-left">
 
       <!-- feeds list sidebar -->
-      <div class="col-xs-10 col-sm-4 col-md-3 col-lg-3 sidebar-offcanvas feed-list-sidebar" id="sidebar" role="navigation" ng-controller="feedCtrl">
+      <div class="col-xs-10 col-sm-7 col-md-7 col-lg-7 sidebar-offcanvas feed-list-sidebar" id="sidebar" role="navigation" ng-controller="feedCtrl">
         <div class="logo-bar">
-          <a class="navbar-brand" href="/#/"><span class="dogfeed-logo"></span></a>
+          <a href="/#/"><span class="dogfeed-logo"></span></a>
         </div>
-        <div class="feed-controls">
-          <form name="quickSettings" class="form-horizontal" novalidate>
-              <label for="showRead"
-                     class="control-label">Show Read Articles</label>
-              <input type="checkbox" name="showRead" ng-model="feeds.settings.showRead" />
-          </form>
+        <div class="sidebar-container">
+          <div class="feed-settings">
+            <form name="quickSettings" class="form-horizontal" novalidate>
+                <label for="showRead"
+                       class="control-label">Show Read Articles</label>
+                <input type="checkbox" name="showRead" ng-model="feeds.settings.showRead" />
+            </form>
+          </div>
+          <feed-list class="feeds" test="test" feeds="feeds" settings="settings"></feed-list>
         </div>
-
-        <feed-list class="feeds" test="test" feeds="feeds" settings="settings"></feed-list>
       </div>
 
 
       <!-- main content area -->
-      <div class="col-xs-12 col-sm-8 col-md-9 col-lg-9 opposite-sidebar">
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 opposite-sidebar">
 
         <div id="remotestorage-connect" ng-controller="remoteStorageCtrl"></div>
 
         <nav class="navbar" role="navigation" ng-controller="titlebarCtrl">
           <div class="container">
             <div class="navbar-header">
-                <p class="pull-left visible-xs">
+                <span class="pull-left">
                   <button type="button" class="btn btn-default btn-md offcanvas-button" data-toggle="offcanvas"><span class="glyphicon glyphicon-align-justify"></span></button>
-                </p>
+                </span>
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                 <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
               </button>
@@ -92,18 +93,15 @@
 
       <div class="text">
         <div class="row">
-          <div class="col-xs-12 col-sm-5 col-md-4 col-lg-3">
-            <h2 class="text-header">Welcome</h2>
-          </div>
-          <div class="col-xs-12 col-sm-7 col-md-8 col-lg-9">
-          <span class="dogfeed-logo-large"></span>
+          <div class="col-xs-12">
+            <span class="dogfeed-logo-large"></span>
           </div>
         </div>
         <div class="row">
           <div class="col-xs-12">
             <div class="text-content">
               <p>It seems that this is your first time using Dogfeed. Dogfeed is an unhosted RSS/Atom feed reader built on Sockethub and remoteStorage</p>
-              <p>Connect your storage using the remoteStorage widget in the upper right corner, or <a href="http://remotestorage.io/get" target="_blank">visit the remoteStorage website</a> to register for an account or learn how to set up your own storage server.</p>
+              <p>Connect your storage using the remoteStorage widget in the upper right corner, or <a href="https://5apps.com/users/sign_up?site=storage" target="_blank">visit the 5apps website</a> to register for a remoteStorage account.</p>
             </div>
           </div>
         </div>
