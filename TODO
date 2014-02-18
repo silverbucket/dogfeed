@@ -1,0 +1,17 @@
+TODO
+----
+* make sure feeds added include images from sockethub, even if the fist copy was fetched from remotestorage
+* it seems the page count isn't working? we get all articles on page load.
+
+
+
+FEEDS
+-----
+http://redecentralize.org/podcast/feed.rss
+http://html5weekly.com/rss/1ga1fgen
+http://www.freie-radios.net/portal/podcast.php?rss
+http://blog.hugoroy.eu/feed/
+http://www.questionablecontent.net/QCRSS.xml
+http://blog.silverbucket.net/rss
+http://www.redicecreations.com/radio/radio.xml
+http://unhosted.org/adventures/feed.rss
