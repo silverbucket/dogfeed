@@ -238,6 +238,15 @@ function ($scope, RS, SH, $timeout, $rootScope, $routeParams, Feeds) {
     }
   };
 
+  $scope.noFeeds = function () {
+    if ((Feeds.data.infoArray.length === 0) &&
+        (Feeds.data.state.remoteStorage)) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
 }]).
 
 directive('loading', [
