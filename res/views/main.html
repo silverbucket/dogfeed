@@ -1,15 +1,14 @@
-
 <section class="page" ng-controller="mainCtrl">
   <div ng-show="isConnecting() || !delayed() || waitingForArticles()">
     <loading></loading>
   </div>
-  <div ng-show="!isConnecting() && delayed() && !waitingForArticles() && !haveArticles()">
+  <div ng-show="!isConnecting() && !delayed() && !waitingForArticles() && noFeeds()">
+  <p>[] [] [] [{{noFeeds()}}]</p>
     <welcome></welcome>
   </div>
-  <div ng-show="!isConnecting() && !waitingForArticles() && haveArticles()">
+  <div ng-show="!isConnecting() && delayed() && !waitingForArticles()">
     <div ng-controller="feedCtrl">
-      <articles feeds="feeds" settings="settings">
-      </articles>
+      <feed-tiles class="feeds" test="test" feeds="feeds" settings="settings"></feed-tiles>
     </div>
   </div>
 </section>
