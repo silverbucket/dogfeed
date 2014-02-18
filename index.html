@@ -49,7 +49,7 @@
 
     <div butterbar>Loading...</div>
 
-    <div class="container" ng-view></div>
+    <div class="content-container" ng-view></div>
 
     <script type="text/ng-template" id="loading.html">
       <div class="text">
@@ -70,39 +70,43 @@
     </script>
 
     <script type="text/ng-template" id="sockethub-settings.html">
-      <div sockethub-settings></div>
+      <div class="col-xs-12 col-sm-8 col-md-9 col-lg-9">
+        <div sockethub-settings></div>
+      </div>
     </script>
 
     <script type="text/ng-template" id="about.html">
-      <div class="text">
-        <h2 class="text-header">About Dogfeed</h2>
-        <div class="text-content">
-          <p>Dogfeed is an
-          <a href="http://unhosted.org" target="_blank">Unhosted</a>
-          newsreader that allows you to access your news feeds from anywhere you
-          want on anything that has a decent web browser - on your phone, desktop,
-          tablet or Smart TV.</p>
+      <div class="col-xs-12 col-sm-8 col-md-9 col-lg-9">
+        <div class="text">
+          <h2 class="text-header">About Dogfeed</h2>
+          <div class="text-content">
+            <p>Dogfeed is an
+            <a href="http://unhosted.org" target="_blank">Unhosted</a>
+            newsreader that allows you to access your news feeds from anywhere you
+            want on anything that has a decent web browser - on your phone, desktop,
+            tablet or Smart TV.</p>
 
-          <p>Dogfeed is
-          <a href="http://github.com/silverbucket/dogfeed" target="_blank">open source</a>,
-          so you can improve it, translate it, or use parts of it to build your own
-          applications. It leverages client-side javascript for all the
-          application logic, and
-          <a href="http://sockethub.org" target="_blank">Sockethub</a> for server
-          independant, server-side functionality, while storing all your data to
-          your private
-          <a href="http://remotestorage.io" target="_blank">remoteStorage</a>
-          instance.</p>
+            <p>Dogfeed is
+            <a href="http://github.com/silverbucket/dogfeed" target="_blank">open source</a>,
+            so you can improve it, translate it, or use parts of it to build your own
+            applications. It leverages client-side javascript for all the
+            application logic, and
+            <a href="http://sockethub.org" target="_blank">Sockethub</a> for server
+            independant, server-side functionality, while storing all your data to
+            your private
+            <a href="http://remotestorage.io" target="_blank">remoteStorage</a>
+            instance.</p>
 
-          <p>If you have used news reader software before, just add your favorite
-          news feeds and Dogfeed away. If you are new to this, you can get a feed link
-          from your favorite news site and add it by clicking the 'Add feed' link (<span class="glyphicon glyicon-plus" alt="plus"></span> icon) in the title bar.</p>
+            <p>If you have used news reader software before, just add your favorite
+            news feeds and Dogfeed away. If you are new to this, you can get a feed link
+            from your favorite news site and add it by clicking the 'Add feed' link (<span class="glyphicon glyicon-plus" alt="plus"></span> icon) in the title bar.</p>
 
-          <p>Dogfeed is developed and maintained by
-          <a href="https://silverbucket.net" target="_blank">Nick
-          Jennings</a> and was made
-          possible with a grant from the
-          <a href="http://nlnet.nl" target="_blank">NLnet foundation</a>.</p>
+            <p>Dogfeed is developed and maintained by
+            <a href="https://silverbucket.net" target="_blank">Nick
+            Jennings</a> and was made
+            possible with a grant from the
+            <a href="http://nlnet.nl" target="_blank">NLnet foundation</a>.</p>
+          </div>
         </div>
       </div>
     </script>
