@@ -58,13 +58,13 @@ body {
   display: block;
   position: fixed;
   top: 45px;
-  left: 18%;
-  right: 18%;
+  left: 0;
+  right: 0;
   text-align: center;
   white-space: nowrap;
   overflow: hidden;
   z-index: 2000;
-  min-width: 300px;
+  background-color: rgba(255,255,255,0);
 }
 .message-container div {
   z-index: 2000 !important;
@@ -74,6 +74,10 @@ body {
 .alert {
   background-color: rgba(255,255,255,255);
   border: none;
+  margin: 0 auto 0 auto;
+  padding: 0 5px 0 5px;
+  min-width: 300px;
+  width: 50%;
   transition: 1s;
   border-radius: 15px;
 }
@@ -124,6 +128,13 @@ body {
   left: 80%;
 }
 
+
+/**
+ * CONTENT
+ */
+.content-container {
+  padding: 0 5px 0 5px;
+}
 
 @media screen and (max-width: 767px) {
   .slider-active {
