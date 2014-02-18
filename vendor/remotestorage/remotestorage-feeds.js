@@ -233,6 +233,16 @@
                 type: 'number',
                 description: 'last time feed was fetched',
                 required: false
+              },
+              date_added: {
+                type: 'number',
+                description: 'date feed was added',
+                required: true
+              },
+              date_updated: {
+                type: 'number',
+                description: 'date feed was added',
+                required: true
               }
             }
           });
@@ -253,8 +263,14 @@
           if (typeof obj.url === 'string') {
             obj.id = md5(obj.url);
           } else {
-            obj.id = privateClient.uuid();
+            return false;
+            //obj.id = privateClient.uuid();
           }
+          if (!obj.date_added) {
+            obj.date_added = new Date().getTime();
+          }
+          obj.date_updated = new Date().getTime();
+
           return privateClient.storeObject(moduleName, obj.id, obj);
         },
 
