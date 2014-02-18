@@ -1,8 +1,12 @@
 TODO
 ----
-* make sure feeds added include images from sockethub, even if the fist copy was fetched from remotestorage
-* it seems the page count isn't working? we get all articles on page load.
-
+* simplify Feeds service
+  - incoming from remotestorage
+  - populate feed data
+  - send fetches to sockethub
+  - as articles come in:
+    . update feed data
+    . populate article data
 
 
 FEEDS
