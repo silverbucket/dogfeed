@@ -75,10 +75,6 @@ body {
   padding: 0 !important;
   margin: 0 !important;
   display: block;
-  /*float: left;
-  top: 45px;
-  left: 0;
-  right: 0;*/
   height: 20px;
   min-height: 20px;
   width: 100%;
@@ -141,6 +137,9 @@ body {
 .feed-settings {
   text-align: left;
   margin-left: 0;
+}
+.feed-settings label {
+  font-weight: normal !important;
 }
 
 /* RIGHT */
@@ -214,11 +213,13 @@ body {
  */
 .feed-tile {
   padding: 0;
-  margin: 4px;
-  min-width: 145px;
+  margin: 2px;
+  min-width: 135px;
+  max-width: 135px;
   display: block;
-  height: 145px;
-  width: 145px;
+  height: 135px;
+  width: 135px;
+  cursor: pointer;
 }
 .feed-tile-info {
   text-align: left;
@@ -230,7 +231,7 @@ body {
   background-color: rgba(0,0,0,0.5);
 }
 .feed-tile-loading {
-  height: 95px;
+  height: 85px;
   width: 100%;
   position: absolute;
   top: 0;
@@ -238,7 +239,7 @@ body {
 }
 .feed-title-text {
   float: right;
-  width: 120px;
+  width: 110px;
   margin-left: 5px;
 }
 .unread-count {
@@ -265,7 +266,6 @@ body {
 }
 .feed-entry {
   display: inline-block;
-  /*pointer-events: all;*/
   cursor: pointer;
   min-width: 200px;
   padding: 2px 0 2px 5px;
@@ -275,8 +275,6 @@ body {
 }
 .feed-name {
   display: inline-block;
-  /*pointer-events: all;
-  cursor: pointer;*/
   min-width: 170px;
 }
 .feed-entry:hover {
@@ -292,7 +290,6 @@ body {
 .active {
   background-color: #08c;
   color: white;
-  /*pointer-events: none;*/
 }
 .active:hover {
   background-color: #08c;
@@ -310,6 +307,162 @@ body {
   background-repeat: no-repeat;
   background-position: left top;
 }
+
+
+
+
+
+
+/**
+ * ARTICLES
+ */
+.article-page {
+  margin-top: 25px;
+}
+.articles-header {
+  text-align: center;
+  background-color: #efefef;
+  color: #3d3d3d;
+  border-radius: 5px;
+  font-weight: 900;
+  padding: 0px 0 2px 0;
+  margin-bottom: 3%;
+}
+.articles {
+  margin: -13px 0 0 1%;
+}
+.article {
+  max-width: 100%;
+  padding: 10px 0 10px 0;
+  margin: 0 auto 15px auto;
+  border-bottom: 2px solid #efefef;
+}
+.article-content {
+  width: 98%;
+  margin: 0 auto 0 auto;
+}
+.article-title {
+  padding-top: 10px;
+  border: 1px solid #cccccc;
+  margin-top: 0;
+}
+.article-title:hover {
+  cursor: pointer;
+  text-decoration: underline;
+}
+.panel-title {
+  width: 90%;
+}
+.article-toggle {
+  float: right;
+  margin-top: 4px;
+}
+.article-info {
+  font-size: 13px;
+  margin-bottom: 15px;
+  margin-left: 10px;
+  font-family: "times";
+}
+.article-info p {
+  margin: 0;
+}
+.article img {
+  position: relative;
+  max-width: 100%;
+  height: auto;
+}
+.article p {
+  font-style: normal;
+}
+.text {
+  padding: 0 3% 0 6%;
+}
+.text-content {
+  color: #555555;
+}
+.text-header {
+  color: #AAAAAA;
+  font-weight: 900;
+}
+h1 {
+  font-size: 22px;
+}
+h2 {
+  display: inline-block;
+  color: black;
+  font-size: 20px;
+  margin-top: 0;
+}
+h4 {
+  padding-left: 20px;
+}
+.articles-feed-info {
+  margin: -20px 4% 30px 6%;
+}
+span.feed-name {
+  color: #222222;
+  font-weight: 900;
+}
+span.feed-edit {
+  float:right;
+  padding: 0 2px 0 2px;
+  background-color: #efefef;
+  color: #888888;
+  font-weight: 900;
+}
+span.feed-edit:hover {
+  background-color: #ffffff;
+  color: #222222;
+  cursor: pointer;
+}
+a:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+a h2:hover {
+  text-decoration: underline;
+}
+h3 {
+  display: inline-block;
+  font-size: 18px;
+  font-style: normal;
+}
+.mark-read, .mark-unread {
+  float: right;
+  padding: 1px 5px 1px 5px;
+  background-color: #efefef;
+  color: #888888;
+  font-weight: 900;
+  margin: -13px 40px 0;
+  z-index: 4;
+  pointer-events: auto;
+}
+.mark-read, .mark-unread:hover {
+  background-color: #ffffff;
+  color: #222222;
+  cursor: pointer;
+  pointer-events: auto;
+  z-index: 4;
+  opacity: 1;
+}
+.read {
+  border-color: white;
+  box-shadow: none;
+  opacity: .4;
+  z-index: 2;
+  pointer-events: none;
+  cursor: default;
+}
+.read a {
+  pointer-events: none;
+  cursor: default;
+}
+.article-audio {
+  margin-left: 5%;
+  margin-bottom: 2%;
+}
+
+
 
 
 @media screen and (max-width: 767px) {
