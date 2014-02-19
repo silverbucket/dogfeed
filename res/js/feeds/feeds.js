@@ -105,14 +105,16 @@ function ($q, SH, CH, RS, $rootScope, $sce) {
   /****
    * ARTICLE MANAGEMENT
    *********************/
-  // update or create an article entry on remoteStorage
+  // update or create an article entry
+  // - add to article indexes
+  // - update on remoteStorage
   func.updateArticle = function updateArticle(obj) {
     var defer = $q.defer();
     var s_obj = {
       link: obj.object.link,
       title: obj.object.title,
       date: obj.object.date,
-      dateNum: Date.parse(obj.object.date) || 0,
+      datenum: Date.parse(obj.object.date) || 0,
       html: obj.object.html,
       text: obj.object.text,
       brief_html: obj.object.brief_html,
@@ -155,7 +157,7 @@ function ($q, SH, CH, RS, $rootScope, $sce) {
         } else {
           feeds[key].url = (feeds[key].url) ? feeds[key].url : feeds[key].address;
           feeds[key].unread = 0;
-          addFeed(feeds[key]);
+          func.updateFeed(feeds[key]);
           func.fetchFeed(feeds[key].url); // asign existing feed info to data struct
         }
       }
@@ -172,30 +174,40 @@ function ($q, SH, CH, RS, $rootScope, $sce) {
   })();
 
   /**
-   * Function: addFeed
+   * Function: _saveFeed
    *
-   * take a record from sockethub and creates a feed entry, queueing to store
-   * in rs
+   * take a feed object, add to info & infoArray and queue to
+   * store to remoteStorage.
    *
    * Parameters:
    *
-   *   actor portion of feed object from sockethub, or feed object from remotestorage
+   *   obj - feed object
    *
    */
-  function addFeed (obj) {
+  function _saveFeed (obj) {
     //console.log('********** ADDING:', obj);
-    obj.url = (obj.address) ? obj.address : obj.url;
-    obj.cache_articles = (obj.cache_articles) ? obj.cache_articles : 20;
-    obj.last_fetched = (obj.last_fetched) ? obj.last_fetched : new Date().getTime();
-    obj.unread = (obj.unread) ? obj.unread : ((data.info[obj.url]) &&
-                                              (data.info[obj.url].unread)) ? data.info[obj.url].unread : 0;
-    obj.image = (obj.image.url) ? obj.image.url : '';
-    delete obj.objectType;
-    delete obj.categories;
-    delete obj.address;
     data.info[obj.url] = obj;
-    data.infoArray.push(obj);
+    _addToInfoArray(obj);
     RS.queue('feeds', 'add', [obj]);
+  }
+
+  //
+  // find if object already exists in infoArray, if so overwrite with new object
+  // else push it to stack.
+  //
+  function _addToInfoArray(obj) {
+    // iterate through infoArray to see if this feed entry exists in it already
+    var updated = false;
+    for (var i = 0, len = data.infoArray.length; i < len; i = i + 1) {
+      if ((data.infoArray[i]) && (data.infoArray[i].url === obj.url)) {
+        data.infoArray[i] = obj;
+        updated = true;
+        break;
+      }
+    }
+    if (!updated) {
+      data.infoArray.push(obj);
+    }
   }
 
   /**
@@ -205,36 +217,47 @@ function ($q, SH, CH, RS, $rootScope, $sce) {
    *
    * Parameters:
    *
-   *   obj - feed object (remotestorage format)
+   *   obj - feed object (remotestorage or sockethub format)
    */
   func.updateFeed = function (obj) {
-    //console.log('updateFeed called', obj);
+    console.log('updateFeed called', obj);
     var updated = false;
-    for (var i = 0, len = data.infoArray.length; i < len; i = i + 1) {
-      console.log("infoArray "+i+': '+ data.infoArray[i].url + ' === '+ obj.url);
-      if ((data.infoArray[i]) && (data.infoArray[i].url === obj.url)) {
-        //console.log("MATCH");
-        data.infoArray[i].name = obj.name;
-        data.info[obj.url].name = obj.name;
-        updated = true;
-        break;
-      } else {
-        //console.log(" NO MATCH");
-      }
+    var defaults = {
+      name: '',
+      cache_articles: 20,
+      last_fetched: new Date().getTime(),
+      unread: 0,
+      image: '/res/img/rss_feed_orange.png',
+      favicon: ''
+    };
+
+    if (data.info[obj.url]) {
+      // feed record exists, update it. set defaults based on existing record.
+      defaults.name = (data.info[obj.url].name) ? data.info[obj.url].name : defaults.name;
+      defaults.cache_articles = (data.info[obj.url].cache_articles) ? data.info[obj.url].cache_articles : defaults.cache_articles;
+      defaults.last_fetched = (data.info[obj.url].last_fetched) ? data.info[obj.url].last_fetched : defaults.last_fetched;
+      defaults.unread = (data.info[obj.url].unread) ? data.info[obj.url].unread : defaults.unread;
+      defaults.image = (data.info[obj.url].image) ? data.info[obj.url].image : defaults.image;
+      defaults.favicon = (data.info[obj.url].favicon) ? data.info[obj.url].favicon : defaults.favicon;
     }
 
-    //console.log(" UPDATED "+updated);
-    if (!updated) {
-      addFeed(obj);
-    } else {
-      RS.call('feeds', 'add', [data.info[obj.url]]).then(function (m) {
-        console.log('feed updated: ', data.info[obj.url]);
-        $rootScope.$broadcast('message', {type: 'success', message: 'updated feed ' + obj.url});
-      }, function (err) {
-        console.log('ERROR',err);
-        $rootScope.$broadcast('message', {type: 'error', message: err.message});
-      });
-    }
+    // now ensure passed in object has all fields updated, assuming passed in object
+    // is the most recent copy we have to go on.
+    obj.url = (obj.address) ? obj.address : obj.url;
+    obj.cache_articles = (obj.cache_articles) ? obj.cache_articles : defaults.cache_articles;
+    obj.last_fetched = (obj.last_fetched) ? obj.last_fetched : defaults.last_fetched;
+    obj.unread = (obj.unread) ? obj.unread : ((data.info[obj.url]) &&
+                                              (data.info[obj.url].unread)) ? data.info[obj.url].unread : defaults.unread;
+    obj.image = (typeof obj.image === 'object' && typeof obj.image.url === 'string') ? obj.image.url : defaults.image;
+    obj.favicon = (obj.favicon) ? obj.favicon : defaults.favicon;
+
+    // remotestorage doesn't use these properties, but sockethub passes them to us
+    // so let's delete them now.
+    delete obj.objectType;
+    delete obj.categories;
+    delete obj.address;
+
+    _saveFeed(obj);
   };
 
   /**
@@ -248,28 +271,30 @@ function ($q, SH, CH, RS, $rootScope, $sce) {
    */
   func.removeFeed = function (url) {
     var defer = $q.defer();
+
     RS.call('feeds', 'remove', [url]).then(function (m) {
-      delete data.info[url];
-      for (var i = 0, len = data.infoArray.length; i < len; i = i + 1) {
-        if ((data.infoArray[i]) && (data.infoArray[i].url === url)) {
-          //console.log('removing from list: ',data.infoArray[i]);
-          data.infoArray.splice(i, 1);
-          break;
-        }
-      }
-      console.log('articles count: '+data.articles.length);
-      for (i = 0, len = data.articles.length; i < len; i = i + 1) {
-        if ((data.articles[i]) && (data.articles[i].actor.address === url)) {
-          //console.log('removing article from list: ',data.articles[i]);
-          data.articles.splice(i, 1);
-        }
-      }
-      console.log('articles count: '+data.articles.length);
-      console.log('feed removed: ', url);
       defer.resolve(m);
     }, function (err) {
       defer.reject(err);
     });
+
+    delete data.info[url];
+    // remove this feed from infoArray
+    for (var i = 0, len = data.infoArray.length; i < len; i = i + 1) {
+      if ((data.infoArray[i]) && (data.infoArray[i].url === url)) {
+        data.infoArray.splice(i, 1);
+        break;
+      }
+    }
+    // remove articles for this feed
+    for (i = 0, len = data.articles.length; i < len; i = i + 1) {
+      if ((data.articles[i]) && (data.articles[i].actor.address === url)) {
+        data.articles.splice(i, 1);
+      }
+    }
+    console.log('articles count: '+data.articles.length);
+    console.log('feed removed: ', url);
+
     return defer.promise;
   };
 
@@ -278,7 +303,6 @@ function ($q, SH, CH, RS, $rootScope, $sce) {
    ****************/
   // issue orders to fetch feeds from sockethub
   func.fetchFeed = function fetch(url, date) {
-    //console.log('fetchFeed called: '+url+' date: '+date);
 
     var msg = {
       verb: 'fetch',
@@ -296,7 +320,6 @@ function ($q, SH, CH, RS, $rootScope, $sce) {
       }
     };
 
-    //console.log("FETCH: ", msg);
     var defer = $q.defer();
     var name = url;
     if (typeof data.info[url] !== 'undefined') {
@@ -306,8 +329,6 @@ function ($q, SH, CH, RS, $rootScope, $sce) {
     $rootScope.$broadcast('message', {type: 'info', message: 'fetching articles from '+name});
 
     SH.submit.call(msg).then(function (o) {
-      //name = o.actor.name || name;
-      //console.log('***** : ', o);
       $rootScope.$broadcast('message', {type: 'success', title: 'Fetched', message: ''+name});
       data.info[url].loaded = true;
       defer.resolve();
@@ -327,11 +348,12 @@ function ($q, SH, CH, RS, $rootScope, $sce) {
   };
 
   //
-  //
   // detect when new articles are received from Sockethub
+  //
   SH.on('feeds', 'message', function (m) {
     //console.log("Feeds received message ",m);
     var key = m.actor.address;
+
     if (!m.status) {
       console.log('received error message from sockethub: ', m);
       $rootScope.$broadcast('message', {
@@ -341,14 +363,16 @@ function ($q, SH, CH, RS, $rootScope, $sce) {
       return;
     }
 
+    //
     // check if the feed entry for this article exists yet, if not add it.
     // also check to update name.
-    if (!data.info[key]) {
-      console.log('#### - adding to data.info: ', m);
-      addFeed(m.actor);
+    //
+    if (!data.info[key])  {
+      func.updateFeed(m.actor);
     } else if ((!data.info[key].name) || (data.info[key].name === data.info[key].url)) {
-      console.log('#### - updating name: ',m);
-      data.info[key]['name'] = m.actor.name;
+      func.updateFeed(m.actor);
+    } else if ((typeof m.actor.image === 'object' && typeof m.actor.image.url === 'string') && (data.info[key].image !== m.actor.image.url)) {
+      func.updateFeed(m.actor);
     }
 
     if (!m.object.read) {
@@ -356,33 +380,36 @@ function ($q, SH, CH, RS, $rootScope, $sce) {
       data.info[key].unread = (typeof data.info[key].unread === "number") ? data.info[key].unread + 1 : 1;
     }
 
-    if (!m.object.dateNum) {
-      m.object.dateNum = Date.parse(m.object.date) || 0;
+    if (!m.object.datenum) {
+      m.object.datenum = Date.parse(m.object.date) || 0;
     }
 
-    if (data.info[key].oldestFetched > m.object.dateNum) {
-      data.info[key].oldestFetched = m.object.dateNum;
+    if (data.info[key].oldestFetched > m.object.datenum) {
+      data.info[key].oldestFetched = m.object.datenum;
     }
 
+    // clean urls for angularjs security
     trustMedia(m);
 
     // add article to article list
     data.articles.push(m);
 
-    // fetch article from remoteStorage if exists
+    //
+    // we've added the article from sockethub to the article list, now let's
+    // try to fetch the article from remoteStorage to see we already have a
+    // record of it.
+    //
+    // if so, we apply read status.
+    //
     RS.call('articles', 'getByUrl', [m.object.link]).then(function (a) {
-      if (a) {
+      if ((typeof a === 'object') && (typeof a.read === 'boolean')) {
         //console.log('ARTICLE FETCH from RS: ', a);
         m.object.read = (a.read) ? a.read : false;
-      }
 
-      if (m.object.read) {
-        // this article is read, subtract from total
-        data.info[key].unread = (typeof data.info[key].unread === "number") ? data.info[key].unread - 1 : 0;
-      }
-
-      if (!m.object.dateNum) {
-        m.object.dateNum = Date.parse(m.object.date) || 0;
+        if (m.object.read) {
+          // this article is read, subtract from total
+          data.info[key].unread = (typeof data.info[key].unread === "number") ? data.info[key].unread - 1 : 0;
+        }
       }
     }, function (e) {
       console.log("ARTICLE FETCH ERROR: ", e);
@@ -609,6 +636,7 @@ function (isSelected, Feeds, $location, $rootScope) {
   };
 }]).
 
+
 /**
  * directive: articles
  */
@@ -647,6 +675,22 @@ function (isSelected, Feeds, $location) {
       return true;
     };
 
+    /**
+     * Function: toggleRead
+     *
+     * toggle an article as read/unread, update unread could on info index,
+     * update article on remoteStorage.
+     *
+     *
+     * Parameters:
+     *
+     *   a   - article object
+     *   idx - index number assigned during angularJS iteration
+     *
+     * Returns:
+     *
+     *   return description
+     */
     $scope.toggleRead = function (a, idx) {
       //console.log('markRead Called!',idx);
       if (!a.object.read) {
@@ -668,6 +712,12 @@ function (isSelected, Feeds, $location) {
       Feeds.func.updateArticle(a);
     };
 
+    /**
+     * Function: showMore
+     *
+     * fetches another group of articles from Sockethub
+     *
+     */
     $scope.showMore = function () {
       Feeds.data.settings.displayCap = Feeds.data.settings.displayCap +
                                        Feeds.data.settings.articlesPerPage;
@@ -677,6 +727,22 @@ function (isSelected, Feeds, $location) {
       }
     };
 
+    /**
+     * Function: isShowable
+     *
+     * returns true/false if the article qualifies for being shown currently.
+     * this is based on how many articles can be shown per-page [displayCap]
+     * and the number of articles currently being shown [ArticlesDisplayed].
+     * Also whether the setting to show read articles is set [showRead].
+     *
+     * Parameters:
+     *
+     *   article - article object
+     *
+     * Returns:
+     *
+     *   return boolean
+     */
     $scope.isShowable = function (article) {
       if (!isSelected(article.actor.address, true)) {
         return false;
