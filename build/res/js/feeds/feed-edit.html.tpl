@@ -16,18 +16,15 @@
         </div>
       </div>
       <div class="control-group">
-        <div class="col-sm-2">
-        </div>
-
-        <div class="col-sm-4">
+        <div class="col-xs-4">
           <button type="default" ng-click="saveFeedSettings(feeds.edit)" class="btn btn-primary btn-spacing" ng-disabled="saving">Save</button>
         </div>
 
-        <div class="col-sm-2">
+        <div class="col-xs-4">
           <button ng-click="cancelFeedSettings()" class="btn btn-action btn-cancel btn-spacing" ng-disabled="saving">Cancel</button>
         </div>
-        <div class="col-sm-2">
-          <button style="float: left;" ng-click="deleteFeed(feeds.edit)" ng-disabled="saving" class="btn btn-danger btn-spacing">Delete</button>
+        <div class="col-xs-4">
+          <button ng-click="deleteFeed(feeds.edit)" ng-disabled="saving" class="btn btn-danger btn-spacing">Delete</button>
         </div>
       </div>
     </fieldset>
