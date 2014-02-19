@@ -9,9 +9,13 @@
        ng-click="switchFeed(f.url, null, f.error)"
        ng-class="{'feed-entry': true, active: isSelected(f.url), error: f.error, loading: !f.loaded}">
 
-    <span class="unread-count" ng-bind="f.unread"></span>
-    <span ng-bind="f.name"></span>
-    <div ng-show="f.image != ''"><img src="{{f.image}}" /></div>
+    <div class="feed-tile"
+         style="background: url({{f.image}}) no-repeat center center;">
+      <div class="feed-tile-info">
+        <span class="unread-count" ng-bind="f.unread"></span>
+        <span ng-bind="f.name"></span>
+      </div>
+    </div>
   </div><!--/span-->
 
 </div><!--/row-->
