@@ -642,11 +642,14 @@ function (isSelected, Feeds, $location, $rootScope) {
  */
 directive('articles', ['isSelected', 'Feeds', '$location',
 function (isSelected, Feeds, $location) {
+
   function ArticlesCtrl($scope) {
 
     $scope.ArticlesDisplayed = {
       oldest: 0
     };
+
+    $scope.feeds = Feeds.data;
 
     $scope.showFeedSettings = function (url) {
       console.log('showFeedSettings: '+url);

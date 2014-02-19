@@ -9,8 +9,8 @@
 
 <div class="articles panel-group" id="accordion" ng-show="feeds.articles.length > 0 && !currentIsEmpty()">
   <div ng-repeat="a in (filteredItems = (feeds.articles | orderBy: 'object.date':true))"
-       ng-controller="feedCtrl"
        ng-class="{read: a.object.read, article: true}"
+       ng-controller="feedCtrl"
        ng-show="isShowable(a)">
     <div class="mark-unread" ng-show="a.object.read" ng-click="toggleRead(a, $index)">Mark Unread</div>
     <div class="mark-read" ng-show="!a.object.read" ng-click="toggleRead(a, $index)">Mark Read</div>
