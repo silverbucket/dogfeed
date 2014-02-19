@@ -27,7 +27,7 @@ function ($routeProvider, $locationProvider) {
       templateUrl: '/res/js/feeds/feed-edit.html.tpl'
     }).
     when('/feeds/:feed', {
-      templateUrl: '/res/js/feeds/articles.html.tpl'
+      templateUrl: '/res/views/articles.html'
     }).
     when('/about', {
       templateUrl: 'about.html'
