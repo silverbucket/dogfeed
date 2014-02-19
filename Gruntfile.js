@@ -12,11 +12,13 @@ module.exports = function(grunt) {
       app: {
         src: ['res/js/dogfeed.js',
               'res/js/feeds/feeds.js',
+              'res/js/directives/misc.js',
               'vendor/angular-shared/ngRemoteStorage.js',
               'vendor/angular-shared/ngCommandQueue.js',
               'vendor/angular-shared/ngMessages.js',
               'vendor/sockethub-client/angular/ngSockethubClient.js',
-              'vendor/sockethub-client/angular/ngSockethubRemoteStorage.js'],
+              'vendor/sockethub-client/angular/ngSockethubRemoteStorage.js',
+              'vendor/bootstramp/js/bootstrap-switch.min.js'],
         dest: 'build/app.js.tmp'
       },
       modules: {
@@ -41,6 +43,7 @@ module.exports = function(grunt) {
           {expand: true, src: ['*.jpg'], dest: 'build/'}, // includes files in path and its subdirs
           {expand: true, src: ['res/img/*'], dest: 'build/', filter: 'isFile'}, // includes files in path and its subdirs
           {expand: true, src: ['res/js/feeds/*.html.tpl'], dest: 'build/', filter: 'isFile'}, // includes files in path and its subdirs
+          {expand: true, src: ['res/views/*.html'], dest: 'build/', filter: 'isFile'}, // includes files in path and its subdirs
           {expand: false, src: ['vendor/bootstrap/fonts/glyphicons-halflings-regular.eot'], dest: 'build/vendor/bootstrap/fonts/glyphicons-halflings-regular.eot', filter: 'isFile'}, // includes files in path and its subdirs
           {expand: false, src: ['vendor/bootstrap/fonts/glyphicons-halflings-regular.svg'], dest: 'build/vendor/bootstrap/fonts/glyphicons-halflings-regular.svg', filter: 'isFile'}, // includes files in path and its subdirs
           {expand: false, src: ['vendor/bootstrap/fonts/glyphicons-halflings-regular.ttf'], dest: 'build/vendor/bootstrap/fonts/glyphicons-halflings-regular.ttf', filter: 'isFile'}, // includes files in path and its subdirs
