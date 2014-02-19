@@ -27,7 +27,7 @@ function ($routeProvider, $locationProvider) {
       templateUrl: '/res/js/feeds/feed-edit.html.tpl'
     }).
     when('/feeds/:feed', {
-      templateUrl: 'main.html'
+      templateUrl: '/res/js/feeds/articles.html.tpl'
     }).
     when('/about', {
       templateUrl: 'about.html'
@@ -57,7 +57,11 @@ run([function () {
     $(document).ready(function() {
       $('[data-toggle=offcanvas]').click(function() {
         $('.opposite-sidebar').toggleClass('slider-active');
-        $('#remotestorage-widget').toggleClass('hidden');
+        if ($('.opposite-sidebar').hasClass('slider-active')) {
+          $('#remotestorage-widget').addClass('hidden');
+        } else {
+          $('#remotestorage-widget').removeClass('hidden');
+        }
       });
       $("[name='showRead']").bootstrapSwitch('size', 'small');
     });
