@@ -57,6 +57,7 @@ run([function () {
     $(document).ready(function() {
       $('[data-toggle=offcanvas]').click(function() {
         $('.opposite-sidebar').toggleClass('slider-active');
+        $('#remotestorage-widget').toggleClass('hidden');
       });
       $("[name='showRead']").bootstrapSwitch('size', 'small');
     });
