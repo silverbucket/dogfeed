@@ -227,7 +227,7 @@ function ($q, SH, CH, RS, $rootScope, $sce) {
       cache_articles: 20,
       last_fetched: new Date().getTime(),
       unread: 0,
-      image: '/res/img/rss_feed_orange.png',
+      image: '',
       favicon: ''
     };
 
