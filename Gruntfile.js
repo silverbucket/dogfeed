@@ -52,6 +52,7 @@ module.exports = function(grunt) {
           {expand: false, src: ['vendor/angular.min.js'], dest: 'build/vendor/angular.min.js', filter: 'isFile'}, // includes files in path and its subdirs
           {expand: false, src: ['vendor/angular-route.min.js'], dest: 'build/vendor/angular-route.min.js', filter: 'isFile'}, // includes files in path and its subdirs
           {expand: false, src: ['vendor/angular-sanitize.min.js'], dest: 'build/vendor/angular-sanitize.min.js', filter: 'isFile'}, // includes files in path and its subdirs
+          {expand: false, src: ['vendor/angular-touch.min.js'], dest: 'build/vendor/angular-touch.min.js', filter: 'isFile'}, // includes files in path and its subdirs
           {expand: false, src: ['vendor/snap.min.js'], dest: 'build/vendor/snap.min.js', filter: 'isFile'}, // includes files in path and its subdirs
           {expand: false, src: ['vendor/matchMedia.js'], dest: 'build/vendor/matchMedia.js', filter: 'isFile'}, // includes files in path and its subdirs
           {expand: false, src: ['vendor/remotestorage/remotestorage.min.js'], dest: 'build/vendor/remotestorage.min.js', filter: 'isFile'}, // includes files in path and its subdirs
