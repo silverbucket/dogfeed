@@ -56,12 +56,20 @@ run([function () {
   setTimeout(function () {
     $(document).ready(function() {
       $('[data-toggle=offcanvas]').click(function() {
-        $('.opposite-sidebar').toggleClass('slider-active');
         if ($('.opposite-sidebar').hasClass('slider-active')) {
-          $('#remotestorage-widget').addClass('hidden');
-        } else {
+          $('.opposite-sidebar').removeClass('slider-active');
           $('#remotestorage-widget').removeClass('hidden');
+        } else {
+          $('.opposite-sidebar').addClass('slider-active');
+          $('#remotestorage-widget').addClass('hidden');
         }
+      });
+
+      // always close slider when navigation happens
+      $('.main-link').click(function() {
+        console.log('---- HELLO!!');
+        $('.opposite-sidebar').removeClass('slider-active');
+        $('#remotestorage-widget').removeClass('hidden');
       });
       $("[name='showRead']").bootstrapSwitch('size', 'small');
     });
