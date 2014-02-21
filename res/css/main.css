@@ -20,6 +20,7 @@ body {
 #remotestorage-widget {
   position: fixed !important;
   top: 3px !important;
+  right: 20px !important;
 }
 .rs-bubble-text {
   margin-top: -1px;
@@ -319,15 +320,6 @@ body {
 .article-page {
   margin-top: 25px;
 }
-.articles-header {
-  text-align: center;
-  background-color: #efefef;
-  color: #3d3d3d;
-  border-radius: 5px;
-  font-weight: 900;
-  padding: 0px 0 2px 0;
-  margin-bottom: 3%;
-}
 .articles {
   margin: -13px 0 0 1%;
 }
@@ -343,7 +335,8 @@ body {
 }
 .article-title {
   padding-top: 10px;
-  border: 1px solid #cccccc;
+  border: 1px solid #F88017 !important;
+  background-color: rgba(248, 128, 23, .5) !important;
   margin-top: 0;
 }
 .article-title:hover {
@@ -359,8 +352,7 @@ body {
 }
 .article-info {
   font-size: 13px;
-  margin-bottom: 15px;
-  margin-left: 10px;
+  margin: 15px auto 15px auto;
   font-family: "times";
 }
 .article-info p {
@@ -461,7 +453,20 @@ h3 {
   margin-left: 5%;
   margin-bottom: 2%;
 }
-
+.button-show-more {
+  width: 100%;
+  margin: 50px auto 50px auto;
+}
+.button-article-link {
+  width: 100%;
+}
+.articles-loading {
+  width: 50%;
+  margin: auto;
+  background-color: rgba(255,255,255,0.1);
+  color: white;
+  font-weight: bold;
+}
 
 
 
