@@ -1,13 +1,19 @@
 <div class="articles-feed-info" ng-show="feeds.current.name">
   <span class="feed-name">{{ feeds.current.name }}</span>
   <span class="feed-edit" ng-click="showFeedSettings(feeds.current.id)">edit</span>
+  <div class="articles-loading" ng-show="!articlesShown">
+    <p>loading articles...</p>
+  </div>
 </div>
+
 
 <div class="articles-empty" ng-show="feeds.articles.length > 0 && currentIsEmpty()">
   <p>no articles</p>
 </div>
 
+
 <div class="articles panel-group" id="accordion" ng-show="feeds.articles.length > 0 && !currentIsEmpty()">
+  
   <div ng-repeat="a in (filteredItems = (feeds.articles | orderBy: 'object.date':true))"
        ng-class="{read: a.object.read, article: true}"
        ng-controller="feedCtrl"
@@ -20,11 +26,7 @@
         <span class="article-toggle glyphicon"
               ng-class="{'glyphicon-chevron-down': (!a.object.read)}"></span>
       </div>
-      <div class="article-info">
-        <p>feed: <i>{{ feeds.info[a.actor.address].name }}</i></p>
-        <p>article: <a target="_blank" href="{{ a.object.link }}">link</a></p>
-        <p rel="{{ a.object.date }}">date: <i>{{ a.object.date | fromNow}}</i></p>
-      </div>
+
       <div id="article{{ $index }}" class="panel-collapse collapse">
         <div class="article-body panel-body" ng-click="toggleRead(a, $index)" data-ng-bind-html="a.object.brief_html"></div>
         <div ng-repeat="m in a.object.media"
@@ -34,9 +36,15 @@
           </audio>
         </div>
       </div>
+
+      <div class="article-info">
+        <div class="col-xs-6 col-sm-4"><p><i>{{ feeds.info[a.actor.address].name }}</i></p></div>
+        <div class="col-xs-6 col-sm-4"><p rel="{{ a.object.date }}"><i>{{ a.object.date | fromNow}}</i></p></div>
+        <div class="col-xs-12"><a class="btn btn-default button-article-link" target="_blank" href="{{ a.object.link }}">visit article link</a></div>
+      </div>
     </div>
   </div>
-  <div ng-show="feeds.articles.length > 0">
+  <div ng-show="feeds.articles.length > 0" class="col-xs-12">
     <div class="btn btn-default button-show-more" ng-click="showMore()">Show More</div>
   </div>
 </div>

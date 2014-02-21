@@ -582,6 +582,9 @@ function (isSelected, Feeds, $location, $rootScope) {
     $scope.switchFeed = function (url, groupId, error) {
       //console.log('SWITCH FEED: '+encodeURIComponent(url));
       if (error) { return false; }
+      // ensure slider is closed
+      $('.opposite-sidebar').removeClass('slider-active');
+      $('#remotestorage-widget').removeClass('hidden');
       if (!url) {
         $location.path('/feeds/');
       } else {
@@ -616,6 +619,9 @@ function (isSelected, Feeds, $location, $rootScope) {
     $scope.switchFeed = function (url, groupId, error) {
       //console.log('SWITCH FEED: '+encodeURIComponent(url));
       if (error) { return false; }
+      // ensure slider is closed
+      $('.opposite-sidebar').removeClass('slider-active');
+      $('#remotestorage-widget').removeClass('hidden');
       if (!url) {
         $location.path('/feeds/');
       } else {
@@ -650,6 +656,7 @@ function (isSelected, Feeds, $location) {
     };
 
     $scope.feeds = Feeds.data;
+    $scope.articlesShown = false;
 
     $scope.showFeedSettings = function (url) {
       console.log('showFeedSettings: '+url);
@@ -760,6 +767,7 @@ function (isSelected, Feeds, $location) {
           delete $scope.ArticlesDisplayed[article.object.link];
           return false;
         } else if ($scope.ArticlesDisplayed[article.object.link]) {
+          $scope.articlesShown = true;
           return true;
         } else {
           delete $scope.ArticlesDisplayed[article.object.link];
@@ -775,6 +783,7 @@ function (isSelected, Feeds, $location) {
               ($scope.ArticlesDisplayed.oldest > article.object.dateNum) ?
               article.object.dateNum : ($scope.ArticlesDisplayed.oldest === 0) ?
               article.object.dateNum : $scope.ArticlesDisplayed.oldest;
+          $scope.articlesShown = true;
           return true;
         } else {
           delete $scope.ArticlesDisplayed[article.object.link];
@@ -787,6 +796,7 @@ function (isSelected, Feeds, $location) {
               ($scope.ArticlesDisplayed.oldest > article.object.dateNum) ?
               article.object.dateNum : ($scope.ArticlesDisplayed.oldest === 0) ?
               article.object.dateNum : $scope.ArticlesDisplayed.oldest;
+        $scope.articlesShown = true;
         return true;
       }
     };
