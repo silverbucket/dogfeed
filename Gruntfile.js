@@ -57,6 +57,7 @@ module.exports = function(grunt) {
           {expand: false, src: ['vendor/matchMedia.js'], dest: 'build/vendor/matchMedia.js', filter: 'isFile'}, // includes files in path and its subdirs
           {expand: false, src: ['vendor/remotestorage/remotestorage.min.js'], dest: 'build/vendor/remotestorage.min.js', filter: 'isFile'}, // includes files in path and its subdirs
           {expand: false, src: ['vendor/bootstrap/js/bootstrap.min.js'], dest: 'build/vendor/bootstrap/js/bootstrap.min.js', filter: 'isFile'}, // includes files in path and its subdirs
+          {expand: false, src: ['vendor/bootstrap/js/bootstrap-switch.min.js'], dest: 'build/vendor/bootstrap/js/bootstrap-switch.min.js', filter: 'isFile'}, // includes files in path and its subdirs
           {expand: false, src: ['vendor/bootstrap/css/bootstrap.min.css'], dest: 'build/vendor/bootstrap/css/bootstrap.min.css', filter: 'isFile'}, // includes files in path and its subdirs
           {expand: false, src: ['<%= concat.app.dest %>'], dest: 'build/res/js/app.min.js', filter: 'isFile'} // includes files in path and its subdirs
 
