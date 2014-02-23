@@ -67,7 +67,6 @@ run([function () {
 
       // always close slider when navigation happens
       $('.main-link').click(function() {
-        console.log('---- HELLO!!');
         $('.opposite-sidebar').removeClass('slider-active');
         $('#remotestorage-widget').removeClass('hidden');
       });
