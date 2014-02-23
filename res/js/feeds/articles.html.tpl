@@ -12,7 +12,7 @@
   </div>
 
   
-  <div ng-repeat="a in (filteredItems = ( feeds.articles | orderBy: 'object.date':true  | filter:isShowable ))"
+  <div ng-repeat="a in (filteredItems = ( feeds.articles | orderBy: 'object.date':true  | filter: isShowable ))"
        title="{{ a.object.title }}"
        ng-class="{read: a.object.read, article: true}"
        ng-controller="feedCtrl">
@@ -31,18 +31,21 @@
         <div class="col-xs-12"><a class="btn btn-default button-article-link" target="_blank" href="{{ a.object.link }}"><span style="font-size: 1.1em; font-weight: bold; margin-right: 10px;">visit article link</span> <span class="glyphicon glyphicon-new-window"></span></a></div>
       </div>
     </div>
+  </div>
 
+
+  <div ng-repeat="a in (filteredItems = ( feeds.articles | orderBy: 'object.date':true  | filter: isShowable ))">
     <div id="article{{ a.object.link | md5 }}" class="article-modal modal fade" role="dialog" aria-labelledby="articleLabel{{ a.object.link | md5 }}" aria-hidden="true"  >
       <div class="modal-dialog">
         
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <div class="article-nav col-xs-12">
+            <div class="nav article-nav">
               <ul>
                 <li class="btn btn-default" data-dismiss="modal" ng-click="viewArticle(filteredItems[$index -1].object.link, a)">Previous</li>
-                <li class="btn btn-default" data-dismiss="modal" ng-click="toggleRead(a, true)">List</li>
                 <li class="btn btn-default" data-dismiss="modal" ng-click="viewArticle(filteredItems[$index +1].object.link, a)">Next</li>
+                <li class="btn btn-default" data-dismiss="modal" ng-click="toggleRead(a, true)">List</li>
               </ul>
             </div>
           </div>
@@ -60,10 +63,12 @@
             </div>
           </div>
           <div class="modal-footer">
-            <div class="article-nav col-xs-12">
-              <div class="col-xs-4 btn btn-default" data-dismiss="modal" ng-click="viewArticle(filteredItems[$index -1].object.link, a)">Previous</div>
-              <div class="col-xs-4 btn btn-default" data-dismiss="modal" ng-click="toggleRead(a, true)">List</div>
-              <div class="col-xs-4 btn btn-default" data-dismiss="modal" ng-click="viewArticle(filteredItems[$index +1].object.link, a)">Next</div>
+            <div class="nav article-nav">
+              <ul>
+                <li class="btn btn-default" data-dismiss="modal" ng-click="viewArticle(filteredItems[$index -1].object.link, a)">Previous</li>
+                <li class="btn btn-default" data-dismiss="modal" ng-click="viewArticle(filteredItems[$index +1].object.link, a)">Next</li>
+                <li class="btn btn-default" data-dismiss="modal" ng-click="toggleRead(a, true)">List</li>
+              </ul>
             </div>
           </div>
         
@@ -71,6 +76,7 @@
       </div>
     </div>
   </div>
+
   <div ng-show="feeds.articles.length > 0" class="col-xs-12">
     <div class="btn btn-default button-show-more" ng-click="showMore()">Show More</div>
   </div>

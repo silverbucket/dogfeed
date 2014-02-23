@@ -621,7 +621,7 @@ directive('feedTiles', ['isSelected', 'Feeds', '$location', '$rootScope',
 function (isSelected, Feeds, $location, $rootScope) {
   function FeedTilesCtrl ($scope) {
 
-    console.log('******** DATA: ', $scope.feeds);
+    //console.log('******** DATA: ', $scope.feeds);
     $scope.isSelected = isSelected;
 
     $scope.switchFeed = function (url, groupId, error) {
@@ -662,6 +662,7 @@ function (isSelected, Feeds, $location) {
     $scope.ArticlesDisplayed = {
       oldest: 0
     };
+    $scope.viewing = '';
 
     $scope.feeds = Feeds.data;
     $scope.articlesShown = false;
@@ -678,7 +679,7 @@ function (isSelected, Feeds, $location) {
     // returns true if current selection is empty (has no unread articles)
     $scope.currentIsEmpty = function () {
       if (!$scope.feeds.current.name) {
-        return false;
+        return true;
       }
       for (var i = 0, num = $scope.feeds.current.indexes.length; i < num; i = i + 1) {
         //console.log('checking '+$scope.model.feeds.current.indexes[i], $scope.model.feeds.info[$scope.model.feeds.current.indexes[i]]);
@@ -686,9 +687,9 @@ function (isSelected, Feeds, $location) {
             (Feeds.data.info[Feeds.data.current.indexes[i]].unread > 0)) {
           return false;
         }
-        if (Feeds.data.settings.showRead) {
-          return false;
-        }
+        // if (Feeds.data.settings.showRead) {
+        //   return false;
+        // }
       }
       return true;
     };
@@ -739,8 +740,10 @@ function (isSelected, Feeds, $location) {
      */
     $scope.toggleRead = function (a, read) {
       if ((read) || (!a.object.read)) {
-        Feeds.data.info[a.actor.address].unread =
-            Feeds.data.info[a.actor.address].unread - 1;
+        if (!Feeds.data.info[a.actor.address].unread > 0) {
+          Feeds.data.info[a.actor.address].unread =
+              Feeds.data.info[a.actor.address].unread - 1;
+        }
         a.object.read = true;
       } else if (a.object.read) {
         Feeds.data.info[a.actor.address].unread =
@@ -831,6 +834,7 @@ function (isSelected, Feeds, $location) {
         $scope.articlesShown = true;
         return true;
       }
+      return true;
     };
   }
 

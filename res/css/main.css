@@ -501,17 +501,19 @@ h3 {
 .modal-content {
   height: 100%;
 }
-.article-nav {
-  text-align: center;
-}
-.article-nav li {
-  margin: 0 5px 0 5px;
-}
 .modal {
   overflow-x: hidden !important;
 }
 .close {
   float: left !important;
+}
+.modal {
+  z-index: 4000;
+}
+.modal-footer {
+  padding-left: 0;
+  padding-right: 0;
+  text-align: left;
 }
 
 
