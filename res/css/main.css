@@ -321,6 +321,10 @@ body {
 
 
 
+
+
+
+
 /**
  * ARTICLES
  */
@@ -469,6 +473,8 @@ h3 {
 }
 .articles-loading {
   width: 50%;
+  vertical-align: middle;
+  text-align: center;
   margin: auto;
   background-color: rgba(255,255,255,0.1);
   color: white;
@@ -482,4 +488,144 @@ h3 {
     transition: 1s;
     left: 75%;
   }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+ * CSS LOADING ANIMATION
+ */
+
+#facebookG{
+width:40px;
+margin: 40px auto;
+}
+.facebook_blockG{
+background-color:#aaaaaa;
+border:1px solid #999999;
+float:left;
+height:28px;
+margin-left:2px;
+width:7px;
+opacity:0.1;
+-moz-animation-name:bounceG;
+-moz-animation-duration:1.9s;
+-moz-animation-iteration-count:infinite;
+-moz-animation-direction:linear;
+-moz-transform:scale(0.7);
+-webkit-animation-name:bounceG;
+-webkit-animation-duration:1.9s;
+-webkit-animation-iteration-count:infinite;
+-webkit-animation-direction:linear;
+-webkit-transform:scale(0.7);
+-ms-animation-name:bounceG;
+-ms-animation-duration:1.9s;
+-ms-animation-iteration-count:infinite;
+-ms-animation-direction:linear;
+-ms-transform:scale(0.7);
+-o-animation-name:bounceG;
+-o-animation-duration:1.9s;
+-o-animation-iteration-count:infinite;
+-o-animation-direction:linear;
+-o-transform:scale(0.7);
+animation-name:bounceG;
+animation-duration:1.9s;
+animation-iteration-count:infinite;
+animation-direction:linear;
+transform:scale(0.7);
+}
+
+#blockG_1{
+-moz-animation-delay:0.57s;
+-webkit-animation-delay:0.57s;
+-ms-animation-delay:0.57s;
+-o-animation-delay:0.57s;
+animation-delay:0.57s;
+}
+
+#blockG_2{
+-moz-animation-delay:0.76s;
+-webkit-animation-delay:0.76s;
+-ms-animation-delay:0.76s;
+-o-animation-delay:0.76s;
+animation-delay:0.76s;
+}
+
+#blockG_3{
+-moz-animation-delay:0.95s;
+-webkit-animation-delay:0.95s;
+-ms-animation-delay:0.95s;
+-o-animation-delay:0.95s;
+animation-delay:0.95s;
+}
+
+@-moz-keyframes bounceG{
+0%{
+-moz-transform:scale(1.2);
+opacity:1}
+
+100%{
+-moz-transform:scale(0.7);
+opacity:0.1}
+
+}
+
+@-webkit-keyframes bounceG{
+0%{
+-webkit-transform:scale(1.2);
+opacity:1}
+
+100%{
+-webkit-transform:scale(0.7);
+opacity:0.1}
+
+}
+
+@-ms-keyframes bounceG{
+0%{
+-ms-transform:scale(1.2);
+opacity:1}
+
+100%{
+-ms-transform:scale(0.7);
+opacity:0.1}
+
+}
+
+@-o-keyframes bounceG{
+0%{
+-o-transform:scale(1.2);
+opacity:1}
+
+100%{
+-o-transform:scale(0.7);
+opacity:0.1}
+
+}
+
+@keyframes bounceG{
+0%{
+transform:scale(1.2);
+opacity:1}
+
+100%{
+transform:scale(0.7);
+opacity:0.1}
+
 }

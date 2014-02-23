@@ -9,7 +9,16 @@
        style="background: url({{(f.image) ? f.image : '/res/img/rss_feed_orange.png'}}) no-repeat center center;"
        ng-click="switchFeed(f.url, null, f.error)"
        ng-class="{active: isSelected(f.url), error: f.error}">
-    <div class="feed-tile-loading" ng-show="f.loaded != true"></div>
+    <div class="feed-tile-loading" ng-show="f.loaded != true">
+      <div id="facebookG">
+        <div id="blockG_1" class="facebook_blockG">
+        </div>
+        <div id="blockG_2" class="facebook_blockG">
+        </div>
+        <div id="blockG_3" class="facebook_blockG">
+        </div>
+      </div>
+    </div>
     <div class="feed-tile-count">
       <span class="unread-count" ng-bind="f.unread"></span>
     </div>
