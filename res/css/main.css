@@ -221,6 +221,10 @@ body {
   height: 135px;
   width: 135px;
   cursor: pointer;
+  border: 3px solid white;
+}
+.feed-tile:hover {
+  border: 3px solid rgb(66, 139, 202);
 }
 .feed-tile-info {
   text-align: left;
@@ -232,7 +236,7 @@ body {
   background-color: rgba(0,0,0,0.5);
 }
 .feed-tile-loading {
-  height: 85px;
+  height: 79px;
   width: 100%;
   position: absolute;
   top: 0;
@@ -243,12 +247,15 @@ body {
   width: 110px;
   margin-left: 5px;
 }
+.feed-tile-count {
+  position: relative;
+  top: 0;
+  right: 0;
+}
 .unread-count {
-  float: left;
   display: inline-block;
   color: #F88017;
   font-weight: 900;
-  display: inline-block;
   min-width: 20px;
   max-width: 20px;
   text-align: center;
