@@ -8,7 +8,7 @@
        title="{{ f.url }}"
        style="background: url({{(f.image) ? f.image : '/res/img/rss.svg'}}) no-repeat center center;"
        ng-click="switchFeed(f.url, null, f.error)"
-       ng-class="{active: isSelected(f.url), error: f.error, 'feed-tile-even': !f.image && ($index % 2), 'feed-tile-odd': !f.image && (!$index % 2)}">
+       ng-class="{active: isSelected(f.url), error: f.error, 'feed-tile-even': !f.image && $even, 'feed-tile-odd': !f.image && $odd}">
     <div class="feed-tile-loading" ng-show="f.loaded != true">
       <div id="facebookG">
         <div id="blockG_1" class="facebook_blockG">

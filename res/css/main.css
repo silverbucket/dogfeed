@@ -354,14 +354,15 @@ body {
   margin: 0 auto 0 auto;
 }
 .article-title {
-  padding-top: 10px;
-  border: 1px solid #F88017 !important;
+  padding: 10px 0 0 10px;
+  border: 3px solid #F88017 !important;
   background-color: rgba(248, 128, 23, .5) !important;
   margin-top: 0;
 }
 .article-title:hover {
   cursor: pointer;
   text-decoration: underline;
+  border-color: rgb(96, 169, 242) !important;
 }
 .panel-title {
   width: 90%;
@@ -409,7 +410,7 @@ h4 {
   padding-left: 20px;
 }
 .articles-feed-info {
-  margin: -20px 4% 30px 6%;
+  margin-bottom: 20px;
 }
 span.feed-name {
   color: #222222;
@@ -445,9 +446,10 @@ h3 {
   background-color: #efefef;
   color: #888888;
   font-weight: 900;
-  margin: -13px 40px 0;
+  margin: -13px 30px 0;
   z-index: 4;
   pointer-events: auto;
+  border: 1px solid black;
 }
 .mark-read, .mark-unread:hover {
   background-color: #ffffff;
@@ -456,6 +458,9 @@ h3 {
   pointer-events: auto;
   z-index: 4;
   opacity: 1;
+}
+.mark-read:hover {
+  border-color: #84E900;
 }
 .read {
   border-color: white;
@@ -488,6 +493,25 @@ h3 {
   background-color: rgba(255,255,255,0.1);
   color: white;
   font-weight: bold;
+}
+.modal-dialog {
+  padding: 0 !important;
+  width: 100%;
+}
+.modal-content {
+  height: 100%;
+}
+.article-nav {
+  text-align: center;
+}
+.article-nav li {
+  margin: 0 5px 0 5px;
+}
+.modal {
+  overflow-x: hidden !important;
+}
+.close {
+  float: left !important;
 }
 
 

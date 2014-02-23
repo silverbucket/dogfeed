@@ -29,6 +29,9 @@ function ($routeProvider, $locationProvider) {
     when('/feeds/:feed', {
       templateUrl: '/res/views/articles.html'
     }).
+    when('/feeds/:feed/:article', {
+      templateUrl: '/res/views/articles.html'
+    }).
     when('/about', {
       templateUrl: 'about.html'
     }).
@@ -70,7 +73,7 @@ run([function () {
         $('.opposite-sidebar').removeClass('slider-active');
         $('#remotestorage-widget').removeClass('hidden');
       });
-      $("[name='showRead']").bootstrapSwitch('size', 'small');
+      //$("[name='showRead']").bootstrapSwitch('size', 'small');
     });
   }, 500);
 }]).
@@ -82,9 +85,9 @@ run([function () {
 run(['RemoteStorageConfig',
 function (RScfg) {
   RScfg.modules = [
-    ['sockethub', 'rw', {'cache': true, 'public': false}],
-    ['feeds', 'rw', {'cache': true, 'public': false}],
-    ['articles', 'rw', {'cache': true, 'public': false}]
+    ['sockethub', 'rw', {'cache': false, 'public': false}],
+    ['feeds', 'rw', {'cache': false, 'public': false}],
+    ['articles', 'rw', {'cache': false, 'public': false}]
   ];
 }]).
 
@@ -170,6 +173,37 @@ function() {
     return article;
   };
 }]).
+
+/**
+ * filter: encode
+ */
+filter('encode', [
+function () {
+  return function (url) {
+    return encodeURIComponent(url);
+  };
+}]).
+
+/**
+ * filter: decode
+ */
+filter('decode', [
+function () {
+  return function (url) {
+    return decodeURIComponent(url);
+  };
+}]).
+
+/**
+ * filter: md5
+ */
+filter('md5', [
+function () {
+  return function (s) {
+    return remoteStorage.feeds.md5sum(s);
+  };
+}]).
+
 
 ///////////////////////////////////////////////////////////////////////////
 //

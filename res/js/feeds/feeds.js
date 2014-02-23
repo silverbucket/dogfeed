@@ -507,8 +507,10 @@ function ($scope, Feeds, $rootScope, $routeParams, $location) {
 controller('feedCtrl',
 ['$scope', 'Feeds', '$rootScope', '$timeout', '$routeParams',
 function ($scope, Feeds, $rootScope, $timeout, $routeParams) {
-  //console.log('--- feedCtrl ' + $routeParams.feed);
   $scope.saving = false;
+  $scope.feeds = Feeds.data;
+
+  $scope.test = false;
 
   if ($routeParams.feed) {
     var feed = decodeURIComponent($routeParams.feed);
@@ -530,6 +532,12 @@ function ($scope, Feeds, $rootScope, $timeout, $routeParams) {
     Feeds.data.current.name = '';
     Feeds.data.current.indexes.length = 0;
   }
+  
+  // $scope.$watch('Feeds.data.info[feed].loaded', function (val1, val2) {
+  //   if (feed) {
+  //     console.log('FEED LOADED! '+val1+'-'+val2+' ['+Feeds.data.info[feed].loaded+']');
+  //   }
+  // });
 
   $rootScope.$on('SockethubConnectFailed', function (event, e) {
     console.log('Sockethub connect failed! ', e);
@@ -685,6 +693,34 @@ function (isSelected, Feeds, $location) {
       return true;
     };
 
+    $scope.viewArticle = function (url, a) {
+      $scope.viewing = url;
+      if (!url) {
+        $scope.switchFeed($scope.feeds.current.id);
+      } else {
+        $('#article'+remoteStorage.feeds.md5sum(url)).modal({
+          show: true,
+          backdrop: false
+        });
+      }
+      if (a) {
+       $scope.toggleRead(a, true);
+      }
+    }
+
+    $scope.switchFeed = function (url, groupId, error) {
+      //console.log('SWITCH FEED: '+encodeURIComponent(url));
+      if (error) { return false; }
+      // ensure slider is closed
+      $('.opposite-sidebar').removeClass('slider-active');
+      $('#remotestorage-widget').removeClass('hidden');
+      if (!url) {
+        $location.path('/feeds/');
+      } else {
+        $location.path('/feeds/'+encodeURIComponent(url));
+      }
+    };
+
     /**
      * Function: toggleRead
      *
@@ -695,25 +731,18 @@ function (isSelected, Feeds, $location) {
      * Parameters:
      *
      *   a   - article object
-     *   idx - index number assigned during angularJS iteration
+     *   read   - force mark as read
      *
      * Returns:
      *
      *   return description
      */
-    $scope.toggleRead = function (a, idx) {
-      //console.log('markRead Called!',idx);
-      if (!a.object.read) {
-        //console.log('subtracting 1 from : '+ Feeds.data.info[a.actor.address].unread);
+    $scope.toggleRead = function (a, read) {
+      if ((read) || (!a.object.read)) {
         Feeds.data.info[a.actor.address].unread =
             Feeds.data.info[a.actor.address].unread - 1;
         a.object.read = true;
-        if ((typeof idx === 'number') &&
-            ($('#article'+idx).hasClass('in'))) {
-          $('#article'+idx).collapse('hide');
-        }
       } else if (a.object.read) {
-        //console.log('adding 1 to : '+ Feeds.data.info[a.actor.address].unread);
         Feeds.data.info[a.actor.address].unread =
             Feeds.data.info[a.actor.address].unread + 1;
         a.object.read = false;
@@ -754,6 +783,9 @@ function (isSelected, Feeds, $location) {
      *   return boolean
      */
     $scope.isShowable = function (article) {
+      if ($scope.viewing === article.object.link) {
+        return true;
+      }
       if (!isSelected(article.actor.address, true)) {
         return false;
       }
