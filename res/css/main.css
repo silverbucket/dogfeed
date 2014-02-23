@@ -200,6 +200,9 @@ body {
   display: none;
 }
 
+
+
+
 /**
  * CONTENT
  */
@@ -207,6 +210,9 @@ body {
   padding: 0 5% 0 5%;
   margin-top: 0;
 }
+
+
+
 
 
 /*
@@ -225,6 +231,12 @@ body {
 }
 .feed-tile:hover {
   border: 3px solid rgb(66, 139, 202);
+}
+.feed-tile-even {
+  background-color: #428BCA !important;
+}
+.feed-tile-odd {
+  background-color: #84E900 !important;
 }
 .feed-tile-info {
   text-align: left;
@@ -250,7 +262,7 @@ body {
 .feed-tile-count {
   position: relative;
   top: 0;
-  right: 0;
+  left: 0;
 }
 .unread-count {
   display: inline-block;
@@ -266,9 +278,6 @@ body {
 .rounded {
   border-radius: 5px;
 }
-
-
-
 .all-feeds {
   margin: 0 0 10px 20px;
 }
@@ -629,3 +638,4 @@ transform:scale(0.7);
 opacity:0.1}
 
 }
+
