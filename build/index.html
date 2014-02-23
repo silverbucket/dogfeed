@@ -24,7 +24,7 @@
         </div>
         <div class="sidebar-container">
           <div class="feed-settings">
-            <form name="quickSettings" class="form-horizontal" novalidate>
+            <form name="quickSettings" class="form-horizontal" ng-controller="feedCtrl" novalidate>
                 <label for="showRead"
                        class="control-label">Show Read Articles</label>
                 <input type="checkbox" name="showRead" ng-model="feeds.settings.showRead" />
