@@ -29,7 +29,7 @@ function ($routeProvider, $locationProvider) {
     when('/feeds/:feed', {
       templateUrl: '/res/views/articles.html'
     }).
-    when('/feeds/:feed/:article', {
+    when('/feeds/:feed/article/:article', {
       templateUrl: '/res/views/articles.html'
     }).
     when('/about', {
