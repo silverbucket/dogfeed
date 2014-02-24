@@ -108,27 +108,29 @@ function ($q, SH, CH, RS, $rootScope, $sce) {
   // update or create an article entry
   // - add to article indexes
   // - update on remoteStorage
-  func.updateArticle = function updateArticle(obj) {
-    var defer = $q.defer();
+  func.updateArticle = function (obj) {
     var s_obj = {
       link: obj.object.link,
       title: obj.object.title,
       date: obj.object.date,
       datenum: Date.parse(obj.object.date) || 0,
-      html: obj.object.html,
-      text: obj.object.text,
+      html: (obj.object.html) ? obj.object.html : (obj.object.brief_html) ? obj.object.brief_html : '',
+      text: (obj.object.text) ? obj.object.text : (obj.object.brief_text) ? obj.object.brief_text : '',
       brief_html: obj.object.brief_html,
       brief_text: obj.object.brief_text,
       read: (obj.object.read) ? true : false,
-      source_link: obj.actor.address,
+      media: (obj.object.media) ? obj.object.media : [],
+      source_link: (obj.actor.address) ? obj.actor.address : (obj.actor.url) ? obj.actor.url : '',
       source_title: obj.actor.name
     };
 
-    RS.call('articles', 'update', [s_obj]).then(function (m) {
-      //console.log('article added: ', m);
-      //data.info[obj.url] = obj;
-      //func.fetchFeed(obj.url);
-      defer.resolve(m);
+    return func.saveArticle(s_obj);
+  };
+
+  func.saveArticle = function (a) {
+    var defer = $q.defer();
+    RS.call('articles', 'update', [a]).then(function (m) {
+      defer.resolve(a);
     }, function (err) {
       defer.reject(err);
     });
@@ -170,7 +172,7 @@ function ($q, SH, CH, RS, $rootScope, $sce) {
         timeout: false
       });
       data.state.remoteStorage = true;
-    });
+    }); 
   })();
 
   /**
@@ -210,6 +212,26 @@ function ($q, SH, CH, RS, $rootScope, $sce) {
     }
   }
 
+  
+  func.getArticle = function (url) {
+    var defer = $q.defer();
+
+    for (var len = data.articles.length; len > 0; len--) {
+      if (data.articles[i].link === url) {
+        defer.resolve(data.articles[i]);
+      }
+    }
+
+    RS.call(['articles', 'getByUrl', [url]]).then(function (a) {
+      defer.resolve(a);
+    }, function (err) {
+      defer.reject(err);
+    })
+
+    return defer.promise;
+  };
+
+
   /**
    * Function: updateFeed
    *
@@ -220,7 +242,7 @@ function ($q, SH, CH, RS, $rootScope, $sce) {
    *   obj - feed object (remotestorage or sockethub format)
    */
   func.updateFeed = function (obj) {
-    console.log('updateFeed called', obj);
+    //console.log('updateFeed called', obj);
     var updated = false;
     var defaults = {
       name: '',
@@ -391,22 +413,26 @@ function ($q, SH, CH, RS, $rootScope, $sce) {
     // clean urls for angularjs security
     trustMedia(m);
 
+    var rs_m;
     // add article to article list
-    data.articles.push(m);
+    func.updateArticle(m).then(function (_m) {
+      rs_m = _m;
+      data.articles.push(rs_m);
 
-    //
-    // we've added the article from sockethub to the article list, now let's
-    // try to fetch the article from remoteStorage to see we already have a
-    // record of it.
-    //
-    // if so, we apply read status.
-    //
-    RS.call('articles', 'getByUrl', [m.object.link]).then(function (a) {
+      //
+      // we've added the article from sockethub to the article list, now let's
+      // try to fetch the article from remoteStorage to see we already have a
+      // record of it.
+      //
+      // if so, we apply read status.
+      //
+      return RS.call('articles', 'getByUrl', [rs_m.link]);
+    }).then(function (a) {
       if ((typeof a === 'object') && (typeof a.read === 'boolean')) {
         //console.log('ARTICLE FETCH from RS: ', a);
-        m.object.read = (a.read) ? a.read : false;
+        rs_m.read = (a.read) ? a.read : false;
 
-        if (m.object.read) {
+        if (rs_m.read) {
           // this article is read, subtract from total
           data.info[key].unread = (typeof data.info[key].unread === "number") ? data.info[key].unread - 1 : 0;
         }
@@ -414,6 +440,7 @@ function ($q, SH, CH, RS, $rootScope, $sce) {
     }, function (e) {
       console.log("ARTICLE FETCH ERROR: ", e);
     });
+
   });
 
   return {
@@ -509,12 +536,30 @@ controller('feedCtrl',
 function ($scope, Feeds, $rootScope, $timeout, $routeParams) {
   $scope.saving = false;
   $scope.feeds = Feeds.data;
-
+  $scope.article;
+  $scope.articleUrl;
   $scope.test = false;
+  $scope.view = 'list';
+
+  if ($routeParams.article) {
+    $scope.view = 'article';
+    $scope.articleUrl = decodeURIComponent($routeParams.article);
+    console.log("ARTICLE PARAM: "+articleUrl);
+    Feeds.getArticle($scope.articleUrl).then(function (a) {
+      $scope.article = a;
+    }, function (err) {
+      $scope.view = 'list';
+      $scope.error = err;
+      $rootScope.$broadcast('message', {
+        message: 'problem fetching article '+err,
+        type: 'error'
+      });
+    });
+  }
 
   if ($routeParams.feed) {
     var feed = decodeURIComponent($routeParams.feed);
-    //console.log("FEED PARAM: "+feed);
+    console.log("FEED PARAM: "+feed);
     // if we have a url as a param, we try to fetch it
 
     //Feeds.data.selectedFeed = feed;
@@ -694,23 +739,25 @@ function (isSelected, Feeds, $location) {
       return true;
     };
 
-    $scope.viewArticle = function (url, a) {
-      $scope.viewing = url;
-      if (!url) {
+    $scope.viewArticle = function (a, oldA) {
+      if (!a) {
         $scope.switchFeed($scope.feeds.current.id);
       } else {
-        $('#article'+remoteStorage.feeds.md5sum(url)).modal({
-          show: true,
-          backdrop: false
-        });
+        if (oldA) {
+         $scope.toggleRead(oldA, true);
+        }
+        //console.log('---VIEW ARTICLE: '+'/feeds/'+encodeURIComponent(a.source_link)+'/article/'+encodeURIComponent(a.link), a);
+        $location.path('/feeds/'+encodeURIComponent(a.source_link)+'/article/'+encodeURIComponent(a.link));
+        // $('#article'+remoteStorage.feeds.md5sum(url)).modal({
+        //   show: true,
+        //   backdrop: false
+        // });
       }
-      if (a) {
-       $scope.toggleRead(a, true);
-      }
+      
     }
 
     $scope.switchFeed = function (url, groupId, error) {
-      //console.log('SWITCH FEED: '+encodeURIComponent(url));
+      console.log('SWITCH FEED: '+encodeURIComponent(url));
       if (error) { return false; }
       // ensure slider is closed
       $('.opposite-sidebar').removeClass('slider-active');
@@ -739,19 +786,19 @@ function (isSelected, Feeds, $location) {
      *   return description
      */
     $scope.toggleRead = function (a, read) {
-      if ((read) || (!a.object.read)) {
-        if (!Feeds.data.info[a.actor.address].unread > 0) {
-          Feeds.data.info[a.actor.address].unread =
-              Feeds.data.info[a.actor.address].unread - 1;
+      if ((read) || (!a.read)) {
+        if (!Feeds.data.info[a.source_link].unread > 0) {
+          Feeds.data.info[a.source_link].unread =
+              Feeds.data.info[a.source_link].unread - 1;
         }
-        a.object.read = true;
-      } else if (a.object.read) {
-        Feeds.data.info[a.actor.address].unread =
-            Feeds.data.info[a.actor.address].unread + 1;
-        a.object.read = false;
+        a.read = true;
+      } else if (a.read) {
+        Feeds.data.info[a.source_link].unread =
+            Feeds.data.info[a.source_link].unread + 1;
+        a.read = false;
       }
 
-      Feeds.func.updateArticle(a);
+      Feeds.func.saveArticle(a);
     };
 
     /**
@@ -786,10 +833,7 @@ function (isSelected, Feeds, $location) {
      *   return boolean
      */
     $scope.isShowable = function (article) {
-      if ($scope.viewing === article.object.link) {
-        return true;
-      }
-      if (!isSelected(article.actor.address, true)) {
+      if (!isSelected(article.source_link, true)) {
         return false;
       }
 
@@ -798,39 +842,39 @@ function (isSelected, Feeds, $location) {
       // }
 
       if (Object.keys($scope.ArticlesDisplayed).length >= Feeds.data.settings.displayCap) {
-        if ((article.object.read) && (!Feeds.data.settings.showRead)) {
-          delete $scope.ArticlesDisplayed[article.object.link];
+        if ((article.read) && (!Feeds.data.settings.showRead)) {
+          delete $scope.ArticlesDisplayed[article.link];
           return false;
-        } else if ($scope.ArticlesDisplayed[article.object.link]) {
+        } else if ($scope.ArticlesDisplayed[article.link]) {
           $scope.articlesShown = true;
           return true;
         } else {
-          delete $scope.ArticlesDisplayed[article.object.link];
+          delete $scope.ArticlesDisplayed[article.link];
           return false;
         }
       }
 
-      if (article.object.read) {
+      if (article.read) {
         if (Feeds.data.settings.showRead) {
-          $scope.ArticlesDisplayed[article.object.link] = true;
-          // keep the oldest value (dateNum of oldest article in list) up to date
+          $scope.ArticlesDisplayed[article.link] = true;
+          // keep the oldest value (datenum of oldest article in list) up to date
           $scope.ArticlesDisplayed.oldest =
-              ($scope.ArticlesDisplayed.oldest > article.object.dateNum) ?
-              article.object.dateNum : ($scope.ArticlesDisplayed.oldest === 0) ?
-              article.object.dateNum : $scope.ArticlesDisplayed.oldest;
+              ($scope.ArticlesDisplayed.oldest > article.datenum) ?
+              article.datenum : ($scope.ArticlesDisplayed.oldest === 0) ?
+              article.datenum : $scope.ArticlesDisplayed.oldest;
           $scope.articlesShown = true;
           return true;
         } else {
-          delete $scope.ArticlesDisplayed[article.object.link];
+          delete $scope.ArticlesDisplayed[article.link];
           return false;
         }
       } else {
-        $scope.ArticlesDisplayed[article.object.link] = true;
-        // keep the oldest value (dateNum of oldest article in list) up to date
+        $scope.ArticlesDisplayed[article.link] = true;
+        // keep the oldest value (datenum of oldest article in list) up to date
         $scope.ArticlesDisplayed.oldest =
-              ($scope.ArticlesDisplayed.oldest > article.object.dateNum) ?
-              article.object.dateNum : ($scope.ArticlesDisplayed.oldest === 0) ?
-              article.object.dateNum : $scope.ArticlesDisplayed.oldest;
+              ($scope.ArticlesDisplayed.oldest > article.datenum) ?
+              article.datenum : ($scope.ArticlesDisplayed.oldest === 0) ?
+              article.datenum : $scope.ArticlesDisplayed.oldest;
         $scope.articlesShown = true;
         return true;
       }
