@@ -31,6 +31,7 @@
       </div>
 
       <div class="nav article-nav">
+        <div class="col-xs-12"><a class="btn btn-default button-article-link" target="_blank" href="{{ a.link }}"><span style="font-size: 1.1em; font-weight: bold; margin-right: 10px;">visit article link</span> <span class="glyphicon glyphicon-new-window"></span></a></div>
         <ul>
           <li class="btn btn-default" data-dismiss="modal" ng-click="viewArticle(article, 'prev')">Previous</li>
           <li class="btn btn-default" data-dismiss="modal" ng-click="viewArticle(article, 'next')">Next</li>
@@ -47,9 +48,12 @@
   <div class="col-xs-12 articles-feed-info" ng-show="feeds.current.name">
     <span class="feed-name">{{ feeds.current.name }}</span>
     <span class="feed-edit" ng-click="showFeedSettings(feeds.current.id)">edit</span>
-    <div class="articles-loading" ng-show="!articlesShown">
-      <p>loading articles...</p>
-    </div>
+
+    
+  </div>
+
+  <div class="col-xs-12 articles-loading" ng-show="!articlesShown">
+    <p>loading articles...</p>
   </div>
 
   <div class="col-xs-12 articles-empty" ng-show="feeds.articles.length > 0 && currentIsEmpty()">
@@ -59,20 +63,18 @@
   <div ng-repeat="a in (filteredItems = ( feeds.articles | orderBy: 'date':true  | filter: isShowable )) track by $index"
        title="{{ a.title }}"
        ng-class="{read: a.read, article: true}">
-    <div class="mark-unread" ng-show="a.read" ng-click="toggleRead(a, $index)">Mark Unread</div>
-    <div class="mark-read" ng-show="!a.read" ng-click="toggleRead(a, $index)">Mark Read</div>
-    <div class="article-content">
-      <div class="article-title" ng-click="viewArticle(a)">
-        <h2>{{ a.title }}</h2>
-        <span class="article-view-icon glyphicon"
-              ng-class="{'glyphicon-chevron-right': (!a.read)}"></span>
-      </div>
+    <div class="mark-unread" ng-show="a.read" ng-click="toggleRead(a)">Mark Unread</div>
+    <div class="mark-read" ng-show="!a.read" ng-click="toggleRead(a)">Mark Read</div>
 
-      <div class="article-info">
-        <div class="col-xs-6 col-sm-4"><p><i>{{ feeds.current.name }}</i></p></div>
-        <div class="col-xs-6 col-sm-4"><p rel="{{ a.date }}"><i>{{ a.date | fromNow}}</i></p></div>
-        <div class="col-xs-12"><a class="btn btn-default button-article-link" target="_blank" href="{{ a.link }}"><span style="font-size: 1.1em; font-weight: bold; margin-right: 10px;">visit article link</span> <span class="glyphicon glyphicon-new-window"></span></a></div>
-      </div>
+    <div class="col-xs-12 article-list-content"
+         ng-click="viewArticle(a)">
+
+      <h2>{{ a.title }}</h2>
+
+      <span class="article-view-icon glyphicon"
+            ng-class="{'glyphicon-chevron-right': (!a.read), 'glyphicon-minus': (a.read)}"></span>
+
+      <span rel="{{ a.date }}"><i>{{ a.date | fromNow}}</i></span>
     </div>
   </div>
 

@@ -150,7 +150,9 @@ function ($rootScope, $location) {
 filter('fromNow', [
 function() {
   return function (dateString) {
-    return new Date(dateString).toDateString(); ///moment(new Date(dateString)).fromNow();
+    //console.log("FROMNOW: " + moment(new Date(dateString)).fromNow());
+    //return new Date(dateString).toDateString(); 
+    return moment(new Date(dateString)).fromNow();
   };
 }]).
 

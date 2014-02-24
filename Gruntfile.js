@@ -13,6 +13,7 @@ module.exports = function(grunt) {
         src: ['res/js/dogfeed.js',
               'res/js/feeds/feeds.js',
               'res/js/directives/misc.js',
+              'vendor/moment.min.js',
               'vendor/angular-shared/ngRemoteStorage.js',
               'vendor/angular-shared/ngCommandQueue.js',
               'vendor/angular-shared/ngMessages.js',

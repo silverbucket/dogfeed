@@ -768,6 +768,7 @@ function (isSelected, Feeds, $location, $filter) {
       var as = $filter('orderBy')(Feeds.data.articles, 'date', true);
       var as = $filter('filter')(as, $scope.isShowable);
 
+      var next;
       for (var i = 0, num = as.length; i >= 0; i = i + 1) {
         if (as[i].link === a.link) {
           next = true;
