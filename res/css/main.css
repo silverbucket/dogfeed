@@ -383,6 +383,7 @@ body {
   position: relative;
   max-width: 100%;
   height: auto;
+  width: auto;
 }
 .article p {
   font-style: normal;
