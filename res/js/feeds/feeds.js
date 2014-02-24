@@ -216,13 +216,13 @@ function ($q, SH, CH, RS, $rootScope, $sce) {
   func.getArticle = function (url) {
     var defer = $q.defer();
 
-    for (var len = data.articles.length; len > 0; len--) {
+    for (var i = 0, len = data.articles.length; i < len; i = i + 1) {
       if (data.articles[i].link === url) {
         defer.resolve(data.articles[i]);
       }
     }
 
-    RS.call(['articles', 'getByUrl', [url]]).then(function (a) {
+    RS.call('articles', 'getByUrl', [url]).then(function (a) {
       defer.resolve(a);
     }, function (err) {
       defer.reject(err);
@@ -544,8 +544,8 @@ function ($scope, Feeds, $rootScope, $timeout, $routeParams) {
   if ($routeParams.article) {
     $scope.view = 'article';
     $scope.articleUrl = decodeURIComponent($routeParams.article);
-    console.log("ARTICLE PARAM: "+articleUrl);
-    Feeds.getArticle($scope.articleUrl).then(function (a) {
+    //console.log("ARTICLE PARAM: "+$scope.articleUrl);
+    Feeds.func.getArticle($scope.articleUrl).then(function (a) {
       $scope.article = a;
     }, function (err) {
       $scope.view = 'list';
@@ -559,7 +559,7 @@ function ($scope, Feeds, $rootScope, $timeout, $routeParams) {
 
   if ($routeParams.feed) {
     var feed = decodeURIComponent($routeParams.feed);
-    console.log("FEED PARAM: "+feed);
+    //console.log("FEED PARAM: "+feed);
     // if we have a url as a param, we try to fetch it
 
     //Feeds.data.selectedFeed = feed;
@@ -699,8 +699,8 @@ function (isSelected, Feeds, $location, $rootScope) {
 /**
  * directive: articles
  */
-directive('articles', ['isSelected', 'Feeds', '$location',
-function (isSelected, Feeds, $location) {
+directive('articles', ['isSelected', 'Feeds', '$location', '$filter',
+function (isSelected, Feeds, $location, $filter) {
 
   function ArticlesCtrl($scope) {
 
@@ -739,15 +739,23 @@ function (isSelected, Feeds, $location) {
       return true;
     };
 
-    $scope.viewArticle = function (a, oldA) {
+    $scope.viewArticle = function (a, move) {
       if (!a) {
         $scope.switchFeed($scope.feeds.current.id);
       } else {
-        if (oldA) {
-         $scope.toggleRead(oldA, true);
+        if (!move) {
+          $scope.toggleRead(a, true);
+          //console.log('---VIEW ARTICLE: '+'/feeds/'+encodeURIComponent(a.source_link)+'/article/'+encodeURIComponent(a.link), a);
+          $location.path('/feeds/'+encodeURIComponent(a.source_link)+'/article/'+encodeURIComponent(a.link));
+        } else if (move === 'prev') {
+          var prevUrl = $scope.getPrevUrl(a);
+          //console.log('---VIEW ARTICLE(prev): '+prevUrl);
+          $location.path('/feeds/'+encodeURIComponent(a.source_link)+'/article/'+encodeURIComponent(prevUrl));
+        } else if (move === 'next') {
+          var nextUrl = $scope.getNextUrl(a);
+          //console.log('---VIEW ARTICLE(next): '+nextUrl);
+          $location.path('/feeds/'+encodeURIComponent(a.source_link)+'/article/'+encodeURIComponent(nextUrl));
         }
-        //console.log('---VIEW ARTICLE: '+'/feeds/'+encodeURIComponent(a.source_link)+'/article/'+encodeURIComponent(a.link), a);
-        $location.path('/feeds/'+encodeURIComponent(a.source_link)+'/article/'+encodeURIComponent(a.link));
         // $('#article'+remoteStorage.feeds.md5sum(url)).modal({
         //   show: true,
         //   backdrop: false
@@ -756,8 +764,38 @@ function (isSelected, Feeds, $location) {
       
     }
 
+    $scope.getNextUrl = function (a) {
+      var as = $filter('orderBy')(Feeds.data.articles, 'date', true);
+      var as = $filter('filter')(as, $scope.isShowable);
+
+      for (var i = 0, num = as.length; i >= 0; i = i + 1) {
+        if (as[i].link === a.link) {
+          next = true;
+        } else if (next) {
+          return as[i].link;
+        }
+      }
+      return '';
+    };
+
+    $scope.getPrevUrl = function (a) {
+      var as = $filter('orderBy')(Feeds.data.articles, 'date', true);
+      var as = $filter('filter')(as, $scope.isShowable);
+
+      var prev = '';
+      for (var i = 0, num = as.length; i >= 0; i = i + 1) {
+        //console.log('checking article: '+as[i].link);
+        if (as[i].link === a.link) {
+          return prev;
+        } else {
+          prev = as[i].link;
+        }
+      }
+      return '';
+    };
+
     $scope.switchFeed = function (url, groupId, error) {
-      console.log('SWITCH FEED: '+encodeURIComponent(url));
+      //console.log('SWITCH FEED: '+encodeURIComponent(url));
       if (error) { return false; }
       // ensure slider is closed
       $('.opposite-sidebar').removeClass('slider-active');

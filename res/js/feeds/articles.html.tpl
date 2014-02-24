@@ -11,15 +11,15 @@
 
       <div class="nav article-nav">
         <ul>
-          <li class="btn btn-default" ng-click="viewArticle(filteredItems[$index -1], a)">Previous</li>
-          <li class="btn btn-default" ng-click="viewArticle(filteredItems[$index +1], a)">Next</li>
-          <li class="btn btn-default" ng-click="toggleRead(a, true)">List</li>
+          <li class="btn btn-default" data-dismiss="modal" ng-click="viewArticle(article, 'prev')">Previous</li>
+          <li class="btn btn-default" data-dismiss="modal" ng-click="viewArticle(article, 'next')">Next</li>
+          <li class="btn btn-default" data-dismiss="modal" ng-click="switchFeed(article.source_link)">List</li>
         </ul>
       </div>
 
       <div class="article"
-           ng-swipe-left="viewArticle(filteredItems[$index -1], a)"
-           ng-swpe-right="viewArticle(filteredItems[$index +1], a)">
+           ng-swipe-left="viewArticle(article, 'prev')"
+           ng-swpe-right="viewArticle(article, 'next')">
         <h2>{{ article.title }}</h2>
         <div class="article-body" data-ng-bind-html="article.brief_html"></div>
         <div ng-repeat="m in article.media"
@@ -32,9 +32,9 @@
 
       <div class="nav article-nav">
         <ul>
-          <li class="btn btn-default" data-dismiss="modal" ng-click="viewArticle(filteredItems[$index -1], a)">Previous</li>
-          <li class="btn btn-default" data-dismiss="modal" ng-click="viewArticle(filteredItems[$index +1], a)">Next</li>
-          <li class="btn btn-default" data-dismiss="modal" ng-click="toggleRead(a, true)">List</li>
+          <li class="btn btn-default" data-dismiss="modal" ng-click="viewArticle(article, 'prev')">Previous</li>
+          <li class="btn btn-default" data-dismiss="modal" ng-click="viewArticle(article, 'next')">Next</li>
+          <li class="btn btn-default" data-dismiss="modal" ng-click="switchFeed(article.source_link)">List</li>
         </ul>
       </div>
 
@@ -56,7 +56,7 @@
     <p>no articles</p>
   </div>
 
-  <div ng-repeat="a in (filteredItems = ( feeds.articles | orderBy: 'object.date':true  | filter: isShowable )) track by $index"
+  <div ng-repeat="a in (filteredItems = ( feeds.articles | orderBy: 'date':true  | filter: isShowable )) track by $index"
        title="{{ a.title }}"
        ng-class="{read: a.read, article: true}">
     <div class="mark-unread" ng-show="a.read" ng-click="toggleRead(a, $index)">Mark Unread</div>
