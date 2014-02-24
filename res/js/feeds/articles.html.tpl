@@ -30,8 +30,9 @@
         </div>
       </div>
 
+      <div class="col-xs-12" style="margin: 10px 0 10px 0;"><a class="btn btn-default button-article-link" target="_blank" href="{{ a.link }}"><span style="font-size: 1.1em; font-weight: bold; margin-right: 10px;">visit article link</span> <span class="glyphicon glyphicon-new-window"></span></a></div>
+
       <div class="nav article-nav">
-        <div class="col-xs-12"><a class="btn btn-default button-article-link" target="_blank" href="{{ a.link }}"><span style="font-size: 1.1em; font-weight: bold; margin-right: 10px;">visit article link</span> <span class="glyphicon glyphicon-new-window"></span></a></div>
         <ul>
           <li class="btn btn-default" data-dismiss="modal" ng-click="viewArticle(article, 'prev')">Previous</li>
           <li class="btn btn-default" data-dismiss="modal" ng-click="viewArticle(article, 'next')">Next</li>
@@ -79,7 +80,21 @@
   </div>
 
   <div ng-show="feeds.articles.length > 0" class="col-xs-12">
-    <div class="btn btn-default button-show-more" ng-click="showMore()">Show More</div>
+    <div class="button-loading" ng-show="!feeds.info[feeds.current.id].loaded">
+      <div id="facebookG">
+        <div id="blockG_1" class="facebook_blockG">
+        </div>
+        <div id="blockG_2" class="facebook_blockG">
+        </div>
+        <div id="blockG_3" class="facebook_blockG">
+        </div>
+      </div>
+    </div>
+
+    <div class="btn btn-default button-show-more" data-style="contract" ng-click="showMore()" ng-disabled="!feeds.info[feeds.current.id].loaded">
+      <span>Show More</span>
+    </div>
+
   </div>
 </div>
 </div>

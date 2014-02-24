@@ -11,6 +11,14 @@
        ng-class="{active: isSelected(f.url), error: f.error, 'feed-tile-even': !f.image && $even, 'feed-tile-odd': !f.image && $odd}">
 
     <div class="feed-tile-loading" ng-show="f.loaded != true">
+       <div id="facebookG">
+         <div id="blockG_1" class="facebook_blockG">
+         </div>
+         <div id="blockG_2" class="facebook_blockG">
+         </div>
+         <div id="blockG_3" class="facebook_blockG">
+         </div>
+       </div>
     </div>
 
     <div class="feed-tile-count">
