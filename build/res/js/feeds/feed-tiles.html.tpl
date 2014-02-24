@@ -3,7 +3,7 @@
     <p>no feeds yet, add some!</p>
   </div><!--/span-->
 
-  <div ng-repeat="f in feeds.infoArray | orderBy: 'name'"
+  <div ng-repeat="f in feeds.infoArray | orderBy: 'name' track by $index"
        class="col-xs-6 col-sm-4 col-md-2 col-lg-2 feed-tile"
        title="{{ f.url }}"
        style="background: url({{(f.image) ? f.image : '/res/img/rss.svg'}}) no-repeat center center;"

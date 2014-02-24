@@ -4,7 +4,7 @@
       <span class="glyphicon glyphicon-globe"></span> <span>All Items</span>
   </li>
   <li ng-show="feeds.infoArray.length == 0"><span style="margin-left: 20px;">no feeds yet, add some!</span></li>
-  <li ng-repeat="g in feeds.groupArray | orderBy: 'name'"
+  <li ng-repeat="g in feeds.groupArray | orderBy: 'name' track by $index"
       data-toggle="tooltip"
       data-init="showSettings = false"
       ng-mouseover="showSettings = true"
