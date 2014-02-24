@@ -112,7 +112,7 @@ function ($q, SH, CH, RS, $rootScope, $sce) {
     var s_obj = {
       link: obj.object.link,
       title: obj.object.title,
-      date: obj.object.date,
+      date: obj.object.date || new Date().toUTCString(),
       datenum: Date.parse(obj.object.date) || 0,
       html: (obj.object.html) ? obj.object.html : (obj.object.brief_html) ? obj.object.brief_html : '',
       text: (obj.object.text) ? obj.object.text : (obj.object.brief_text) ? obj.object.brief_text : '',
@@ -123,6 +123,19 @@ function ($q, SH, CH, RS, $rootScope, $sce) {
       source_link: (obj.actor.address) ? obj.actor.address : (obj.actor.url) ? obj.actor.url : '',
       source_title: obj.actor.name
     };
+
+    var updated = false;
+    for (var i = 0, len = data.articles.length; i < len; i = i + 1) {
+      if ((data.articles[i]) && (data.articles[i].link === s_obj.link)) {
+        data.articles[i] = s_obj;
+        updated = true;
+        break;
+      }
+    }
+
+    if (!updated) {
+      data.articles.push(s_obj);
+    }
 
     return func.saveArticle(s_obj);
   };
@@ -210,6 +223,30 @@ function ($q, SH, CH, RS, $rootScope, $sce) {
     if (!updated) {
       data.infoArray.push(obj);
     }
+  }
+
+  function _addArticle(a) {
+    // clean urls for angularjs security
+    trustMedia(a);
+    var url = a.link || a.object.link;
+
+    //
+    // see if we can fetch article to get previously set read status
+    return RS.call('articles', 'getByUrl', [url]).then(function (_a) {
+      if ((typeof _a === 'object') && (typeof _a.read === 'boolean')) {
+        //console.log('ARTICLE FETCH from RS: ', a);
+        a.read = (_a.read) ? _a.read : false;
+
+        if (a.read) {
+          // this article is read, subtract from total
+          data.info[key].unread = (typeof data.info[key].unread === "number") ? data.info[key].unread - 1 : 0;
+        }
+      }
+      func.updateArticle(a);
+    }, function (e) {
+      //console.log("ARTICLE FETCH ERROR: ", e);
+      func.updateArticle(a);
+    });
   }
 
   
@@ -410,37 +447,8 @@ function ($q, SH, CH, RS, $rootScope, $sce) {
       data.info[key].oldestFetched = m.object.datenum;
     }
 
-    // clean urls for angularjs security
-    trustMedia(m);
 
-    var rs_m;
-    // add article to article list
-    func.updateArticle(m).then(function (_m) {
-      rs_m = _m;
-      data.articles.push(rs_m);
-
-      //
-      // we've added the article from sockethub to the article list, now let's
-      // try to fetch the article from remoteStorage to see we already have a
-      // record of it.
-      //
-      // if so, we apply read status.
-      //
-      return RS.call('articles', 'getByUrl', [rs_m.link]);
-    }).then(function (a) {
-      if ((typeof a === 'object') && (typeof a.read === 'boolean')) {
-        //console.log('ARTICLE FETCH from RS: ', a);
-        rs_m.read = (a.read) ? a.read : false;
-
-        if (rs_m.read) {
-          // this article is read, subtract from total
-          data.info[key].unread = (typeof data.info[key].unread === "number") ? data.info[key].unread - 1 : 0;
-        }
-      }
-    }, function (e) {
-      console.log("ARTICLE FETCH ERROR: ", e);
-    });
-
+    _addArticle(m);
   });
 
   return {
@@ -741,7 +749,6 @@ function (isSelected, Feeds, $location, $filter) {
 
     $scope.viewArticle = function (a, move) {
       if (!a) {
-        $scope.switchFeed($scope.feeds.current.id);
       } else {
         if (!move) {
           $scope.toggleRead(a, true);
@@ -749,10 +756,16 @@ function (isSelected, Feeds, $location, $filter) {
           $location.path('/feeds/'+encodeURIComponent(a.source_link)+'/article/'+encodeURIComponent(a.link));
         } else if (move === 'prev') {
           var prevUrl = $scope.getPrevUrl(a);
+          if (!prevUrl) {
+            $scope.switchFeed($scope.feeds.current.id);
+          }
           //console.log('---VIEW ARTICLE(prev): '+prevUrl);
           $location.path('/feeds/'+encodeURIComponent(a.source_link)+'/article/'+encodeURIComponent(prevUrl));
         } else if (move === 'next') {
           var nextUrl = $scope.getNextUrl(a);
+          if (!nextUrl) {
+            $scope.switchFeed($scope.feeds.current.id);
+          }
           //console.log('---VIEW ARTICLE(next): '+nextUrl);
           $location.path('/feeds/'+encodeURIComponent(a.source_link)+'/article/'+encodeURIComponent(nextUrl));
         }
@@ -770,13 +783,14 @@ function (isSelected, Feeds, $location, $filter) {
 
       var next;
       for (var i = 0, num = as.length; i >= 0; i = i + 1) {
-        if (as[i].link === a.link) {
+        if (!as[i]) {
+          return '';
+        } else if (as[i].link === a.link) {
           next = true;
         } else if (next) {
           return as[i].link;
         }
       }
-      return '';
     };
 
     $scope.getPrevUrl = function (a) {
@@ -796,7 +810,7 @@ function (isSelected, Feeds, $location, $filter) {
     };
 
     $scope.switchFeed = function (url, groupId, error) {
-      //console.log('SWITCH FEED: '+encodeURIComponent(url));
+      console.log('SWITCH FEED: '+encodeURIComponent(url));
       if (error) { return false; }
       // ensure slider is closed
       $('.opposite-sidebar').removeClass('slider-active');
