@@ -150,6 +150,7 @@ body {
   right: 0;
   bottom: 0;
   overflow-y: auto;
+  overflow-x: hidden;
   background-color: white;
   z-index: 1000;
   padding: 0 !important;
