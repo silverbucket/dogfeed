@@ -30,7 +30,12 @@
         </div>
       </div>
 
-      <div class="col-xs-12" style="margin: 10px 0 10px 0;"><a class="btn btn-default button-article-link" target="_blank" href="{{ a.link }}"><span style="font-size: 1.1em; font-weight: bold; margin-right: 10px;">visit article link</span> <span class="glyphicon glyphicon-new-window"></span></a></div>
+      <div class="col-xs-12" style="margin: 10px 0 10px 0;">
+        <a class="btn btn-default button-article-link" target="_blank" href="{{ article.link | decode }}">
+          <span style="font-size: 1.1em; font-weight: bold; margin-right: 10px;">visit article link</span> 
+          <span class="glyphicon glyphicon-new-window"></span>
+        </a>
+      </div>
 
       <div class="nav article-nav">
         <ul>
