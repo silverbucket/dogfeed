@@ -229,6 +229,7 @@ body {
   width: 135px;
   cursor: pointer;
   border: 3px solid white;
+  border-radius: 10px !important;
 }
 .feed-tile:hover {
   border: 3px solid rgb(66, 139, 202);
@@ -247,6 +248,8 @@ body {
   position: absolute;
   bottom: 0;
   background-color: rgba(0,0,0,0.5);
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
 }
 .feed-tile-loading {
   height: 79px;
@@ -254,6 +257,8 @@ body {
   position: absolute;
   top: 0;
   background-color: rgba(0,0,0,0.5);
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
 }
 .feed-title-text {
   float: right;
