@@ -1,7 +1,7 @@
 {
   "name": "Dogfeed",
   "description": "an unhosted RSS reader",
-  "version": "0.3.6",
+  "version": "0.3.7",
   "private": false,
   "author": "Nick Jennings <nick@silverbucket.net>",
   "license": "AGPL",

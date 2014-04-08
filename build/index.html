@@ -17,24 +17,6 @@
 
     <div class="row row-offcanvas row-offcanvas-left">
 
-      <!-- feeds list sidebar -->
-      <div class="col-xs-10 col-sm-7 col-md-7 col-lg-7 sidebar-offcanvas feed-list-sidebar" id="sidebar" role="navigation" ng-controller="feedCtrl">
-        <div class="logo-bar">
-          <a href="/#/"><span class="dogfeed-logo"></span></a>
-        </div>
-        <div class="sidebar-container">
-          <div class="feed-settings">
-            <form name="quickSettings" class="form-horizontal" ng-controller="feedCtrl" novalidate>
-                <label for="showRead"
-                       class="control-label">Show Read Articles</label>
-                <input type="checkbox" name="showRead" ng-model="feeds.settings.showRead" />
-            </form>
-          </div>
-          <feed-list class="feeds" test="test" feeds="feeds" settings="settings"></feed-list>
-        </div>
-      </div>
-
-
       <!-- main content area -->
       <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 opposite-sidebar">
 
