@@ -1,4 +1,4 @@
-/** remotestorage.js 0.10.0, http://remotestorage.io, MIT-licensed **/
+/** remotestorage.js 0.10.1, http://remotestorage.io, MIT-licensed **/
 
 /** FILE: lib/promising.js **/
 (function(global) {
@@ -2109,7 +2109,7 @@ RemoteStorage.Assets = {
     **/
     display: function(options) {
       if (typeof(options) === 'string') {
-        options = { domID: domID };
+        options = { domID: options };
       } else if (typeof(options) === 'undefined') {
         options = {};
       }
