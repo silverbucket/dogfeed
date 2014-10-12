@@ -14,11 +14,11 @@ module.exports = function(grunt) {
               'res/js/feeds/feeds.js',
               'res/js/directives/misc.js',
               'vendor/moment.min.js',
-              'vendor/angular-shared/ngRemoteStorage.js',
-              'vendor/angular-shared/ngCommandQueue.js',
-              'vendor/angular-shared/ngMessages.js',
-              'vendor/sockethub-client/angular/ngSockethubClient.js',
-              'vendor/sockethub-client/angular/ngSockethubRemoteStorage.js'],
+              'vendor/helpers/ngRemoteStorage.js',
+              'vendor/helpers/ngCommandQueue.js',
+              'vendor/helpers/ngMessages.js',
+              'vendor/helpers/ngSockethubClient.js',
+              'vendor/helpers/ngSockethubRemoteStorage.js'],
         dest: 'build/app.js.tmp'
       },
       modules: {
@@ -66,19 +66,19 @@ module.exports = function(grunt) {
         ]
       }
     },
-    uglify: {
-      options: {
-        compress: true,
-        banner: '/*! built for <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
-      },
-      dist: {
-        files: {
-          //'build/res/js/app.min.js': ['<%= concat.app.dest %>'],
-          //'build/vendor/sockethub-client.min.js': ['<%= concat.sockethub.dest %>'],
-          //'build/vendor/remotestorage-modules.min.js': ['<%= concat.modules.dest %>']
-        }
-      }
-    },
+    // uglify: {
+    //   options: {
+    //     compress: true,
+    //     banner: '/*! built for <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
+    //   },
+    //   dist: {
+    //     files: {
+    //       //'build/res/js/app.min.js': ['<%= concat.app.dest %>'],
+    //       //'build/vendor/sockethub-client.min.js': ['<%= concat.sockethub.dest %>'],
+    //       //'build/vendor/remotestorage-modules.min.js': ['<%= concat.modules.dest %>']
+    //     }
+    //   }
+    // },
     cssmin: {
       minify: {
         expand: true,
@@ -108,5 +108,5 @@ module.exports = function(grunt) {
   //grunt.file.write('build/VERSION', grunt.pkg.version);
 
   // Default task(s).
-  grunt.registerTask('default', ['concat', 'copy', 'uglify', 'cssmin', 'usemin', 'clean']);
+  grunt.registerTask('default', ['concat', 'copy', 'cssmin', 'usemin', 'clean']);
 };
