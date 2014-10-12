@@ -85,9 +85,9 @@ run([function () {
 run(['RemoteStorageConfig',
 function (RScfg) {
   RScfg.modules = [
-    ['sockethub', 'rw', {'cache': false, 'public': false}],
-    ['feeds', 'rw', {'cache': false, 'public': false}],
-    ['articles', 'rw', {'cache': false, 'public': false}]
+    ['sockethub', 'rw', {'cache': true, 'public': false}],
+    ['feeds', 'rw', {'cache': true, 'public': false}],
+    ['articles', 'rw', {'cache': true, 'public': false}]
   ];
 }]).
 
@@ -151,7 +151,7 @@ filter('fromNow', [
 function() {
   return function (dateString) {
     //console.log("FROMNOW: " + moment(new Date(dateString)).fromNow());
-    //return new Date(dateString).toDateString(); 
+    //return new Date(dateString).toDateString();
     return moment(new Date(dateString)).fromNow();
   };
 }]).
