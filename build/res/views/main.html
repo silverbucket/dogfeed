@@ -1,0 +1,13 @@
+<section class="page" ng-controller="mainCtrl">
+  <div ng-show="isConnecting() || !delayed() || waitingForArticles()">
+    <loading></loading>
+  </div>
+  <div ng-show="!isConnecting() && delayed() && !waitingForArticles() && noFeeds()">
+    <welcome></welcome>
+  </div>
+  <div ng-show="!isConnecting() && delayed() && !waitingForArticles() && !noFeeds()">
+    <div ng-controller="feedCtrl">
+      <feed-tiles class="feeds" feeds="feeds" settings="settings"></feed-tiles>
+    </div>
+  </div>
+</section>
