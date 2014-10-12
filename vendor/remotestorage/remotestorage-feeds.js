@@ -275,7 +275,7 @@
         },
 
         md5sum: md5,
-        
+
         get: privateClient.getObject.bind(privateClient),
 
         getAll: privateClient.getAll.bind(privateClient),
