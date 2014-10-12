@@ -18,8 +18,7 @@ module.exports = function(grunt) {
               'vendor/angular-shared/ngCommandQueue.js',
               'vendor/angular-shared/ngMessages.js',
               'vendor/sockethub-client/angular/ngSockethubClient.js',
-              'vendor/sockethub-client/angular/ngSockethubRemoteStorage.js',
-              'vendor/bootstramp/js/bootstrap-switch.min.js'],
+              'vendor/sockethub-client/angular/ngSockethubRemoteStorage.js'],
         dest: 'build/app.js.tmp'
       },
       modules: {
@@ -56,11 +55,13 @@ module.exports = function(grunt) {
           {expand: false, src: ['vendor/angular-touch.min.js'], dest: 'build/vendor/angular-touch.min.js', filter: 'isFile'}, // includes files in path and its subdirs
           {expand: false, src: ['vendor/snap.min.js'], dest: 'build/vendor/snap.min.js', filter: 'isFile'}, // includes files in path and its subdirs
           {expand: false, src: ['vendor/matchMedia.js'], dest: 'build/vendor/matchMedia.js', filter: 'isFile'}, // includes files in path and its subdirs
-          {expand: false, src: ['vendor/remotestorage/remotestorage.js'], dest: 'build/vendor/remotestorage.js', filter: 'isFile'}, // includes files in path and its subdirs
+          {expand: false, src: ['vendor/remotestorage/remotestorage.min.js'], dest: 'build/vendor/remotestorage.min.js', filter: 'isFile'}, // includes files in path and its subdirs
           {expand: false, src: ['vendor/bootstrap/js/bootstrap.min.js'], dest: 'build/vendor/bootstrap/js/bootstrap.min.js', filter: 'isFile'}, // includes files in path and its subdirs
           {expand: false, src: ['vendor/bootstrap/js/bootstrap-switch.min.js'], dest: 'build/vendor/bootstrap/js/bootstrap-switch.min.js', filter: 'isFile'}, // includes files in path and its subdirs
           {expand: false, src: ['vendor/bootstrap/css/bootstrap.min.css'], dest: 'build/vendor/bootstrap/css/bootstrap.min.css', filter: 'isFile'}, // includes files in path and its subdirs
-          {expand: false, src: ['<%= concat.app.dest %>'], dest: 'build/res/js/app.min.js', filter: 'isFile'} // includes files in path and its subdirs
+          {expand: false, src: ['<%= concat.app.dest %>'], dest: 'build/res/js/app.min.js', filter: 'isFile'}, // includes files in path and its subdirs
+          {expand: false, src: ['<%= concat.sockethub.dest %>'], dest: 'build/vendor/sockethub-client.min.js', filter: 'isFile'}, // includes files in path and its subdirs
+          {expand: false, src: ['<%= concat.modules.dest %>'], dest: 'build/vendor/remotestorage-modules.min.js', filter: 'isFile'} // includes files in path and its subdirs
 
         ]
       }
@@ -73,8 +74,8 @@ module.exports = function(grunt) {
       dist: {
         files: {
           //'build/res/js/app.min.js': ['<%= concat.app.dest %>'],
-          'build/vendor/sockethub-client.min.js': ['<%= concat.sockethub.dest %>'],
-          'build/vendor/remotestorage-modules.min.js': ['<%= concat.modules.dest %>']
+          //'build/vendor/sockethub-client.min.js': ['<%= concat.sockethub.dest %>'],
+          //'build/vendor/remotestorage-modules.min.js': ['<%= concat.modules.dest %>']
         }
       }
     },
