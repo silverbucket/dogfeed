@@ -5,6 +5,8 @@ A lightweight RSS reader, built with [Sockethub](http://sockethub.org) and [remo
 [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/silverbucket/dogfeed/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
 
 
+**Dogfeed is currently not being maintained and is in a non-functional state. Total rewrite planned in the future.**
+
 ## About
 
 Dogfeed is being developed as a proof-of-concept app for [Sockethub](http://sockethub.org).
