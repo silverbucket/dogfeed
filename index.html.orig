@@ -27,14 +27,32 @@
 
         <div id="remotestorage-connect" ng-controller="remoteStorageCtrl"></div>
 
+        <nav class="navbar" role="navigation" ng-controller="titlebarCtrl">
+          <div class="container">
+            <div class="navbar-header">
+                <span class="pull-left">
+                  <button type="button" class="btn btn-default btn-md offcanvas-button" data-toggle="offcanvas"><span class="glyphicon glyphicon-align-justify"></span></button>
+                </span>
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
+              </button>
+            </div>
+            <div class="collapse navbar-collapse">
+              <ul class="nav navbar-nav">
+                <li class="main-link" ng-class="class('home')"><a href="/#/"><span class="glyphicon glyphicon-home"></span></a></li>
+                <li class="main-link" ng-class="class('add')"><a href="/#/feeds/add"><span class="glyphicon glyphicon-plus"></span></a></li>
+                <li class="main-link" ng-class="class('settings-sockethub')"><a href="/#/settings/sockethub"><span class="glyphicon glyphicon-cog"></span></a></li>
+                <li class="main-link" ng-class="class('about')"><a href="/#/about"><span class="glyphicon glyphicon-info-sign"></span></a></li>
+              </ul>
+            </div>
+          </div>
+        </nav>
+
         <div class="message-container">
-          <div message>
-	  </div>
+          <div message></div>
         </div>
 
-        <div class="content-container" ng-view>
-<h3>The Dogfeed demo has been temporarily disocntinued while we focus on significant design and library improvements.</h3>
-	</div>
+        <div class="content-container" ng-view></div>
 
       </div><!--/span-->
 
@@ -112,11 +130,48 @@
       </div>
     </script>
 
+    <!-- build:js /vendor/jquery.min.js -->
+    <script src="/vendor/jquery.min.js?v=2.1.1"></script>
+    <!-- endbuild -->
+    <!-- build:js /vendor/angular.min.js -->
+    <script src="/vendor/angular.min.js?v=1.2.26"></script>
+    <!-- endbuild -->
+    <!-- build:js /vendor/angular-route.min.js -->
+    <script src="/vendor/angular-route.min.js?v=1.2.26"></script>
+    <!-- endbuild -->
+    <!-- build:js /vendor/angular-sanitize.min.js -->
+    <script src="/vendor/angular-sanitize.min.js?v=1.2.26"></script>
+    <!-- endbuild -->
+    <!-- build:js /vendor/angular-touch.min.js -->
+    <script src="/vendor/angular-touch.min.js?v=1.2.26"></script>
+    <!-- endbuild -->
     <!-- build:js /vendor/bootstrap/js/bootstrap.min.js -->
     <script src="/vendor/bootstrap/js/bootstrap.min.js?v=3.2.0"></script>
     <!-- endbuild -->
     <!-- build:js /vendor/bootstrap/js/bootstrap-switch.min.js -->
     <script src="/vendor/bootstrap/js/bootstrap-switch.min.js?v=20141012"></script>
+    <!-- endbuild -->
+    <!-- build:js /vendor/remotestorage.min.js -->
+    <script src="/vendor/remotestorage/remotestorage.min.js?v=0.11.0"></script>
+    <!-- endbuild -->
+    <!-- build:js /vendor/sockethub-client.min.js -->
+    <script src="/vendor/sockethub-client.js?v=0.2.8"></script>
+    <!-- endbuild -->
+    <!-- build:js /vendor/remotestorage-modules.min.js -->
+    <script src="/vendor/remotestorage/remotestorage-sockethub.js?v=0.2.8"></script>
+    <script src="/vendor/remotestorage/remotestorage-articles.js?v=0.2.8"></script>
+    <script src="/vendor/remotestorage/remotestorage-feeds.js?v=0.2.8"></script>
+    <!-- endbuild -->
+    <!-- build:js /res/js/app.min.js -->
+    <script src="/vendor/helpers/ngSockethubClient.js?v=0.2.8"></script>
+    <script src="/vendor/helpers/ngSockethubRemoteStorage.js?v=0.2.8"></script>
+    <script src="/vendor/helpers/ngRemoteStorage.js?v=0.0.1"></script>
+    <script src="/vendor/helpers/ngMessages.js?v=0.0.1"></script>
+    <script src="/vendor/helpers/ngCommandQueue.js?v=0.0.1"></script>
+    <script src="/res/js/feeds/feeds.js?v=0.2.8"></script>
+    <script src="/res/js/dogfeed.js?v=0.2.8"></script>
+    <script src="/res/js/directives/misc.js?v=0.2.8"></script>
+    <script src="/vendor/moment.min.js?v=2.8.3"></script>
     <!-- endbuild -->
   </body>
 </html>
